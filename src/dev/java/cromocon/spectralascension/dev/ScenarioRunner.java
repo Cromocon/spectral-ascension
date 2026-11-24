@@ -408,6 +408,7 @@ public final class ScenarioRunner {
         mc.options.hideGui = false;
         hudHidden = false;
         mc.options.setCameraType(CameraType.FIRST_PERSON);
+        ScenarioActions.resetFov();
     }
 
     /** Cancella gli screenshot della corsa precedente dello stesso scenario (screenshots/scenari/&lt;nome&gt;/). */

@@ -1,0 +1,446 @@
+// Solo il T9 di vetrina.json (stessa stanza e inquadratura), ripetuto in 24 scatti lungo il ciclo di 200 tick.
+{
+  "description": "Vetrina Prismatic: 24 scatti ogni ~10 tick (stessa inquadratura di vetrina) per un ciclo intero dell'animazione T9",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 60
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "clear @s",
+        "effect clear @s",
+        "time set 6000",
+        "weather clear",
+        "gamerule doDaylightCycle false",
+        "gamerule doWeatherCycle false",
+        "gamerule doMobSpawning false",
+        "fill 2991 -60 2995 3009 -49 3010 minecraft:air",
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "fly",
+      "value": true
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "fly",
+      "value": true
+    },
+    {
+      "action": "fov",
+      "value": 40
+    },
+    {
+      "action": "hide_hud",
+      "value": true,
+      "hand": false
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=minecraft:glow_item_frame,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:armor_stand,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:item,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "summon minecraft:glow_item_frame 2997 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_bow\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_axe\",count:1}}",
+        "summon minecraft:glow_item_frame 2999 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_shovel\",count:1}}",
+        "summon minecraft:glow_item_frame 3000 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_workstaff\",count:1}}",
+        "summon minecraft:glow_item_frame 3001 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_hoe\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_shears\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_fishing_rod\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_helmet\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_sword\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_chestplate\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_ultra_greatsword\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_leggings\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_bident\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_boots\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_crossbow\",count:1}}",
+        "summon minecraft:armor_stand 3000.5 -59 2997.5 {Rotation:[0f,0f],NoGravity:1b,Invulnerable:1b,ShowArms:1b,NoBasePlate:1b,DisabledSlots:4144959,ArmorItems:[{id:\"spectral_ascension:prismatic_boots\",count:1},{id:\"spectral_ascension:prismatic_leggings\",count:1},{id:\"spectral_ascension:prismatic_chestplate\",count:1},{id:\"spectral_ascension:prismatic_helmet\",count:1}],HandItems:[{id:\"spectral_ascension:prismatic_ultra_greatsword\",count:1},{}],Pose:{RightArm:[-90f,90f,0f],LeftArm:[-10f,0f,-10f],Head:[0f,0f,0f]}}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_00"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_01"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_02"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_03"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_04"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_05"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_06"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_07"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_08"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_09"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_10"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_11"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_12"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_13"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_14"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_15"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_16"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_17"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_18"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_19"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_20"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_21"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_22"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "fase_23"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "hide_hud",
+      "value": false
+    }
+  ]
+}

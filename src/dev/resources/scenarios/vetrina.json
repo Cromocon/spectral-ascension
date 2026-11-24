@@ -1,0 +1,309 @@
+// Vetrina per il README: una stanza di blocchi di Spectrum a x 2991-3009, z 2995-3010 (lontana dalle altre zone
+// di prova di sa_test, che stanno sotto x 500), pareti di calcite levigata, pavimento e zoccolo di basalto levigato,
+// colonne di calcite levigata ai lati del pannello; per l'Argent (icone chiare) la stanza si ricostruisce in negativo
+// (pareti e colonne di basalto levigato, zoccolo e pavimento di calcite levigata, piedistallo di basalto cesellato). Sulla parete di fondo 15 glow item frame invisibili (riga di 7 in
+// alto, due gruppi 2x2 ai lati), al centro su un piedistallo di calcite cesellata un armor stand con l'armatura del
+// tier e lo spadone (ultra greatsword) alzato. Cielo aperto a mezzogiorno (luce piena, nessuna ombra). Camera in prima persona, HUD e mano
+// nascosti, FOV stretto da lontano (azione fov), fuori dalla portata del giocatore. Uno screenshot per tier.
+// La stanza resta lì (isolata); a ogni esecuzione viene svuotata e ricostruita.
+{
+  "description": "Vetrina per il README: stanza di Spectrum, 15 oggetti in cornice e armor stand, per T6-T9",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 60
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "clear @s",
+        "effect clear @s",
+        "time set 6000",
+        "weather clear",
+        "gamerule doDaylightCycle false",
+        "gamerule doWeatherCycle false",
+        "gamerule doMobSpawning false",
+        "fill 2991 -60 2995 3009 -49 3010 minecraft:air",
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "fly",
+      "value": true
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 3000.5 -59.019999999999996 3005.8 180 0"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "fly",
+      "value": true
+    },
+    {
+      "action": "fov",
+      "value": 40
+    },
+    {
+      "action": "hide_hud",
+      "value": true,
+      "hand": false
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=minecraft:glow_item_frame,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:armor_stand,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:item,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "summon minecraft:glow_item_frame 2997 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_bow\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_axe\",count:1}}",
+        "summon minecraft:glow_item_frame 2999 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_shovel\",count:1}}",
+        "summon minecraft:glow_item_frame 3000 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_workstaff\",count:1}}",
+        "summon minecraft:glow_item_frame 3001 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_hoe\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_shears\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_fishing_rod\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_helmet\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_sword\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_chestplate\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_ultra_greatsword\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_leggings\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_bident\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_boots\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:trichromatic_crossbow\",count:1}}",
+        "summon minecraft:armor_stand 3000.5 -59 2997.5 {Rotation:[0f,0f],NoGravity:1b,Invulnerable:1b,ShowArms:1b,NoBasePlate:1b,DisabledSlots:4144959,ArmorItems:[{id:\"spectral_ascension:trichromatic_boots\",count:1},{id:\"spectral_ascension:trichromatic_leggings\",count:1},{id:\"spectral_ascension:trichromatic_chestplate\",count:1},{id:\"spectral_ascension:trichromatic_helmet\",count:1}],HandItems:[{id:\"spectral_ascension:trichromatic_ultra_greatsword\",count:1},{}],Pose:{RightArm:[-90f,90f,0f],LeftArm:[-10f,0f,-10f],Head:[0f,0f,0f]}}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "trichromatic"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=minecraft:glow_item_frame,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:armor_stand,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:item,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "summon minecraft:glow_item_frame 2997 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_bow\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_axe\",count:1}}",
+        "summon minecraft:glow_item_frame 2999 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_shovel\",count:1}}",
+        "summon minecraft:glow_item_frame 3000 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_workstaff\",count:1}}",
+        "summon minecraft:glow_item_frame 3001 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_hoe\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_shears\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_fishing_rod\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_helmet\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_sword\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_chestplate\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_ultra_greatsword\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_leggings\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_bident\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_boots\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:umbral_crossbow\",count:1}}",
+        "summon minecraft:armor_stand 3000.5 -59 2997.5 {Rotation:[0f,0f],NoGravity:1b,Invulnerable:1b,ShowArms:1b,NoBasePlate:1b,DisabledSlots:4144959,ArmorItems:[{id:\"spectral_ascension:umbral_boots\",count:1},{id:\"spectral_ascension:umbral_leggings\",count:1},{id:\"spectral_ascension:umbral_chestplate\",count:1},{id:\"spectral_ascension:umbral_helmet\",count:1}],HandItems:[{id:\"spectral_ascension:umbral_ultra_greatsword\",count:1},{}],Pose:{RightArm:[-90f,90f,0f],LeftArm:[-10f,0f,-10f],Head:[0f,0f,0f]}}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "umbral"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_calcite",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_basalt",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_basalt",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_basalt",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_calcite",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_basalt_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_basalt_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_basalt"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=minecraft:glow_item_frame,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:armor_stand,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:item,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "summon minecraft:glow_item_frame 2997 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_bow\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_axe\",count:1}}",
+        "summon minecraft:glow_item_frame 2999 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_shovel\",count:1}}",
+        "summon minecraft:glow_item_frame 3000 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_workstaff\",count:1}}",
+        "summon minecraft:glow_item_frame 3001 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_hoe\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_shears\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_fishing_rod\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_helmet\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_sword\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_chestplate\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_ultra_greatsword\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_leggings\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_bident\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_boots\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:argent_crossbow\",count:1}}",
+        "summon minecraft:armor_stand 3000.5 -59 2997.5 {Rotation:[0f,0f],NoGravity:1b,Invulnerable:1b,ShowArms:1b,NoBasePlate:1b,DisabledSlots:4144959,ArmorItems:[{id:\"spectral_ascension:argent_boots\",count:1},{id:\"spectral_ascension:argent_leggings\",count:1},{id:\"spectral_ascension:argent_chestplate\",count:1},{id:\"spectral_ascension:argent_helmet\",count:1}],HandItems:[{id:\"spectral_ascension:argent_ultra_greatsword\",count:1},{}],Pose:{RightArm:[-90f,90f,0f],LeftArm:[-10f,0f,-10f],Head:[0f,0f,0f]}}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "argent"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "fill 2991 -61 2995 3009 -61 3010 spectrum:polished_basalt",
+        "fill 2991 -62 2995 3009 -62 3010 minecraft:stone",
+        "fill 2991 -60 2995 3009 -52 2995 spectrum:polished_calcite",
+        "fill 2991 -60 2995 2991 -52 3010 spectrum:polished_calcite",
+        "fill 3009 -60 2995 3009 -52 3010 spectrum:polished_calcite",
+        "fill 2991 -60 2995 3009 -60 2995 spectrum:polished_basalt",
+        "fill 2995 -59 2995 2995 -52 2995 spectrum:polished_calcite_pillar",
+        "fill 3005 -59 2995 3005 -52 2995 spectrum:polished_calcite_pillar",
+        "setblock 3000 -60 2997 spectrum:chiseled_polished_calcite"
+      ]
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=minecraft:glow_item_frame,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:armor_stand,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "kill @e[type=minecraft:item,x=2991,y=-61,z=2995,dx=18,dy=12,dz=15]",
+        "summon minecraft:glow_item_frame 2997 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_bow\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_axe\",count:1}}",
+        "summon minecraft:glow_item_frame 2999 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_shovel\",count:1}}",
+        "summon minecraft:glow_item_frame 3000 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_workstaff\",count:1}}",
+        "summon minecraft:glow_item_frame 3001 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_hoe\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_shears\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -55 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_fishing_rod\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_helmet\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_sword\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_chestplate\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -57 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_ultra_greatsword\",count:1}}",
+        "summon minecraft:glow_item_frame 2997 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_leggings\",count:1}}",
+        "summon minecraft:glow_item_frame 3002 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_bident\",count:1}}",
+        "summon minecraft:glow_item_frame 2998 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_boots\",count:1}}",
+        "summon minecraft:glow_item_frame 3003 -58 2996 {Facing:3b,Invisible:1b,Fixed:1b,Invulnerable:1b,Item:{id:\"spectral_ascension:prismatic_crossbow\",count:1}}",
+        "summon minecraft:armor_stand 3000.5 -59 2997.5 {Rotation:[0f,0f],NoGravity:1b,Invulnerable:1b,ShowArms:1b,NoBasePlate:1b,DisabledSlots:4144959,ArmorItems:[{id:\"spectral_ascension:prismatic_boots\",count:1},{id:\"spectral_ascension:prismatic_leggings\",count:1},{id:\"spectral_ascension:prismatic_chestplate\",count:1},{id:\"spectral_ascension:prismatic_helmet\",count:1}],HandItems:[{id:\"spectral_ascension:prismatic_ultra_greatsword\",count:1},{}],Pose:{RightArm:[-90f,90f,0f],LeftArm:[-10f,0f,-10f],Head:[0f,0f,0f]}}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "look",
+      "yaw": 180,
+      "pitch": 0
+    },
+    {
+      "action": "screenshot",
+      "name": "prismatic"
+    },
+    {
+      "action": "hide_hud",
+      "value": false
+    }
+  ]
+}

@@ -184,8 +184,44 @@ public final class ScenarioActions {
             case "book_focus" -> BookFocus.create(s);
             case "buy_hint" -> buyHint(s);
             case "track_projectile" -> trackProjectile(s);
+            case "fov" -> client(() -> setFov(s));
             default -> throw new IllegalArgumentException("azione sconosciuta: " + action);
         };
+    }
+
+    // ================================================================ campo visivo (fov)
+
+    /** FOV e "effetti FOV" originali, salvati alla prima azione fov dello scenario; null = niente da ripristinare. */
+    private static Integer savedFov;
+    private static Double savedFovEffect;
+
+    /**
+     * fov: imposta il campo visivo (gradi, 30-110) e, con {@code effects} (default 0), la scala degli effetti FOV
+     * (volo, scatto). Serve alle inquadrature "da foto prodotto": FOV stretto da lontano, fuori dalla portata del
+     * giocatore (niente contorno del blocco mirato). Non si salva su options.txt: resetFov() lo rimette com'era a
+     * fine scenario.
+     */
+    private static StepResult setFov(JsonObject s) {
+        Minecraft mc = Minecraft.getInstance();
+        int fov = Math.max(30, Math.min(110, Scenario.integer(s, "value", 70)));
+        double eff = s.has("effects") ? s.get("effects").getAsDouble() : 0.0;
+        if (savedFov == null) {
+            savedFov = mc.options.fov().get();
+            savedFovEffect = mc.options.fovEffectScale().get();
+        }
+        mc.options.fov().set(fov);
+        mc.options.fovEffectScale().set(Math.max(0.0, Math.min(1.0, eff)));
+        return StepResult.ok("fov=" + fov + " effetti=" + mc.options.fovEffectScale().get() + " (originale " + savedFov + ")");
+    }
+
+    /** Rimette il FOV di prima della prima azione fov (chiamato da ScenarioRunner.resetClientState). */
+    static void resetFov() {
+        if (savedFov == null) return;
+        Minecraft mc = Minecraft.getInstance();
+        mc.options.fov().set(savedFov);
+        mc.options.fovEffectScale().set(savedFovEffect);
+        savedFov = null;
+        savedFovEffect = null;
     }
 
     // ================================================================ voci-indizio (spectrum:hint)
