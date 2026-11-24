@@ -34,26 +34,6 @@ Each tier mines like the Allthemodium tools of its metal, hits harder than the o
 
 The special weapons keep everything that makes their Spectrum counterparts unique: the ultra greatsword keeps its ground slam and gains more reach with every tier, the crossbow keeps its overcharge, and the bow keeps its zoom and precision.
 
-## The workstaff menu
-
-Sneak and use the workstaff to open its menu. The Trichromatic workstaff uses Spectrum's own menu: Silk Touch, Fortune or Resonance, 1x1, 3x3 or 5x5 area mining, right-click actions and projectiles. From Umbral onwards the workstaff gets an expanded menu:
-
-- **Umbral** adds a 7x7 area and a **Foundry** switch that smelts what you mine. Foundry pauses while Silk Touch is selected and comes back when you switch to Fortune or Resonance.
-- **Argent** adds an **Inventory Insertion** switch that sends drops straight to your inventory.
-- **Prismatic** adds a 9x9 area, and area mining no longer costs any Ink.
-
-On the lower tiers, area mining is paid in White Ink, as in Spectrum.
-
-## The bident
-
-The bident combines the powers of Spectrum's Ferocious and Fractal bidents in a single weapon. Sneak and use it to pick a mode:
-
-- **Ferocious:** Riptide even out of water, hurting whatever you touch while you spin.
-- **Fractal:** throw an illusory copy and keep the real bident in your hand.
-- **Off:** a plain, powerful bident with no Ink cost.
-
-Each mode remembers its own set of enchantments, and the tooltip shows what is stored and what is active.
-
 ## Armor and Azure Dike
 
 Wearing a full set of four pieces, from any mix of tiers, grants the Azure Dike of Spectrum's whole line of Dike accessories at once. While the set is worn, Dike accessories in your trinket slots stop counting, so those slots are free for something else.
