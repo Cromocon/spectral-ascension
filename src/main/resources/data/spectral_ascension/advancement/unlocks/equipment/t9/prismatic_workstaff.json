@@ -1,0 +1,64 @@
+{
+  "criteria": {
+    "unlocked_t9": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/prismatic"
+      }
+    },
+    "tick_unlocked_t9": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/prismatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_argent_workstaff": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/equipment/t8/argent_workstaff"
+      }
+    },
+    "tick_unlocked_argent_workstaff": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/equipment/t8/argent_workstaff": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t9",
+      "tick_unlocked_t9"
+    ],
+    [
+      "unlocked_argent_workstaff",
+      "tick_unlocked_argent_workstaff"
+    ]
+  ]
+}

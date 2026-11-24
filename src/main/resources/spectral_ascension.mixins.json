@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cromocon.spectralascension.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AnvilMenuMixin", "AzureDikeAttachmentTypeMixin", "BedrockAnvilScreenHandlerMixin", "EnchanterBlockEntityMixin", "EnchantmentUpgradeRecipeMixin", "FusionShrineRecipeMixin", "GatedSpectrumRecipeMixin", "ServerEntityMixin", "ShootingStarVariantMixin", "SpectrumEnchantmentHelperMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

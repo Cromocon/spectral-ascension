@@ -1,0 +1,122 @@
+{
+  "criteria": {
+    "unlocked_t6": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/trichromatic"
+      }
+    },
+    "tick_unlocked_t6": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/trichromatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_bedrock_boots": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/equipment/bedrock_tools"
+      }
+    },
+    "tick_unlocked_bedrock_boots": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/equipment/bedrock_tools": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_shieldgrasp_amulet": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/trinkets/shieldgrasp_amulet"
+      }
+    },
+    "tick_unlocked_shieldgrasp_amulet": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/trinkets/shieldgrasp_amulet": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_azuresque_dike_core": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/trinkets/azuresque_dike_core"
+      }
+    },
+    "tick_unlocked_azuresque_dike_core": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/trinkets/azuresque_dike_core": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t6",
+      "tick_unlocked_t6"
+    ],
+    [
+      "unlocked_bedrock_boots",
+      "tick_unlocked_bedrock_boots"
+    ],
+    [
+      "unlocked_shieldgrasp_amulet",
+      "tick_unlocked_shieldgrasp_amulet"
+    ],
+    [
+      "unlocked_azuresque_dike_core",
+      "tick_unlocked_azuresque_dike_core"
+    ]
+  ]
+}

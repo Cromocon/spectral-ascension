@@ -1,0 +1,15 @@
+// Pedestal Moonstone completo (struttura "complex" di Spectrum, 13x13x7).
+// Dati: data/spectrum/modonomicon/multiblocks/pedestal_complex.json nel jar di Spectrum.
+// "pos" del passo build = posizione del Pedestal; il centro del multiblock (carattere '0') è il blocco SOTTO il Pedestal,
+// esattamente come controlla PedestalBlockEntity.getStructureTier (validate(level, pos.below(), Rotation.NONE)).
+{
+  "description": "Pedestal Moonstone + struttura complessa (pedestal_complex)",
+  "multiblock": "spectrum:pedestal_complex",
+  "center_offset": [0, -1, 0],
+  "clear": true,
+  "validate": true,
+  // Il centro '0' del multiblock è "modonomicon:any" (qualsiasi blocco): place() lo lascerebbe vuoto.
+  // Ci si mette un blocco pieno, così il Pedestal si può anche ripiazzare a mano (clic destro sulla faccia superiore).
+  // Coordinate relative a "pos".
+  "blocks": [{"pos": [0, -1, 0], "block": "spectrum:polished_basalt"}]
+}

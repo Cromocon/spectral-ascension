@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/fishing_rod",
+  "textures": {
+    "layer0": "spectral_ascension:item/umbral_fishing_rod_cast"
+  }
+}

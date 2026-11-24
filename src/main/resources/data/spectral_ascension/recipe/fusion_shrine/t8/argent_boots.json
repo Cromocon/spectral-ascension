@@ -1,0 +1,40 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "allthemodium"
+    }
+  ],
+  "type": "spectrum:fusion_shrine",
+  "group": "spectral_ascension_t8_armor",
+  "time": 2000,
+  "experience": 48.0,
+  "fluid": {
+    "fluid": "spectrum:dragonrot"
+  },
+  "copy_components": true,
+  "disable_yield_upgrades": true,
+  "ingredients": [
+    "spectral_ascension:umbral_boots",
+    {
+      "tag": "c:ingots/unobtainium",
+      "count": 4
+    },
+    {
+      "item": "spectrum:moonstone_powder",
+      "count": 32
+    }
+  ],
+  "result": {
+    "id": "spectral_ascension:argent_boots",
+    "count": 1,
+    "components": {
+      "minecraft:enchantments": {
+        "levels": {
+          "minecraft:fire_protection": 8
+        }
+      }
+    }
+  },
+  "required_advancement": "spectral_ascension:unlocks/equipment/t8/argent_boots"
+}

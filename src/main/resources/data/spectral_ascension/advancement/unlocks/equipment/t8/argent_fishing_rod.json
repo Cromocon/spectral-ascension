@@ -1,0 +1,64 @@
+{
+  "criteria": {
+    "unlocked_t8": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/argent"
+      }
+    },
+    "tick_unlocked_t8": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/argent": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_umbral_fishing_rod": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/equipment/t7/umbral_fishing_rod"
+      }
+    },
+    "tick_unlocked_umbral_fishing_rod": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/equipment/t7/umbral_fishing_rod": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t8",
+      "tick_unlocked_t8"
+    ],
+    [
+      "unlocked_umbral_fishing_rod",
+      "tick_unlocked_umbral_fishing_rod"
+    ]
+  ]
+}

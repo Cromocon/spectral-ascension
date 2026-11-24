@@ -1,0 +1,117 @@
+// Progressione del T9 (Alloy «Prismatic») da un giocatore "vergine". Catena VERA (JSON generati da tools/gen_data.py):
+//   spectral_ascension:unlocks/tiers/prismatic      = advancement_gotten(unlocks/tiers/argent) E inventory_changed di UNO
+//                                              QUALSIASI fra #c:ingots/vibranium_allthemodium_alloy,
+//                                              #c:ingots/unobtainium_allthemodium_alloy, #c:ingots/unobtainium_vibranium_alloy
+//                                              (OR, ricerca/04 §5.1)
+//   unlocks/equipment/t9/prismatic_<oggetto> = advancement_gotten(t9) E advancement_gotten(unlocks/equipment/t8/argent_<oggetto>)
+//   voce T9 (equipment, figlia della voce T8) = condizione unlocks/tiers/prismatic, nascosta da bloccata
+//   (l'Idea esiste solo per il T6: niente Idea T9 dal 2026-11-23)
+// Controlla anche l'ordine: una lega presa PRIMA del T8 non apre niente, il T8 senza leghe nemmeno, poi UNA sola
+// lega (unobtainium-allthemodium) basta. Le NOSTRE advancement non si concedono mai a mano: devono scattare da sole
+// (al passo 1 si REVOCA il gate T9, per azzerare il criterio del lingotto già soddisfatto).
+{
+  "description": "Catena di sblocco del T9 (Alloy): tier dopo il T8 e una qualsiasi delle tre leghe, pezzi dopo il pezzo T8, voce del guidebook",
+  "steps": [
+    // ---------------------------------------------------------------- 0. giocatore vergine
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "tp @s 0.5 -60 -6.5 180 0",
+      "advancement revoke @s everything"
+    ]},
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/prismatic", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_sword", "unlocked": false},
+
+    // ---------------------------------------------------------------- 1. una lega prima del T8: niente
+    {"action": "command", "command": "give @s allthemodium:unobtainium_vibranium_alloy_ingot"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/prismatic", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_sword", "unlocked": false},
+    {"action": "command", "expect": "any", "commands": ["clear @s", "advancement revoke @s only spectral_ascension:unlocks/tiers/prismatic"]},
+
+    // ---------------------------------------------------------------- 2. T6, T7 e T8, senza leghe: ancora niente
+    {"action": "command", "commands": [
+      "advancement grant @s until spectrum:place_pedestal",
+      "advancement grant @s until spectrum:lategame/build_complex_pedestal_structure",
+      "advancement grant @s until spectrum:build_fusion_shrine",
+      "advancement grant @s until spectrum:milestones/unlock_ink_use",
+      "advancement grant @s only spectrum:unlocks/equipment/bedrock_tools",
+      "advancement grant @s until spectrum:unlocks/trinkets/puff_circlet",
+      "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_ring",
+      "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_belt",
+      "advancement grant @s until spectrum:unlocks/trinkets/shieldgrasp_amulet",
+      "advancement grant @s until spectrum:unlocks/trinkets/azuresque_dike_core",
+      "advancement grant @s until spectrum:unlocks/malachite/glass_crest_tools"
+    ]},
+    {"action": "command", "command": "give @s allthemodium:allthemodium_ingot"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic"},
+    {"action": "command", "command": "give @s allthemodium:vibranium_ingot"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/umbral"},
+    {"action": "command", "command": "give @s allthemodium:unobtainium_ingot"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/argent"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_sword"},
+    {"action": "wait", "ticks": 20},
+    // T8 sì, nessuna lega in inventario: il T9 resta chiuso.
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/prismatic", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_sword", "done": false},
+    {"action": "wait", "ticks": 40},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t9_equipment", "unlocked": false},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t8_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_t8_senza_t9"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 3. UNA lega (unobtainium-allthemodium) → T9
+    {"action": "command", "command": "give @s allthemodium:unobtainium_allthemodium_alloy_ingot"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/prismatic"},
+    // I pezzi T8 sbloccati aprono i T9 corrispondenti (anche l'armatura: gli accessori Dike sono stati concessi al
+    // passo 2); quelli che chiedono la workstaff glass crest o i bident glass crest no.
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_sword"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_axe"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_boots"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_sword", "unlocked": true},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_workstaff", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_bident", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_helmet"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_workstaff", "unlocked": false},
+    {"action": "wait", "ticks": 40},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t9_equipment", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t9_equipment", "page": 0, "unlocked": true},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t9_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_t9_tooltip"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t9_equipment", "page": 0},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t9_pagina0"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 4. workstaff glass crest → T6 → T7 → T8 → T9
+    {"action": "command", "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_workstaff"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t7/umbral_workstaff"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_workstaff"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t9/prismatic_workstaff"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_workstaff"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_workstaff_t9"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_chestplate"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_corazza_t9"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_sword"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_spada_t9"},
+    {"action": "close_screen"},
+    {"action": "command", "expect": "any", "commands": ["clear @s", "advancement revoke @s everything"]}
+  ]
+}

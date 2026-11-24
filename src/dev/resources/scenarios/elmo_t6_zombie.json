@@ -1,0 +1,343 @@
+// Elmo T6 «Trichromatic» su uno zombie (NoAI, Silent, Invulnerable, PersistenceRequired; con l'elmo in testa e invulnerabile non brucia al sole) per vedere com'è l'elmo sul viso con la testa con la pelle,
+// a differenza degli armor stand di elmo_t6_vicino. Due zombie: uno a terra (davanti e di lato) e uno sollevato di 1,8 blocchi (da sotto verso il mento e di tre quarti dal basso),
+// Il mondo di test è in pacifico, dove gli zombie spariscono: per questo il primo passo mette `difficulty easy`.
+// più due viste intere a 2,5 blocchi. Camera in prima persona, mano nascosta, `look at` con coordinate esatte.
+{
+  "description": "Elmo T6 indossato da uno zombie (NoAI, con la testa con la pelle), inquadrature ravvicinate in prima persona: davanti, di lato, da sotto (mento), di tre quarti dal basso e vista intera a 2,5 blocchi",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "difficulty easy",
+        "clear @s",
+        "time set 6000",
+        "weather clear",
+        "kill @e[type=zombie]",
+        "tp @s 300.5 -60 304.5 0 0"
+      ]
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "hide_hud",
+      "value": true,
+      "hand": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "summon minecraft:zombie 300.5 -60.5 300.5 {Rotation:[0f,0f],NoAI:1b,Silent:1b,PersistenceRequired:1b,Invulnerable:1b,NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:trichromatic_boots\",count:1},{id:\"spectral_ascension:trichromatic_leggings\",count:1},{id:\"spectral_ascension:trichromatic_chestplate\",count:1},{id:\"spectral_ascension:trichromatic_helmet\",count:1}]}",
+        "summon minecraft:zombie 300.5 -58.7 310.5 {Rotation:[0f,0f],NoAI:1b,Silent:1b,PersistenceRequired:1b,Invulnerable:1b,NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:trichromatic_boots\",count:1},{id:\"spectral_ascension:trichromatic_leggings\",count:1},{id:\"spectral_ascension:trichromatic_chestplate\",count:1},{id:\"spectral_ascension:trichromatic_helmet\",count:1}]}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 301.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.8,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "01_davanti_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 301.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.8,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "02_davanti_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.5 -60 300.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.8,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "03_lato_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.1 -60 300.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.8,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "04_lato_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 311.6"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.6
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "05_sotto_mento"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 311.2"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "06_sotto_mento_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 310.9"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "07_sotto_dritto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.2 -60 311.3"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "08_tre_quarti_sotto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.95 -60 311.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "09_tre_quarti_sotto_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.7 -60 310.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.0,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "10_lato_sotto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 303.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -59.4,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "11_intero_2_5_blocchi"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 302.0 -60 302.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -59.4,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "12_intero_diagonale"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=zombie]",
+        "tp @s 300.5 -60 300.5 0 0"
+      ]
+    }
+  ]
+}

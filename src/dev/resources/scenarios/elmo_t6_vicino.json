@@ -1,0 +1,294 @@
+// Elmo T6 «Trichromatic» (set Castone) visto da vicino, per controllare lo spiraglio fra i due gusci dell'elmo
+// (testa 10 esterna, testa 9 interna). Due armor stand con l'armatura T6: uno infossato di 0,5 blocchi, con la testa poco sotto l'occhio (davanti e di lato) e uno
+// sollevato di 1,8 blocchi (da sotto, verso il mento, e di tre quarti dal basso). Il runner non ha FOV né zoom:
+// la camera è in prima persona (mano nascosta) a 0,5-1 blocco dalla testa. Camera con `look at` e coordinate esatte.
+{
+  "description": "Elmo T6 indossato su armor stand, inquadrature ravvicinate in prima persona: davanti, di lato, da sotto (mento) e di tre quarti dal basso",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "clear @s",
+        "time set 6000",
+        "weather clear",
+        "kill @e[type=armor_stand]",
+        "tp @s 300.5 -60 304.5 0 0"
+      ]
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "hide_hud",
+      "value": true,
+      "hand": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "summon minecraft:armor_stand 300.5 -60.5 300.5 {Rotation:[0f,0f],NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:trichromatic_boots\",count:1},{id:\"spectral_ascension:trichromatic_leggings\",count:1},{id:\"spectral_ascension:trichromatic_chestplate\",count:1},{id:\"spectral_ascension:trichromatic_helmet\",count:1}]}",
+        "summon minecraft:armor_stand 300.5 -58.7 310.5 {Rotation:[0f,0f],NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:trichromatic_boots\",count:1},{id:\"spectral_ascension:trichromatic_leggings\",count:1},{id:\"spectral_ascension:trichromatic_chestplate\",count:1},{id:\"spectral_ascension:trichromatic_helmet\",count:1}]}"
+      ]
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 301.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.75,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "01_davanti_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 301.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.75,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "02_davanti_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.5 -60 300.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.75,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "03_lato_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.1 -60 300.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -58.75,
+        300.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "04_lato_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 311.6"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.6
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "05_sotto_mento"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 311.2"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "06_sotto_mento_vicinissimo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.5 -60 310.9"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "07_sotto_dritto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.2 -60 311.3"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "08_tre_quarti_sotto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 300.95 -60 311.0"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "09_tre_quarti_sotto_vicino"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "tp @s 301.7 -60 310.5"
+      ]
+    },
+    {
+      "action": "look",
+      "at": [
+        300.5,
+        -57.3,
+        310.5
+      ],
+      "block_center": false
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "10_lato_sotto"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "kill @e[type=armor_stand]",
+        "tp @s 300.5 -60 300.5 0 0"
+      ]
+    }
+  ]
+}

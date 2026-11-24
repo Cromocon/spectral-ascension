@@ -1,0 +1,77 @@
+{
+  "criteria": {
+    "unlocked_t7": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/umbral"
+      }
+    },
+    "tick_unlocked_t7": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/umbral": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_glass_crest_tools": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/malachite/glass_crest_tools"
+      }
+    },
+    "tick_unlocked_glass_crest_tools": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/malachite/glass_crest_tools": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "has_unobtainium_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/unobtainium"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t7",
+      "tick_unlocked_t7"
+    ],
+    [
+      "unlocked_glass_crest_tools",
+      "tick_unlocked_glass_crest_tools"
+    ],
+    [
+      "has_unobtainium_ingot"
+    ]
+  ]
+}

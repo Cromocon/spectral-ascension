@@ -1,0 +1,94 @@
+// Menu di selezione della modalità del bident (BidentScreen, griglia "quick navigation" della workstaff di Spectrum).
+// Shift + tasto destro apre il menu; clic su una voce = scelta (pacchetto BidentModePayload al server).
+// Posizioni delle voci rispetto al centro della finestra (coordinate GUI, centro delle caselle 32x32):
+//   spento = su [-4, -64], Ferocious = sinistra [-64, -4], Fractal = destra [56, -4], centro [0, 0] = chiudi.
+{
+  "description": "Menu del bident: Shift + destro apre il menu (T6, T7, T8, T9), clic su Fractal / spento / Ferocious cambia bident_mode; senza Shift si carica il lancio",
+  "stop_on_fail": true,
+  "steps": [
+    {"action": "command", "expect": "any", "commands": ["gamemode creative", "clear @s", "tp @s 0.5 -60 -6.5 180 0"]},
+
+    // --- T6: il bident nuovo parte in Ferocious; menu, screenshot con il tooltip di Fractal, scelta di Fractal ---
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_bident"},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=ferocious]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4], "click": false},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t6"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "assert_screen", "screen": "none"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "screenshot", "name": "dopo_fractal"},
+
+    // --- il menu riaperto mostra Fractal come attiva; il centro chiude senza cambiare ---
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [-4, -64], "click": false},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t6_fractal_attiva"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [0, 0]},
+    {"action": "sneak", "value": false},
+    {"action": "assert_screen", "screen": "none"},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal]"},
+
+    // --- senza Shift: niente menu, si carica il lancio (rilasciato prima dei 10 tick: non parte) ---
+    {"action": "use_item", "hold_ticks": 5},
+    {"action": "assert_screen", "screen": "none", "within": 0},
+
+    // --- T7: spento ---
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:umbral_bident"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t7"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [-4, -64]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:umbral_bident[spectral_ascension:bident_mode=off]"},
+    // menu riaperto con Off attivo: nessuna casella colorata
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t7_off_attivo"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [0, 0]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:umbral_bident[spectral_ascension:bident_mode=off]"},
+
+    // --- T8: Fractal, poi di nuovo Ferocious ---
+    {"action": "hold", "slot": 2, "item": "spectral_ascension:argent_bident"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t8"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4]},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:argent_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "use_item"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [-64, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:argent_bident[spectral_ascension:bident_mode=ferocious]"},
+
+    // --- T9 (Alloy): parte in Ferocious; menu, screenshot, scelta di Fractal ---
+    {"action": "hold", "slot": 3, "item": "spectral_ascension:prismatic_bident"},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:prismatic_bident[spectral_ascension:bident_mode=ferocious]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "BidentScreen"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "menu_t9"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:prismatic_bident[spectral_ascension:bident_mode=fractal]"}
+  ]
+}

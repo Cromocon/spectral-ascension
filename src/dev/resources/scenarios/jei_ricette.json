@@ -1,0 +1,92 @@
+// Solo sviluppo. Va lanciato DOPO lo scenario sblocchi (tools/run_auto.sh --jei --scenario jei_bloccate,sblocchi,jei_ricette):
+// conta le ricette Fusion Shrine in JEI (SpectrumJEI) e apre JEI su una ricetta per tier. Serve emi.css con enabled:false per vedere JEI.
+{
+ "description": "JEI: ricette Fusion Shrine sbloccate e schermate per tier",
+ "steps": [
+  {
+   "action": "wait",
+   "ticks": 40
+  },
+  {
+   "action": "jei_dump"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:trichromatic_axe",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_trichromatic_axe"
+  },
+  {
+   "action": "close_screen"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:umbral_workstaff",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_umbral_workstaff"
+  },
+  {
+   "action": "close_screen"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:argent_sword",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_argent_sword"
+  },
+  {
+   "action": "close_screen"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:prismatic_chestplate",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_prismatic_chestplate"
+  },
+  {
+   "action": "close_screen"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:prismatic_bident",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_prismatic_bident"
+  },
+  {
+   "action": "close_screen"
+  },
+  {
+   "action": "open_screen",
+   "screen": "jei",
+   "item": "spectral_ascension:prismatic_workstaff",
+   "wait": 20
+  },
+  {
+   "action": "screenshot",
+   "name": "jei_prismatic_workstaff"
+  },
+  {
+   "action": "close_screen"
+  }
+ ]
+}

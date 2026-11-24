@@ -1,0 +1,184 @@
+{
+  "name": "book.spectral_ascension.guidebook.t9_equipment.name",
+  "description": "book.spectral_ascension.added_by",
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "spectral_ascension:unlocks/tiers/prismatic"
+  },
+  "icon": {
+    "item": "spectral_ascension:prismatic_workstaff"
+  },
+  "category": "spectrum:equipment",
+  "hide_while_locked": true,
+  "parents": [
+    {
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment"
+    }
+  ],
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "x": 3,
+  "y": 3,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.spectral_ascension.guidebook.t9_equipment.name",
+      "text": "book.spectral_ascension.guidebook.t9_equipment.page0.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_workstaff",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_workstaff",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_workstaff"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_workstaff.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_ultra_greatsword",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_ultra_greatsword",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_ultra_greatsword"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_ultra_greatsword.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_crossbow",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_crossbow",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_crossbow"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_crossbow.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_bident",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_bident",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_bident"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_bident.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_axe",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_axe",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_axe"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_axe.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_shovel",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_shovel",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_shovel"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_shovel.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_hoe",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_hoe",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_hoe"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_hoe.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_sword",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_sword",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_sword"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_sword.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_bow",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_bow",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_bow"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_bow.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_fishing_rod",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_fishing_rod",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_fishing_rod"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_fishing_rod.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_shears",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_shears",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_shears"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_shears.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_helmet",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_helmet",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_helmet"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_helmet.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_chestplate",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_chestplate",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_chestplate"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_chestplate.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_leggings",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_leggings",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_leggings"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_leggings.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_boots",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_boots",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_boots"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_boots.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.spectral_ascension.guidebook.t9_equipment.armor_set.title",
+      "text": "book.spectral_ascension.guidebook.t9_equipment.armor_set.text"
+    }
+  ]
+}

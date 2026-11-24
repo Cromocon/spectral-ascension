@@ -1,0 +1,93 @@
+{
+  "criteria": {
+    "unlocked_t6": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/trichromatic"
+      }
+    },
+    "tick_unlocked_t6": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/trichromatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_bedrock_helmet": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/equipment/bedrock_tools"
+      }
+    },
+    "tick_unlocked_bedrock_helmet": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/equipment/bedrock_tools": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_puff_circlet": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/trinkets/puff_circlet"
+      }
+    },
+    "tick_unlocked_puff_circlet": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/trinkets/puff_circlet": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t6",
+      "tick_unlocked_t6"
+    ],
+    [
+      "unlocked_bedrock_helmet",
+      "tick_unlocked_bedrock_helmet"
+    ],
+    [
+      "unlocked_puff_circlet",
+      "tick_unlocked_puff_circlet"
+    ]
+  ]
+}

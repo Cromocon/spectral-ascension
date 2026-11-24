@@ -1,0 +1,1966 @@
+// GENERATO da tools/gen_data.py (gen_unlock_scenario): non modificarlo a mano, rilancia il generatore.
+{
+  "description": "Sblocchi in ordine (Spectrum, poi ogni tier e i suoi oggetti) per vedere in EMI e nel guidebook tutte le ricette; non dà oggetti né cambia la modalità di gioco",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "log",
+      "text": "Sblocchi in ordine fino all'ultimo tier. Nessun oggetto dato, modalità di gioco invariata."
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:place_pedestal (until): Pedestal: sblocco del tipo di ricetta, EMI lo chiede per mostrare le ricette Pedestal"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:place_pedestal"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:lategame/build_complex_pedestal_structure (until): Pedestal Moonstone: tier complex delle ricette Pedestal"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:lategame/build_complex_pedestal_structure"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:build_fusion_shrine (until): Fusion Shrine: sblocco del tipo di ricetta"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:build_fusion_shrine"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:lategame/create_malachite_tool (until): primo attrezzo di malachite: rende visibile l'Idea del T6"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:lategame/create_malachite_tool"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:milestones/unlock_ink_use (until): Ink: area della workstaff, overcharge della balestra, modalità del bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:milestones/unlock_ink_use"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:midgame/break_decayed_bedrock (until): rivela la Bedrock Dust (camuffata da polvere da sparo da Revelationary)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:midgame/break_decayed_bedrock"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:hidden/collect_shards/amethyst (until): rivela la Amethyst Powder (camuffata da colorante)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:hidden/collect_shards/amethyst"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:hidden/collect_shards/citrine (until): rivela la Citrine Powder (camuffata da colorante)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:hidden/collect_shards/citrine"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:hidden/collect_shards/topaz (until): rivela la Topaz Powder (camuffata da colorante)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:hidden/collect_shards/topaz"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:create_onyx_shard (until): rivela la Onyx Powder (T7+)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:create_onyx_shard"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:lategame/collect_moonstone (until): rivela la Moonstone Powder (T8+); esplicito per sicurezza"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:lategame/collect_moonstone"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:milestones/unlock_shooting_stars (until): rivela la Stardust (T9: camuffata da tintura viola da Revelationary)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:milestones/unlock_shooting_stars"
+    },
+    {
+      "action": "log",
+      "text": "== T6 Trichromatic: 15 oggetti"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/tiers/trichromatic (only): tier Trichromatic (al posto del primo lingotto c:ingots/allthemodium)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/tiers/trichromatic"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/glass_crest_workstaff (until): ingrediente di trichromatic_workstaff"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_workstaff"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff (only): ricetta e pagina di trichromatic_workstaff"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/glass_crest_ultra_greatsword (until): ingrediente di trichromatic_ultra_greatsword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_ultra_greatsword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_ultra_greatsword (only): ricetta e pagina di trichromatic_ultra_greatsword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_ultra_greatsword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/glass_crest_crossbow (until): ingrediente di trichromatic_crossbow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_crossbow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_crossbow (only): ricetta e pagina di trichromatic_crossbow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_crossbow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/ferocious_glass_crest_bident (until): ingrediente di trichromatic_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/ferocious_glass_crest_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/fractal_glass_crest_bident (until): ingrediente di trichromatic_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/fractal_glass_crest_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_bident (only): ricetta e pagina di trichromatic_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/equipment/bedrock_tools (until): ingrediente di trichromatic_axe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/equipment/bedrock_tools"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_axe (only): ricetta e pagina di trichromatic_axe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_axe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_shovel (only): ricetta e pagina di trichromatic_shovel"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_shovel"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_hoe (only): ricetta e pagina di trichromatic_hoe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_hoe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_sword (only): ricetta e pagina di trichromatic_sword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_sword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_bow (only): ricetta e pagina di trichromatic_bow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_bow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_fishing_rod (only): ricetta e pagina di trichromatic_fishing_rod"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_fishing_rod"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_shears (only): ricetta e pagina di trichromatic_shears"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_shears"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/trinkets/puff_circlet (until): ingrediente di trichromatic_helmet"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/trinkets/puff_circlet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_helmet (only): ricetta e pagina di trichromatic_helmet"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_helmet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/trinkets/azure_dike_ring (until): ingrediente di trichromatic_chestplate"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_ring"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_chestplate (only): ricetta e pagina di trichromatic_chestplate"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_chestplate"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/trinkets/azure_dike_belt (until): ingrediente di trichromatic_leggings"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_belt"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_leggings (only): ricetta e pagina di trichromatic_leggings"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_leggings"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/trinkets/shieldgrasp_amulet (until): ingrediente di trichromatic_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/trinkets/shieldgrasp_amulet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/trinkets/azuresque_dike_core (until): ingrediente di trichromatic_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/trinkets/azuresque_dike_core"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_boots (only): ricetta e pagina di trichromatic_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_boots"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:triggers/hints/t6_page0 (only): pagina 0 dell'Idea, in chiaro"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:triggers/hints/t6_page0"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:triggers/hints/t6_page1 (only): pagina 1 dell'Idea, in chiaro"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:triggers/hints/t6_page1"
+    },
+    {
+      "action": "log",
+      "text": "== T7 Umbral: 15 oggetti"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/tiers/umbral (only): tier Umbral (al posto del primo lingotto c:ingots/vibranium)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/tiers/umbral"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_workstaff (only): ricetta e pagina di umbral_workstaff"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_workstaff"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_ultra_greatsword (only): ricetta e pagina di umbral_ultra_greatsword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_ultra_greatsword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_crossbow (only): ricetta e pagina di umbral_crossbow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_crossbow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_bident (only): ricetta e pagina di umbral_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_axe (only): ricetta e pagina di umbral_axe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_axe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_shovel (only): ricetta e pagina di umbral_shovel"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_shovel"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_hoe (only): ricetta e pagina di umbral_hoe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_hoe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_sword (only): ricetta e pagina di umbral_sword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_sword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_bow (only): ricetta e pagina di umbral_bow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_bow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_fishing_rod (only): ricetta e pagina di umbral_fishing_rod"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_fishing_rod"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_shears (only): ricetta e pagina di umbral_shears"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_shears"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_helmet (only): ricetta e pagina di umbral_helmet"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_helmet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_chestplate (only): ricetta e pagina di umbral_chestplate"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_chestplate"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_leggings (only): ricetta e pagina di umbral_leggings"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_leggings"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_boots (only): ricetta e pagina di umbral_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_boots"
+    },
+    {
+      "action": "log",
+      "text": "== T8 Argent: 15 oggetti"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/malachite/glass_crest_tools (until): lucchetto del T8"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_tools"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/tiers/argent (only): tier Argent (al posto del primo lingotto c:ingots/unobtainium)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/tiers/argent"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_workstaff (only): ricetta e pagina di argent_workstaff"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_workstaff"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_ultra_greatsword (only): ricetta e pagina di argent_ultra_greatsword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_ultra_greatsword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_crossbow (only): ricetta e pagina di argent_crossbow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_crossbow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_bident (only): ricetta e pagina di argent_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_axe (only): ricetta e pagina di argent_axe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_axe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_shovel (only): ricetta e pagina di argent_shovel"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_shovel"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_hoe (only): ricetta e pagina di argent_hoe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_hoe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_sword (only): ricetta e pagina di argent_sword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_sword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_bow (only): ricetta e pagina di argent_bow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_bow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_fishing_rod (only): ricetta e pagina di argent_fishing_rod"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_fishing_rod"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_shears (only): ricetta e pagina di argent_shears"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_shears"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_helmet (only): ricetta e pagina di argent_helmet"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_helmet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_chestplate (only): ricetta e pagina di argent_chestplate"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_chestplate"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_leggings (only): ricetta e pagina di argent_leggings"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_leggings"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_boots (only): ricetta e pagina di argent_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_boots"
+    },
+    {
+      "action": "log",
+      "text": "== T9 Prismatic: 15 oggetti"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/tiers/prismatic (only): tier Prismatic (al posto del primo lingotto c:ingots/unobtainium_allthemodium_alloy)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/tiers/prismatic"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_workstaff (only): ricetta e pagina di prismatic_workstaff"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_workstaff"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_ultra_greatsword (only): ricetta e pagina di prismatic_ultra_greatsword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_ultra_greatsword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_crossbow (only): ricetta e pagina di prismatic_crossbow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_crossbow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_bident (only): ricetta e pagina di prismatic_bident"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_bident"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_axe (only): ricetta e pagina di prismatic_axe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_axe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_shovel (only): ricetta e pagina di prismatic_shovel"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_shovel"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_hoe (only): ricetta e pagina di prismatic_hoe"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_hoe"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_sword (only): ricetta e pagina di prismatic_sword"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_sword"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_bow (only): ricetta e pagina di prismatic_bow"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_bow"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_fishing_rod (only): ricetta e pagina di prismatic_fishing_rod"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_fishing_rod"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_shears (only): ricetta e pagina di prismatic_shears"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_shears"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_helmet (only): ricetta e pagina di prismatic_helmet"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_helmet"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_chestplate (only): ricetta e pagina di prismatic_chestplate"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_chestplate"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_leggings (only): ricetta e pagina di prismatic_leggings"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_leggings"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_boots (only): ricetta e pagina di prismatic_boots"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_boots"
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "log",
+      "text": "Controllo: advancement, ricette (server e client) e voci del guidebook"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:triggers/hints/t6_page0"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:triggers/hints/t6_page1"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_axe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_boots"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_chestplate"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_crossbow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_fishing_rod"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_helmet"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_hoe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shears"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shovel"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_ultra_greatsword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_axe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_boots"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_bow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_chestplate"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_crossbow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_fishing_rod"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_helmet"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_hoe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_shears"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_shovel"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_sword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_ultra_greatsword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_workstaff"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_axe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_boots"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_bow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_chestplate"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_crossbow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_fishing_rod"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_helmet"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_hoe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_shears"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_shovel"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_sword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_ultra_greatsword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_workstaff"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_axe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_boots"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_bow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_chestplate"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_crossbow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_fishing_rod"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_helmet"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_hoe"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_shears"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_shovel"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_sword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_ultra_greatsword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_workstaff"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/tiers/argent"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/tiers/prismatic"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/tiers/trichromatic"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/tiers/umbral"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:build_fusion_shrine"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:create_onyx_shard"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:hidden/collect_shards/amethyst"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:hidden/collect_shards/citrine"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:hidden/collect_shards/topaz"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:lategame/build_complex_pedestal_structure"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:lategame/collect_moonstone"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:lategame/create_malachite_tool"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:midgame/break_decayed_bedrock"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:milestones/unlock_ink_use"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:milestones/unlock_shooting_stars"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:place_pedestal"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/equipment/bedrock_tools"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/ferocious_glass_crest_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/fractal_glass_crest_bident"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/glass_crest_crossbow"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/glass_crest_tools"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/glass_crest_ultra_greatsword"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/malachite/glass_crest_workstaff"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/trinkets/azure_dike_belt"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/trinkets/azure_dike_ring"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/trinkets/azuresque_dike_core"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/trinkets/puff_circlet"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectrum:unlocks/trinkets/shieldgrasp_amulet"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_workstaff"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 1,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_ultra_greatsword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 2,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_crossbow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 3,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 4,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_axe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 5,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_shovel"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 6,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_hoe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 7,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 8,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 9,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_fishing_rod"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 10,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_shears"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 11,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_helmet"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 12,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 13,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_leggings"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 14,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:general/spectral_ascension_t6_hint",
+      "unlocked": true
+    },
+    {
+      "action": "open_screen",
+      "screen": "recipes",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_workstaff"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "emi_t6_trichromatic_workstaff"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "open_screen",
+      "screen": "guidebook",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 0
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "libro_t6"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_workstaff"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 1,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_ultra_greatsword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 2,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_crossbow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 3,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_bident"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 4,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_axe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 5,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_shovel"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 6,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_hoe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 7,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_sword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 8,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_bow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 9,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_fishing_rod"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 10,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_shears"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 11,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_helmet"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 12,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_chestplate"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 13,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_leggings"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 14,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "open_screen",
+      "screen": "recipes",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_workstaff"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "emi_t7_umbral_workstaff"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "open_screen",
+      "screen": "guidebook",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 0
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "libro_t7"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_workstaff"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 1,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_ultra_greatsword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 2,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_crossbow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 3,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_bident"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 4,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_axe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 5,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_shovel"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 6,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_hoe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 7,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_sword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 8,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_bow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 9,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_fishing_rod"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 10,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_shears"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 11,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_helmet"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 12,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_chestplate"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 13,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_leggings"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 14,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "open_screen",
+      "screen": "recipes",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_workstaff"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "emi_t8_argent_workstaff"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "open_screen",
+      "screen": "guidebook",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 0
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "libro_t8"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_workstaff"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 1,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_ultra_greatsword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 2,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_crossbow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 3,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_bident"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 4,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_axe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 5,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_shovel"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 6,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_hoe"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 7,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_sword"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 8,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_bow"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 9,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_fishing_rod"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 10,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_shears"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 11,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_helmet"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 12,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_chestplate"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 13,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_leggings"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 14,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "open_screen",
+      "screen": "recipes",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_workstaff"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "emi_t9_prismatic_workstaff"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "open_screen",
+      "screen": "guidebook",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 0
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "screenshot",
+      "name": "libro_t9"
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "log",
+      "text": "Fatto: 90 advancement concessi in ordine"
+    }
+  ]
+}

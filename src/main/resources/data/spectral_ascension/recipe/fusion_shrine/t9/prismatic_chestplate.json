@@ -1,0 +1,56 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "allthemodium"
+    }
+  ],
+  "type": "spectrum:fusion_shrine",
+  "group": "spectral_ascension_t9_armor",
+  "time": 2000,
+  "experience": 48.0,
+  "fluid": {
+    "fluid": "spectrum:dragonrot"
+  },
+  "copy_components": true,
+  "disable_yield_upgrades": true,
+  "ingredients": [
+    "spectral_ascension:argent_chestplate",
+    {
+      "tag": "c:ingots/vibranium_allthemodium_alloy",
+      "count": 1
+    },
+    {
+      "tag": "c:ingots/unobtainium_allthemodium_alloy",
+      "count": 1
+    },
+    {
+      "tag": "c:ingots/unobtainium_vibranium_alloy",
+      "count": 1
+    },
+    {
+      "item": "spectrum:colorful_shooting_star",
+      "count": 1
+    },
+    {
+      "item": "spectrum:colorful_shooting_star",
+      "count": 1
+    },
+    {
+      "item": "spectrum:stardust",
+      "count": 32
+    }
+  ],
+  "result": {
+    "id": "spectral_ascension:prismatic_chestplate",
+    "count": 1,
+    "components": {
+      "minecraft:enchantments": {
+        "levels": {
+          "minecraft:protection": 11
+        }
+      }
+    }
+  },
+  "required_advancement": "spectral_ascension:unlocks/equipment/t9/prismatic_chestplate"
+}

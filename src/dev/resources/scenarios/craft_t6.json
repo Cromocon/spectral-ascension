@@ -1,0 +1,208 @@
+// Craft REALI nel mondo del T6, tutti alla Fusion Shrine con Dragonrot (dal 2026-11-18 il T6 non usa più il Pedestal).
+// Ingredienti esatti dai JSON generati (src/main/resources/data/spectral_ascension/recipe/fusion_shrine/t6/...):
+//   trichromatic_sword: bedrock_sword, 6 lingotti allthemodium, 6 bedrock_dust, 32 polveri amethyst/citrine/topaz,
+//     800 tick, senza copy_components → Sharpness VII
+//   trichromatic_workstaff: glass_crest_workstaff, 6 lingotti, 6 bedrock_dust, stesse polveri, 1200 tick
+//     → Fortune VI + Efficiency V (+ incantesimi copiati)
+//   trichromatic_bident: ferocious + fractal glass crest bident, 8 lingotti, 8 bedrock_dust, stesse polveri
+//     (7 ingredienti) → Impaling V, set Ferocious dal primo bident (attivo), set Fractal dal secondo (memorizzato)
+// Le due Fusion Shrine lavorano in parallelo per risparmiare un minuto.
+{
+  "description": "Craft reali alla Fusion Shrine con Dragonrot: spada (base bedrock), workstaff e bident (glass crest)",
+  "steps": [
+    // ---------------------------------------------------------------- preparazione: sblocchi per la catena vera
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "kill @e[type=item]",
+      "tp @s 0.5 -60 0.5 0 0",
+      "advancement revoke @s everything",
+      "advancement grant @s until spectrum:place_pedestal",
+      "advancement grant @s until spectrum:lategame/build_complex_pedestal_structure",
+      "advancement grant @s until spectrum:milestones/unlock_ink_use",
+      "advancement grant @s until spectrum:build_fusion_shrine",
+      "advancement grant @s only spectrum:unlocks/equipment/bedrock_tools",
+      "advancement grant @s only spectrum:unlocks/malachite/glass_crest_workstaff",
+      "advancement grant @s only spectrum:unlocks/malachite/ferocious_glass_crest_bident",
+      "advancement grant @s only spectrum:unlocks/malachite/fractal_glass_crest_bident",
+      "give @s allthemodium:allthemodium_ingot",
+      "clear @s"
+    ]},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bident"},
+
+    // ================================================================ FUSION SHRINE S: spada (base bedrock)
+    {"action": "build", "preset": "fusion_shrine", "pos": [0, -60, 12]},
+    {"action": "command", "command": "tp @s 0.5 -60 8.5 0 20"},
+    {"action": "hold", "slot": 0, "item": "minecraft:air"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 0, "item": "spectrum:dragonrot_bucket"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    // base incantata: Sharpness IX (più alto della ricetta, deve restare IX) + Looting III (si conserva)
+    {"action": "hold", "slot": 1, "item": "spectrum:bedrock_sword[minecraft:enchantments={levels:{\"minecraft:sharpness\":9,\"minecraft:looting\":3}}]"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 2, "item": "allthemodium:allthemodium_ingot 6"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 3, "item": "spectrum:bedrock_dust 6"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 4, "item": "spectrum:amethyst_powder 32"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 5, "item": "spectrum:citrine_powder 32"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 6, "item": "spectrum:topaz_powder 32"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "command", "command": "data get block 0 -60 12"},
+    {"action": "command", "command": "clear @s"},
+    {"action": "command", "command": "tp @s 3.5 -57 8.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [0, -59, 12]},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "wait", "ticks": 100},
+    {"action": "screenshot", "name": "fusion_spada_durante"},
+    {"action": "hide_hud", "value": false},
+    {"action": "command", "command": "data get block 0 -60 12 CraftingTime"},
+    // risultato: a terra sopra la shrine; incantesimi ESATTI della ricetta e indistruttibile
+    {"action": "assert_item", "pos": [0, -59, 12], "radius": 4, "within": 900, "dump": true,
+      "predicate": "spectral_ascension:trichromatic_sword[minecraft:enchantments={levels:{\"minecraft:sharpness\":9,\"minecraft:looting\":3}}]"},
+    {"action": "fly", "value": false},
+    // raccolta: ci si teletrasporta SULL'oggetto a terra (con una posizione fissa a volte restava fuori portata)
+    {"action": "command", "command": "tp @s @e[type=item,limit=1,sort=nearest,nbt={Item:{id:\"spectral_ascension:trichromatic_sword\"}}]"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_sword[minecraft:unbreakable]", "dump": true},
+    {"action": "assert_item", "item": "spectral_ascension:trichromatic_sword", "enchantments": {"minecraft:sharpness": 9, "minecraft:looting": 3}},
+    {"action": "open_screen", "screen": "inventory"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "spada_t6_incantesimi_inventario"},
+    {"action": "close_screen"},
+    // ingredienti consumati tutti
+    {"action": "command", "expect": "fail", "command": "execute if data block 0 -60 12 Items[]"},
+
+    // ================================================================ FUSION SHRINE A: workstaff
+    {"action": "command", "expect": "any", "commands": ["clear @s", "kill @e[type=item]"]},
+    {"action": "build", "preset": "fusion_shrine", "pos": [24, -60, 12]},
+    {"action": "command", "command": "tp @s 24.5 -60 8.5 0 20"},
+    {"action": "hold", "slot": 0, "item": "minecraft:air"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 0, "item": "spectrum:dragonrot_bucket"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "command", "command": "data get block 24 -60 12"},
+    // la workstaff glass crest come la ha un giocatore: rinominata, Fortune IV (di serie) + Unbreaking III aggiunto.
+    // Atteso: nome copiato (copy_components), Fortune VI + Efficiency V della ricetta (Fortune IV si perde: è più basso); Unbreaking si perde perché
+    // i nostri oggetti sono tolti da minecraft:enchantable/durability (indistruttibili, scelta di design)
+    {"action": "hold", "slot": 1, "item": "spectrum:glass_crest_workstaff[minecraft:custom_name='\"Workstaff di prova\"',minecraft:enchantments={levels:{\"minecraft:fortune\":4,\"minecraft:unbreaking\":3}}]"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 2, "item": "allthemodium:allthemodium_ingot 6"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 3, "item": "spectrum:bedrock_dust 6"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 4, "item": "spectrum:topaz_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 5, "item": "spectrum:amethyst_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "hold", "slot": 6, "item": "spectrum:citrine_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "command", "command": "data get block 24 -60 12"},
+
+    // ================================================================ FUSION SHRINE B: bident (in parallelo)
+    {"action": "command", "command": "clear @s"},
+    {"action": "build", "preset": "fusion_shrine", "pos": [24, -60, 30]},
+    {"action": "command", "command": "tp @s 24.5 -60 26.5 0 20"},
+    {"action": "hold", "slot": 0, "item": "minecraft:air"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 0, "item": "spectrum:dragonrot_bucket"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    // Ferocious: Loyalty III (+ Unbreaking III, che il bident non accetta) → set Ferocious (attivo all'uscita); nome copiato
+    {"action": "hold", "slot": 1, "item": "spectrum:ferocious_glass_crest_bident[minecraft:custom_name='\"Bident di prova\"',minecraft:enchantments={levels:{\"minecraft:loyalty\":3,\"minecraft:unbreaking\":3}}]"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    // Fractal: Riptide III → set Fractal; Mending non accettato; Impaling V non supera la base (Impaling V) e si perde
+    {"action": "hold", "slot": 2, "item": "spectrum:fractal_glass_crest_bident[minecraft:enchantments={levels:{\"minecraft:riptide\":3,\"minecraft:mending\":1,\"minecraft:impaling\":5}}]"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 3, "item": "allthemodium:allthemodium_ingot 8"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 4, "item": "spectrum:bedrock_dust 8"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 5, "item": "spectrum:topaz_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 6, "item": "spectrum:amethyst_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "hold", "slot": 7, "item": "spectrum:citrine_powder 32"},
+    {"action": "use_on_block", "pos": [24, -60, 30], "face": "north"},
+    {"action": "command", "command": "data get block 24 -60 30"},
+
+    // ---------------------------------------------------------------- durante
+    {"action": "command", "command": "clear @s"},
+    {"action": "command", "command": "tp @s 27.5 -57 8.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [24, -59, 12]},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "wait", "ticks": 200},
+    {"action": "screenshot", "name": "fusion_workstaff_durante"},
+    {"action": "command", "command": "tp @s 27.5 -57 26.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [24, -59, 30]},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "fusion_bident_durante"},
+    {"action": "hide_hud", "value": false},
+    // il progresso del craft (CraftingTime) deve salire
+    {"action": "command", "command": "data get block 24 -60 12 CraftingTime"},
+    {"action": "command", "command": "data get block 24 -60 30 CraftingTime"},
+
+    // ---------------------------------------------------------------- risultati
+    {"action": "assert_item", "pos": [24, -59, 12], "radius": 4, "within": 1300, "dump": true,
+      "predicate": "spectral_ascension:trichromatic_workstaff[minecraft:enchantments={levels:{\"minecraft:fortune\":6,\"minecraft:efficiency\":5}},minecraft:custom_name='\"Workstaff di prova\"',minecraft:unbreakable]"},
+    {"action": "assert_item", "pos": [24, -59, 30], "radius": 4, "within": 200, "dump": true,
+      "predicate": "spectral_ascension:trichromatic_bident[minecraft:enchantments={levels:{\"minecraft:impaling\":5,\"minecraft:loyalty\":3}},spectral_ascension:bident_mode=ferocious,minecraft:custom_name='\"Bident di prova\"',minecraft:unbreakable]"},
+    {"action": "assert_item", "pos": [24, -59, 30], "radius": 4, "dump": true,
+      "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_enchantments={base:{\"minecraft:impaling\":5},ferocious:{\"minecraft:loyalty\":3},fractal:{\"minecraft:riptide\":3},applied:{\"minecraft:impaling\":5,\"minecraft:loyalty\":3}}]"},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "look", "at": [24, -59, 30]},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "fusion_bident_dopo"},
+    {"action": "command", "command": "tp @s 27.5 -57 8.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [24, -59, 12]},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "fusion_workstaff_dopo"},
+    {"action": "hide_hud", "value": false},
+    // il tank si svuota e gli ingredienti sono consumati
+    {"action": "command", "command": "data get block 24 -60 12"},
+    {"action": "command", "expect": "fail", "command": "execute if data block 24 -60 12 Items[]"},
+    {"action": "command", "expect": "fail", "command": "execute if data block 24 -60 30 Items[]"},
+
+    // ---------------------------------------------------------------- bident: raccolto e cambio di modalità
+    {"action": "command", "expect": "any", "commands": ["clear @s", "kill @e[type=item,nbt={Item:{id:\"spectral_ascension:trichromatic_workstaff\"}}]"]},
+    {"action": "command", "command": "tp @s @e[type=item,limit=1,sort=nearest,nbt={Item:{id:\"spectral_ascension:trichromatic_bident\"}}]"},
+    {"action": "wait", "ticks": 20},
+    {"action": "hold", "slot": 0},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=ferocious]"},
+    {"action": "command", "command": "tp @s 24.5 -60 24.5 0 0"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "dump": true,
+      "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal,minecraft:enchantments={levels:{\"minecraft:impaling\":5,\"minecraft:riptide\":3}}]"},
+    {"action": "screenshot", "name": "bident_fractal"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [-4, -64]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "dump": true,
+      "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=off,minecraft:enchantments={levels:{\"minecraft:impaling\":5}}]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [-64, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "dump": true,
+      "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=ferocious,minecraft:enchantments={levels:{\"minecraft:impaling\":5,\"minecraft:loyalty\":3}}]"},
+    // ---------------------------------------------------------------- livelli oltre il X (chiavi enchantment.level.11-30 della mod)
+    // il tooltip dell'elmo T7/T8 (Projectile Protection 11) mostrava «enchantment.level.11»: in chat la traduzione del client
+    {"action": "command", "command": "tellraw @s [{\"translate\":\"enchantment.minecraft.projectile_protection\"},\" \",{\"translate\":\"enchantment.level.11\"},\" / \",{\"translate\":\"enchantment.minecraft.sharpness\"},\" \",{\"translate\":\"enchantment.level.7\"},\" / \",{\"translate\":\"enchantment.level.30\"}]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "livelli_romani_chat", "chat": true},
+    {"action": "assert_log", "regex": "Exception in server tick loop|Disconnected", "present": false, "within": 1}
+  ]
+}

@@ -1,0 +1,73 @@
+// Stati dei modelli del T9 (Alloy «Prismatic») in prima persona, come la parte 3 di casi_client.json per il T8:
+// balestra a riposo, in tensione (serie), carica con freccia, razzo e le 6 frecce di vetro (i 12 stati, ognuno con la
+// texture _oversized in mano), arco teso (serie dei 3 stati), canna lanciata, bident mentre carica il lancio.
+// Nessuna asserzione oltre alla balestra carica: è un controllo visivo (texture animate, niente viola-nero).
+{
+  "description": "Stati dei modelli T9 in prima persona: balestra (12 stati), arco teso, canna lanciata, bident in lancio",
+  "stop_on_fail": false,
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "tp @s 160.5 -60 0.5 0 0"
+    ]},
+    {"action": "first_person"},
+    {"action": "hide_hud", "value": true},
+    {"action": "wait", "ticks": 20},
+
+    // ---------------------------------------------------------------- 1. stati dei modelli (T9, prima persona)
+    {"action": "look", "yaw": 0, "pitch": 0},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow"},
+    {"action": "wait", "ticks": 20},
+    {"action": "screenshot", "name": "balestra_riposo"},
+    {"action": "command", "command": "item replace entity @s inventory.9 with minecraft:arrow 64"},
+    {"action": "use_item", "keep": true},
+    {"action": "screenshot_series", "name": "balestra_carica", "count": 4, "every": 4},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:prismatic_crossbow[charged_projectiles]", "slot": "mainhand"},
+    {"action": "screenshot", "name": "balestra_freccia"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:firework_rocket\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_razzo"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:malachite_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_vetro_malachite"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:topaz_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_topazio"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:amethyst_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_ametista"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:citrine_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_citrino"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:onyx_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_onice"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"spectrum:moonstone_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_moonstone"},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_bow"},
+    {"action": "use_item", "keep": true},
+    {"action": "screenshot_series", "name": "arco_teso", "count": 3, "every": 8},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 10},
+    {"action": "command", "command": "kill @e[type=arrow,distance=..60]"},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_fishing_rod"},
+    {"action": "look", "yaw": 0, "pitch": -20},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 15},
+    {"action": "screenshot", "name": "canna_lanciata"},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 5},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_bident[spectral_ascension:bident_mode=off]"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 12},
+    {"action": "screenshot", "name": "bident_in_carica"},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 10},
+    {"action": "command", "expect": "any", "commands": ["kill @e[type=!player,distance=..60]", "clear @s"]}
+  ]
+}

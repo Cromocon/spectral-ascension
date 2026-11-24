@@ -1,0 +1,85 @@
+// Abilità a Ink in SOPRAVVIVENZA con una Pigment Palette piena (segnalazione: «non funzionano in survival»).
+// Spectrum (InkPowered.tryDrainEnergy) in sopravvivenza chiede spectrum:milestones/unlock_ink_use, che arriva con
+// spectrum:midgame/spectrum_midgame (craft del Pigment Pedestal, cioè l'Onyx Pedestal). Senza, nessuna abilità a Ink
+// parte, neanche quelle degli oggetti di Spectrum: con la palette nell'inventario e nello slot Curios "palette".
+// Segnali: il bident Fractal con Ink lancia la copia illusoria e resta in mano (senza Ink viene lanciato davvero);
+// la balestra carica con Shift + destro tenuto si "overcarica" (componente spectrum:overcharged) solo se paga 100 Ink.
+{
+  "description": "Ink in sopravvivenza: palette piena in inventario e nello slot Curios, con e senza unlock_ink_use (bident Fractal, overcharge della balestra)",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode survival", "clear @s", "effect give @s minecraft:saturation 600 10 true", "time set 6000", "weather clear",
+      "tp @s 600.5 -60 600.5 0 0",
+      "curios clear @s",
+      "advancement revoke @s only spectrum:milestones/unlock_ink_use",
+      "item replace entity @s inventory.10 with spectrum:pigment_palette[spectrum:ink_storage={max_energy_total:0L,max_per_color:100000L,stored_energy:{\"spectrum:white\":100000L}}]"
+    ]},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectrum:milestones/unlock_ink_use", "done": false},
+
+    // ---------------------------------------------------------------- 1. palette nell'inventario, Ink NON sbloccato
+    {"action": "log", "text": "palette nell'inventario, senza unlock_ink_use: il bident Fractal viene lanciato davvero"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "use_item", "hold_ticks": 20},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_bident", "count": 0, "exact": true},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:trichromatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item", "hold_ticks": 30},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_crossbow[spectrum:overcharged]", "present": false},
+    {"action": "assert_item", "predicate": "spectrum:pigment_palette", "dump": true},
+
+    // ---------------------------------------------------------------- 2. palette nell'inventario, Ink sbloccato
+    {"action": "command", "commands": ["advancement grant @s only spectrum:milestones/unlock_ink_use", "clear @s spectral_ascension:trichromatic_crossbow"]},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectrum:milestones/unlock_ink_use", "done": true},
+    {"action": "log", "text": "palette nell'inventario, con unlock_ink_use: copia illusoria (il bident resta in mano) e overcharge"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "use_item", "hold_ticks": 20},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_bident", "count": 1, "exact": true},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:trichromatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item", "hold_ticks": 30},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_crossbow[spectrum:overcharged]"},
+    {"action": "screenshot", "name": "overcharge_inventario"},
+    {"action": "assert_item", "predicate": "spectrum:pigment_palette", "dump": true},
+
+    // ---------------------------------------------------------------- 3. palette nello slot Curios, Ink sbloccato
+    {"action": "command", "commands": [
+      "clear @s", "effect give @s minecraft:saturation 600 10 true",
+      "curios replace palette 0 @s with spectrum:pigment_palette[spectrum:ink_storage={max_energy_total:0L,max_per_color:100000L,stored_energy:{\"spectrum:white\":100000L}}]"
+    ]},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_item", "predicate": "spectrum:pigment_palette", "count": 0, "exact": true},
+    {"action": "log", "text": "palette nello slot Curios, con unlock_ink_use: copia illusoria e overcharge"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:umbral_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "use_item", "hold_ticks": 20},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_item", "predicate": "spectral_ascension:umbral_bident", "count": 1, "exact": true},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item", "hold_ticks": 30},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:umbral_crossbow[spectrum:overcharged]"},
+
+    // ---------------------------------------------------------------- 4. palette nello slot Curios, Ink NON sbloccato
+    {"action": "command", "commands": ["advancement revoke @s only spectrum:milestones/unlock_ink_use", "clear @s"]},
+    {"action": "wait", "ticks": 10},
+    {"action": "log", "text": "palette nello slot Curios, senza unlock_ink_use: niente copia illusoria"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_bident[spectral_ascension:bident_mode=fractal]"},
+    {"action": "use_item", "hold_ticks": 20},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_item", "predicate": "spectral_ascension:argent_bident", "count": 0, "exact": true},
+
+    // ripristino: il mondo di test torna creativo e con l'Ink sbloccato
+    {"action": "command", "expect": "any", "commands": [
+      "advancement grant @s only spectrum:milestones/unlock_ink_use", "curios clear @s", "clear @s", "gamemode creative"
+    ]}
+  ]
+}

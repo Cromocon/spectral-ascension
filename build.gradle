@@ -1,0 +1,173 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.140'
+}
+
+version = mod_version
+group = mod_group_id
+base { archivesName = mod_id }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+// Source set "dev": scenario runner SOLO per lo sviluppo (src/dev/java + src/dev/resources).
+// È una mod separata (spectral_ascension_dev) caricata solo da runClient/runClientAuto;
+// non entra nel jar di rilascio, che `jar` costruisce solo da sourceSets.main.
+sourceSets {
+    dev {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    devImplementation.extendsFrom implementation
+    devCompileOnly.extendsFrom compileOnly
+    devRuntimeOnly.extendsFrom runtimeOnly
+}
+
+repositories {
+    maven { url = 'https://maven.is-immensely.gay/releases' }                 // Revelationary, Fractal, Arrowhead (DaFuqs)
+    maven { url = 'https://dl.cloudsmith.io/public/klikli-dev/mods/maven/' }  // Modonomicon
+    maven { url = 'https://maven.theillusivec4.top/' }                        // Curios
+    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' } // GeckoLib (richiesto da Allthemodium)
+    maven { url = 'https://maven.blamejared.com/'; content { includeGroup 'mezz.jei'; includeGroup 'net.mezzdev.config' } } // JEI (solo sviluppo)
+    maven { url = 'https://api.modrinth.com/maven'; content { includeGroup 'maven.modrinth' } }
+    maven { url = 'https://cfa2.cursemaven.com';    content { includeGroup 'curse.maven' } }
+}
+
+neoForge {
+    version = project.neo_version
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+    mods {
+        "${mod_id}" { sourceSet(sourceSets.main) }
+        spectral_ascension_dev { sourceSet(sourceSets.dev) }   // solo sviluppo, vedi sourceSets.dev
+    }
+    runs {
+        // Client di sviluppo MANUALE: cartella dedicata, utente offline fisso, entra diretto nel mondo di test.
+        // Uso: ./gradlew runClient   (il mondo sa_test viene creato da tools/reset_test_world.py se manca)
+        client {
+            client()
+            gameDirectory = project.file('run/client')
+            programArguments.addAll '--username', 'Dev', '--quickPlaySingleplayer', 'sa_test'
+            sourceSet = sourceSets.dev     // classpath con il codice di sviluppo (scenario runner, /sa scenario)
+            loadedMods = [mods.spectral_ascension, mods.spectral_ascension_dev]
+            systemProperty 'spectral_ascension.scenarioDir', project.file('src/dev/resources/scenarios').absolutePath
+        }
+        // Client AUTOMATICO per l'agente: stesso mondo e stessa cartella, piu' la property che attivera' lo scenario runner.
+        // Uso: tools/run_auto.sh  (lancia ./gradlew runClientAuto dentro uno schermo virtuale)
+        // Scenari: tutti per default; -PsaScenario=smoke,altro per sceglierli (tools/run_auto.sh --scenario ...).
+        clientAuto {
+            client()
+            gameDirectory = project.file('run/client')
+            programArguments.addAll '--username', 'Dev', '--quickPlaySingleplayer', 'sa_test'
+            programArguments.addAll '--width', '1280', '--height', '720'   // screenshot più leggibili
+            sourceSet = sourceSets.dev
+            loadedMods = [mods.spectral_ascension, mods.spectral_ascension_dev]
+            systemProperty 'spectral_ascension.scenarioDir', project.file('src/dev/resources/scenarios').absolutePath
+            systemProperties.put 'spectral_ascension.autoScenario', providers.gradleProperty('saScenario').orElse('all')
+        }
+        server { server(); programArgument '--nogui'; loadedMods = [mods.spectral_ascension] }
+        // Server di test senza finestra: carica Spectrum, ATM e la mod, esegue i GameTest e si chiude.
+        // Uso: ./gradlew runGameTestServer  (poi: python3 -I tools/check_log.py)
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = project.file('run/gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            loadedMods = [mods.spectral_ascension]
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+}
+
+neoForge.addModdingDependenciesTo(sourceSets.dev)
+
+dependencies {
+    // Spectrum 1.12.9: solo su Modrinth (il maven di DaFuqs si ferma a 1.12.5). Il POM Modrinth è vuoto,
+    // quindi le dipendenze di Spectrum vanno dichiarate a mano qui sotto.
+    implementation "maven.modrinth:spectrum:${spectrum_version}"
+    implementation "de.dafuqs:revelationary-neoforge:${revelationary_version}"
+    implementation("com.klikli_dev:modonomicon-1.21.1-neoforge:${modonomicon_version}") { exclude group: 'mezz.jei' }
+    compileOnly    "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    runtimeOnly    "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+
+    // Solo sviluppo: API di JEI per il plugin/azione dev (src/dev, JeiDev.java). Non finisce nel jar di rilascio.
+    devCompileOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+
+    // Librerie che Spectrum include al suo interno (jar-in-jar): servono per compilare se usiamo le loro classi.
+    compileOnly "de.dafuqs:Fractal:${fractal_version}"     // CreativeSubTabEvent (sotto-tab del creativo di Spectrum)
+    compileOnly "de.dafuqs:arrowhead:${arrowhead_version}" // serve per estendere le balestre di Spectrum
+
+    // Allthemodium 3.2.1 (su Modrinth c'è solo fino a 3.0.1) + GeckoLib, che Allthemodium richiede.
+    implementation "curse.maven:allthemodium-364466:${allthemodium_cf_file}"
+    runtimeOnly    "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
+
+    // Solo sviluppo: visualizzatori di ricette (EMI + JEI insieme). NON sono dipendenze della mod (non finiscono nel mods.toml).
+    // Spectrum ha un plugin EMI (de.dafuqs.spectrum.compat.emi) senza versione minima dichiarata: si usa l'ultimo EMI per 1.21.1.
+    // Per escluderli: ./gradlew ... -PnoRecipeViewers
+    // -PjeiOnly: come nell'istanza ATM10 (JEI + SpectrumJEI, senza EMI). SpectrumJEI "sconsiglia" EMI (neoforge.mods.toml, type discouraged):
+    // caricati insieme, FML mostra una schermata di avviso che blocca il client automatico, quindi con -PjeiOnly EMI non c'è.
+    if (!project.hasProperty('noRecipeViewers')) {
+        if (!project.hasProperty('jeiOnly')) runtimeOnly "maven.modrinth:emi:${emi_version}"
+        runtimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
+        // SpectrumJEI contiene già FractalJEI e JEIDrawables (jar-in-jar).
+        if (project.hasProperty('jeiOnly')) runtimeOnly files('libs/dev/SpectrumJEI-21.1.11.1-neoforge.jar')
+    }
+
+    // -Papothic: Apothic Enchanting VERO (+ Placebo e Apothic Attributes, sue dipendenze obbligatorie), jar copiati
+    // dall'istanza ATM10 «Mio» in libs/dev. Solo sviluppo/test (runClient, runClientAuto, runGameTestServer): i GameTest
+    // SAApothicTests girano solo con Apothic caricato. La config di Apothic dell'istanza (libs/dev/apotheosis) viene
+    // copiata nella cartella della run da copyApothicConfig.
+    if (project.hasProperty('apothic')) {
+        runtimeOnly files('libs/dev/ApothicEnchanting-1.21.1-1.6.4.jar', 'libs/dev/ApothicAttributes-1.21.1-2.11.0.jar',
+                'libs/dev/Placebo-1.21.1-9.9.4.jar')
+    }
+}
+
+// Con -Papothic: copia la config di Apothic dell'istanza ATM10 (libs/dev/apotheosis, copia in sola lettura di
+// config/apotheosis di «Mio») nelle cartelle delle run, a ogni avvio (Placebo può riscriverla: si riparte sempre da quella).
+var copyApothicConfig = tasks.register('copyApothicConfig', Copy) {
+    outputs.upToDateWhen { false }
+    into 'run'
+    from('libs/dev/apotheosis') { into 'gametest/config/apotheosis' }
+    from('libs/dev/apotheosis') { into 'client/config/apotheosis' }
+}
+if (project.hasProperty('apothic')) {
+    tasks.matching { it.name in ['runClient', 'runClientAuto', 'runGameTestServer'] }.configureEach { dependsOn copyApothicConfig }
+}
+
+// Crea il mondo di test sa_test se non esiste (non lo sovrascrive mai).
+var ensureTestWorld = tasks.register('ensureTestWorld', Exec) {
+    commandLine 'python3', '-I', file('tools/reset_test_world.py').absolutePath
+    outputs.upToDateWhen { false }
+}
+tasks.matching { it.name == 'runClient' || it.name == 'runClientAuto' }.configureEach { dependsOn ensureTestWorld }
+
+// Riempie i ${...} di neoforge.mods.toml con i valori di gradle.properties.
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version_range     : minecraft_version_range,
+            neo_version_range           : neo_version_range,
+            mod_id                      : mod_id,
+            mod_name                    : mod_name,
+            mod_license                 : mod_license,
+            mod_version                 : mod_version,
+            mod_authors                 : mod_authors,
+            mod_description             : mod_description,
+            spectrum_version_range      : spectrum_version_range,
+            allthemodium_version_range  : allthemodium_version_range,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }

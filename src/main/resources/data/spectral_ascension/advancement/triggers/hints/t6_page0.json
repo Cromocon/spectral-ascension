@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "unlocked_t6": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/trichromatic"
+      }
+    },
+    "tick_unlocked_t6": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/trichromatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "hint_purchased": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "hint_purchased",
+      "unlocked_t6",
+      "tick_unlocked_t6"
+    ]
+  ]
+}

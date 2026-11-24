@@ -1,0 +1,6 @@
+{
+  "parent": "spectrum:templates_item/handheld_oversized_throwing",
+  "textures": {
+    "layer0": "spectral_ascension:item/argent_bident_oversized"
+  }
+}

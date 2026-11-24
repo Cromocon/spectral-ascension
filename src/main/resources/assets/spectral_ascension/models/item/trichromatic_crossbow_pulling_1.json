@@ -1,0 +1,14 @@
+{
+  "parent": "spectrum:templates_item/crossbow_oversized",
+  "textures": {
+    "layer0": "spectral_ascension:item/trichromatic_crossbow_pulling_1"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "oversized": 1.0
+      },
+      "model": "spectral_ascension:item/trichromatic_crossbow_pulling_1_oversized"
+    }
+  ]
+}

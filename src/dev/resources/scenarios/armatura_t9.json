@@ -1,0 +1,169 @@
+// Armatura T9 Alloy «Prismatic» indossata (set t9-m3): terza persona davanti e dietro da fermo, serie
+// dell'animazione (40 fotogrammi x 5 tick: every 10 = un fotogramma sì e uno no, count 20 = tutto il ciclo di
+// 10 s), due armor stand di lato, poi il giocatore che cammina e corre (mantello e perizoma con la fisica
+// del mantello vanilla, BedrockCapeRenderer di Spectrum). Copia di armatura_t8.json, 40 blocchi più in là su x.
+{
+  "description": "Armatura T9 (Alloy) indossata: davanti, dietro, di lato, camminando e correndo",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "clear @s",
+        "time set 6000",
+        "weather clear",
+        "kill @e[type=armor_stand]",
+        "tp @s 420.5 -60 300.5 0 0",
+        "item replace entity @s armor.head with spectral_ascension:prismatic_helmet",
+        "item replace entity @s armor.chest with spectral_ascension:prismatic_chestplate",
+        "item replace entity @s armor.legs with spectral_ascension:prismatic_leggings",
+        "item replace entity @s armor.feet with spectral_ascension:prismatic_boots"
+      ]
+    },
+    {
+      "action": "hide_hud",
+      "value": true
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": 15
+    },
+    {
+      "action": "third_person",
+      "view": "front"
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "fermo_davanti"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_armatura",
+      "count": 20,
+      "every": 10
+    },
+    {
+      "action": "third_person",
+      "view": "back"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "fermo_dietro"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "summon minecraft:armor_stand 419.3 -60 304.5 {Rotation:[90f,0f],NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:prismatic_boots\",count:1},{id:\"spectral_ascension:prismatic_leggings\",count:1},{id:\"spectral_ascension:prismatic_chestplate\",count:1},{id:\"spectral_ascension:prismatic_helmet\",count:1}]}",
+        "summon minecraft:armor_stand 421.7 -60 304.5 {Rotation:[-90f,0f],NoGravity:1b,ArmorItems:[{id:\"spectral_ascension:prismatic_boots\",count:1},{id:\"spectral_ascension:prismatic_leggings\",count:1},{id:\"spectral_ascension:prismatic_chestplate\",count:1},{id:\"spectral_ascension:prismatic_helmet\",count:1}]}"
+      ]
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "hide_hud",
+      "value": true,
+      "hand": false
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": 10
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "lato_fermo"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "kill @e[type=armor_stand]"
+    },
+    {
+      "action": "hide_hud",
+      "value": true
+    },
+    {
+      "action": "third_person",
+      "view": "back"
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": 15
+    },
+    {
+      "action": "move",
+      "direction": "forward",
+      "keep": true
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "cammina_dietro"
+    },
+    {
+      "action": "move",
+      "direction": "forward",
+      "sprint": true,
+      "keep": true
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "corre_dietro"
+    },
+    {
+      "action": "third_person",
+      "view": "front"
+    },
+    {
+      "action": "move",
+      "direction": "forward",
+      "sprint": true,
+      "keep": true
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "corre_davanti"
+    },
+    {
+      "action": "move",
+      "direction": "none"
+    },
+    {
+      "action": "wait",
+      "ticks": 40
+    },
+    {
+      "action": "screenshot",
+      "name": "fermo_dopo_corsa"
+    }
+  ]
+}

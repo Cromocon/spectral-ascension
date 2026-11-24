@@ -1,0 +1,53 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "allthemodium"
+    }
+  ],
+  "type": "spectrum:fusion_shrine",
+  "group": "spectral_ascension_t6_armor",
+  "time": 1600,
+  "experience": 24.0,
+  "fluid": {
+    "fluid": "spectrum:dragonrot"
+  },
+  "copy_components": true,
+  "disable_yield_upgrades": true,
+  "ingredients": [
+    "spectrum:bedrock_leggings",
+    "spectrum:azure_dike_belt",
+    {
+      "tag": "c:ingots/allthemodium",
+      "count": 7
+    },
+    {
+      "item": "spectrum:bedrock_dust",
+      "count": 7
+    },
+    {
+      "item": "spectrum:amethyst_powder",
+      "count": 32
+    },
+    {
+      "item": "spectrum:citrine_powder",
+      "count": 32
+    },
+    {
+      "item": "spectrum:topaz_powder",
+      "count": 32
+    }
+  ],
+  "result": {
+    "id": "spectral_ascension:trichromatic_leggings",
+    "count": 1,
+    "components": {
+      "minecraft:enchantments": {
+        "levels": {
+          "minecraft:blast_protection": 6
+        }
+      }
+    }
+  },
+  "required_advancement": "spectral_ascension:unlocks/equipment/t6/trichromatic_leggings"
+}

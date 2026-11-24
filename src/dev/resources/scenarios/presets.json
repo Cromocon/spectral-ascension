@@ -1,0 +1,62 @@
+// Verifica in gioco dei due preset di struttura (Pedestal Moonstone e Fusion Shrine):
+// costruzione, Multiblock.validate, poi il controllo VERO di Spectrum (advancement completed_multiblock).
+{
+  "description": "Preset Pedestal Moonstone e Fusion Shrine: costruiti, validati e riconosciuti da Spectrum",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "tp @s 0.5 -60 0.5",
+      // advancement da ottenere costruendo: il loro criterio "gotten_previous" (revelationary:advancement_gotten)
+      // scatta solo quando il genitore viene ottenuto DI NUOVO, quindi si revoca e riconcede anche il genitore
+      "advancement revoke @s only spectrum:lategame/build_complex_pedestal_structure",
+      "advancement revoke @s only spectrum:build_fusion_shrine",
+      "advancement revoke @s only spectrum:lategame/craft_moonstone_pedestal",
+      "advancement revoke @s only spectrum:collect_all_basic_pigments_besides_brown",
+      "advancement grant @s only spectrum:lategame/craft_moonstone_pedestal",
+      "advancement grant @s only spectrum:collect_all_basic_pigments_besides_brown"
+    ]},
+    {"action": "assert_advancement", "id": "spectrum:lategame/build_complex_pedestal_structure", "done": false},
+    {"action": "assert_advancement", "id": "spectrum:build_fusion_shrine", "done": false},
+
+    // --- Pedestal Moonstone ---
+    {"action": "build", "preset": "pedestal_moonstone", "pos": [0, -60, 12]},
+    {"action": "assert_multiblock", "preset": "pedestal_moonstone", "pos": [0, -60, 12]},
+    // Il Pedestal piazzato dal preset non ha proprietario: lo si ripiazza a mano (clic destro) per far scattare
+    // il controllo della struttura di Spectrum, che premia il proprietario con l'advancement.
+    {"action": "command", "command": "setblock 0 -60 12 air"},
+    {"action": "assert_multiblock", "preset": "pedestal_moonstone", "pos": [0, -60, 12], "valid": false},
+    {"action": "hold", "slot": 0, "item": "spectrum:pedestal_moonstone"},
+    {"action": "command", "command": "tp @s 0.5 -60 9.5 0 30"},
+    {"action": "use_on_block", "pos": [0, -61, 12], "face": "up"},
+    {"action": "assert_block", "pos": [0, -60, 12], "block": "spectrum:pedestal_moonstone"},
+    {"action": "assert_multiblock", "preset": "pedestal_moonstone", "pos": [0, -60, 12]},
+    {"action": "hold", "slot": 1, "item": "minecraft:air"},
+    {"action": "use_on_block", "pos": [0, -60, 12], "face": "north"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "pedestal_schermata"},
+    {"action": "close_screen"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectrum:lategame/build_complex_pedestal_structure"},
+    {"action": "command", "command": "tp @s 9.5 -54 1.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [0, -59, 12]},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "pedestal_struttura"},
+    {"action": "hide_hud", "value": false},
+
+    // --- Fusion Shrine ---
+    {"action": "build", "preset": "fusion_shrine", "pos": [24, -60, 12]},
+    {"action": "assert_block", "pos": [24, -60, 12], "block": "spectrum:fusion_shrine_basalt"},
+    {"action": "command", "command": "tp @s 24.5 -60 8.5 0 20"},
+    {"action": "hold", "slot": 1, "item": "minecraft:air"},
+    {"action": "use_on_block", "pos": [24, -60, 12], "face": "north"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectrum:build_fusion_shrine"},
+    {"action": "command", "command": "tp @s 31.5 -55 4.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [24, -59, 12]},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "fusion_shrine"}
+  ]
+}

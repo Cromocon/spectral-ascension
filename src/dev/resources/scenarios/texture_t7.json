@@ -1,0 +1,539 @@
+// Controllo visivo del set di texture T7 «Umbral» (t7), installato da tools/install_textures.py:
+// i 15 pezzi in mano in prima persona, gli oggetti speciali (workstaff, ultra spadone, balestra scarica e carica,
+// bident) in mano, cioè con le texture _oversized, animazioni (frametime 5: every 5 = un fotogramma per scatto),
+// arco nei tre stati di tensione, canna lanciata, armatura indossata davanti/dietro e animata (12 fotogrammi x 5
+// tick = ciclo di 60 tick: la serie ne scatta 8 a 5 tick), inventario con tutte le icone 16x16.
+{
+  "description": "Texture T7 Umbral (t7): icone animate, speciali, inventario, armatura indossata, arco e canna",
+  "stop_on_fail": false,
+  "steps": [
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "gamemode creative",
+        "clear @s",
+        "time set 6000",
+        "weather clear",
+        "tp @s 40.5 -60 0.5 0 0"
+      ]
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "hide_hud",
+      "value": true
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": -30
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_sword"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_spada"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_spada",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_axe"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_ascia"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_ascia",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_shovel"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_pala"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_hoe"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_zappa"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_shears"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_cesoie"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_bow"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_arco"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_fishing_rod"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_canna"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_helmet"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_elmo"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_elmo",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_chestplate"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_corazza"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_leggings"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_gambali"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_boots"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_stivali"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_workstaff"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_workstaff"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_workstaff",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_ultra_greatsword"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_spadone"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_spadone",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_crossbow"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_balestra"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_balestra",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_bident"
+    },
+    {
+      "action": "wait",
+      "ticks": 30
+    },
+    {
+      "action": "screenshot",
+      "name": "mano_bident"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_bident",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "balestra_carica_freccia"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"spectrum:topaz_glass_arrow\",count:1}]]"
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "balestra_carica_topazio"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"minecraft:firework_rocket\",count:1}]]"
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "balestra_carica_razzo"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_bident[spectral_ascension:bident_mode=off]"
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": -10
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "use_item",
+      "keep": true
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "bident_carica_lancio",
+      "frames": 1
+    },
+    {
+      "action": "release_use"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "kill @e[type=spectrum:bident,distance=..64]"
+    },
+    {
+      "action": "command",
+      "command": "give @s minecraft:arrow 64"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_bow"
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": -10
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "use_item",
+      "keep": true
+    },
+    {
+      "action": "wait",
+      "ticks": 3
+    },
+    {
+      "action": "screenshot",
+      "name": "arco_pulling_0",
+      "frames": 1
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "arco_pulling_1",
+      "frames": 1
+    },
+    {
+      "action": "wait",
+      "ticks": 12
+    },
+    {
+      "action": "screenshot",
+      "name": "arco_pulling_2",
+      "frames": 1
+    },
+    {
+      "action": "release_use"
+    },
+    {
+      "action": "hold",
+      "slot": 0,
+      "item": "spectral_ascension:umbral_fishing_rod"
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": 30
+    },
+    {
+      "action": "use_item"
+    },
+    {
+      "action": "wait",
+      "ticks": 15
+    },
+    {
+      "action": "screenshot",
+      "name": "canna_lanciata"
+    },
+    {
+      "action": "use_item"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "command",
+      "commands": [
+        "item replace entity @s armor.head with spectral_ascension:umbral_helmet",
+        "item replace entity @s armor.chest with spectral_ascension:umbral_chestplate",
+        "item replace entity @s armor.legs with spectral_ascension:umbral_leggings",
+        "item replace entity @s armor.feet with spectral_ascension:umbral_boots",
+        "item replace entity @s weapon.mainhand with minecraft:air"
+      ]
+    },
+    {
+      "action": "look",
+      "yaw": 0,
+      "pitch": 15
+    },
+    {
+      "action": "third_person",
+      "view": "front"
+    },
+    {
+      "action": "hide_hud",
+      "value": true
+    },
+    {
+      "action": "wait",
+      "ticks": 20
+    },
+    {
+      "action": "screenshot",
+      "name": "armatura_davanti"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_armatura",
+      "count": 8,
+      "every": 5
+    },
+    {
+      "action": "third_person",
+      "view": "back"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "armatura_dietro"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "commands": [
+        "item replace entity @s hotbar.0 with spectral_ascension:umbral_sword",
+        "item replace entity @s hotbar.1 with spectral_ascension:umbral_axe",
+        "item replace entity @s hotbar.2 with spectral_ascension:umbral_shovel",
+        "item replace entity @s hotbar.3 with spectral_ascension:umbral_hoe",
+        "item replace entity @s hotbar.4 with spectral_ascension:umbral_shears",
+        "item replace entity @s hotbar.5 with spectral_ascension:umbral_bow",
+        "item replace entity @s hotbar.6 with spectral_ascension:umbral_fishing_rod",
+        "item replace entity @s hotbar.7 with spectral_ascension:umbral_workstaff",
+        "item replace entity @s hotbar.8 with spectral_ascension:umbral_ultra_greatsword",
+        "item replace entity @s inventory.0 with spectral_ascension:umbral_helmet",
+        "item replace entity @s inventory.1 with spectral_ascension:umbral_chestplate",
+        "item replace entity @s inventory.2 with spectral_ascension:umbral_leggings",
+        "item replace entity @s inventory.3 with spectral_ascension:umbral_boots",
+        "item replace entity @s inventory.4 with spectral_ascension:umbral_crossbow",
+        "item replace entity @s inventory.5 with spectral_ascension:umbral_bident"
+      ]
+    },
+    {
+      "action": "first_person"
+    },
+    {
+      "action": "hide_hud",
+      "value": false
+    },
+    {
+      "action": "command",
+      "command": "gamemode survival"
+    },
+    {
+      "action": "wait",
+      "ticks": 5
+    },
+    {
+      "action": "open_screen",
+      "screen": "inventory"
+    },
+    {
+      "action": "wait",
+      "ticks": 10
+    },
+    {
+      "action": "screenshot",
+      "name": "inventario"
+    },
+    {
+      "action": "screenshot_series",
+      "name": "anim_inventario",
+      "count": 6,
+      "every": 5
+    },
+    {
+      "action": "close_screen"
+    },
+    {
+      "action": "command",
+      "command": "gamemode creative"
+    },
+    {
+      "action": "hide_hud",
+      "value": false
+    }
+  ]
+}

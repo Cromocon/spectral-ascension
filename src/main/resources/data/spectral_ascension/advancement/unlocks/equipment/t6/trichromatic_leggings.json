@@ -1,0 +1,93 @@
+{
+  "criteria": {
+    "unlocked_t6": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/trichromatic"
+      }
+    },
+    "tick_unlocked_t6": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/trichromatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_bedrock_leggings": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/equipment/bedrock_tools"
+      }
+    },
+    "tick_unlocked_bedrock_leggings": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/equipment/bedrock_tools": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_azure_dike_belt": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/trinkets/azure_dike_belt"
+      }
+    },
+    "tick_unlocked_azure_dike_belt": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/trinkets/azure_dike_belt": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t6",
+      "tick_unlocked_t6"
+    ],
+    [
+      "unlocked_bedrock_leggings",
+      "tick_unlocked_bedrock_leggings"
+    ],
+    [
+      "unlocked_azure_dike_belt",
+      "tick_unlocked_azure_dike_belt"
+    ]
+  ]
+}

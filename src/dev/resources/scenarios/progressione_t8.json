@@ -1,0 +1,111 @@
+// Progressione del T8 (Argent) da un giocatore "vergine". Catena VERA (JSON generati da tools/gen_data.py):
+//   spectral_ascension:unlocks/tiers/argent   = advancement_gotten(unlocks/tiers/umbral) E advancement_gotten(spectrum:unlocks/
+//                                           malachite/glass_crest_tools) E inventory_changed(#c:ingots/unobtainium)
+//                                           (ricerca/04 §5.1)
+//   unlocks/equipment/t8/argent_<oggetto> = advancement_gotten(t8) E advancement_gotten(unlocks/equipment/t7/umbral_<oggetto>)
+//   voce T8 (equipment, figlia della voce T7) = condizione unlocks/tiers/argent, nascosta da bloccata
+//   (l'Idea esiste solo per il T6: niente Idea T8 dal 2026-11-23)
+// Controlla anche l'ordine: l'unobtainium preso PRIMA del T7 non apre niente, e il T7 da solo (senza gli attrezzi
+// glass crest) nemmeno. Le NOSTRE advancement non si concedono mai a mano: devono scattare da sole.
+{
+  "description": "Catena di sblocco del T8: tier dopo il T7 e gli attrezzi glass crest, pezzi dopo il pezzo T7, voce del guidebook",
+  "steps": [
+    // ---------------------------------------------------------------- 0. giocatore vergine
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "tp @s 0.5 -60 -6.5 180 0",
+      "advancement revoke @s everything"
+    ]},
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/argent", "done": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t8_equipment", "unlocked": false},
+
+    // ---------------------------------------------------------------- 1. unobtainium prima del T7: niente
+    {"action": "command", "command": "give @s allthemodium:unobtainium_ingot"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/argent", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t8/argent_sword", "unlocked": false},
+
+    // ---------------------------------------------------------------- 2. T6 e T7, senza glass crest: ancora niente
+    {"action": "command", "commands": [
+      "advancement grant @s until spectrum:place_pedestal",
+      "advancement grant @s until spectrum:lategame/build_complex_pedestal_structure",
+      "advancement grant @s until spectrum:build_fusion_shrine",
+      "advancement grant @s until spectrum:milestones/unlock_ink_use",
+      "advancement grant @s only spectrum:unlocks/equipment/bedrock_tools",
+      // dal 2026-11-18 l'armatura T6 si fa con gli accessori Dike: senza questi sblocchi i pezzi T6 (e quindi
+      // T7/T8) dell'armatura restano bloccati
+      "advancement grant @s until spectrum:unlocks/trinkets/puff_circlet",
+      "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_ring",
+      "advancement grant @s until spectrum:unlocks/trinkets/azure_dike_belt",
+      "advancement grant @s until spectrum:unlocks/trinkets/shieldgrasp_amulet",
+      "advancement grant @s until spectrum:unlocks/trinkets/azuresque_dike_core"
+    ]},
+    {"action": "command", "command": "give @s allthemodium:allthemodium_ingot"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic"},
+    {"action": "command", "command": "give @s allthemodium:vibranium_ingot"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/umbral"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t7/umbral_sword"},
+    {"action": "assert_advancement", "id": "spectrum:unlocks/malachite/glass_crest_tools", "done": false},
+    {"action": "wait", "ticks": 20},
+    // T7 e unobtainium ci sono, gli attrezzi glass crest no: il T8 resta chiuso (lucchetto in più di ricerca/04).
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/argent", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_sword", "done": false},
+    {"action": "wait", "ticks": 40},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t8_equipment", "unlocked": false},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t7_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_t7_senza_t8"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 3. attrezzi glass crest → T8
+    {"action": "command", "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_tools"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/argent"},
+    // I pezzi T7 sbloccati (dai bedrock tools) aprono i T8 corrispondenti; quelli che chiedono la workstaff glass
+    // crest, i bident o gli accessori no.
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_sword"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_axe"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_boots"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t8/argent_sword", "unlocked": true},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_workstaff", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_bident", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_helmet"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t8/argent_workstaff", "unlocked": false},
+    {"action": "wait", "ticks": 40},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t8_equipment", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t8_equipment", "page": 0, "unlocked": true},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t8_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_t8_tooltip"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t8_equipment", "page": 0},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t8_pagina0"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 4. workstaff glass crest → T6 → T7 → T8
+    {"action": "command", "command": "advancement grant @s until spectrum:unlocks/malachite/glass_crest_workstaff"},
+    {"action": "wait", "ticks": 30},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t7/umbral_workstaff"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t8/argent_workstaff"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t8/argent_workstaff"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_workstaff_t8"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t8/argent_chestplate"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_corazza_t8_bloccata"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t8/argent_sword"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_spada_t8"},
+    {"action": "close_screen"},
+    {"action": "command", "expect": "any", "commands": ["clear @s", "advancement revoke @s everything"]}
+  ]
+}

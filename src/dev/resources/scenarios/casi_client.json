@@ -1,0 +1,97 @@
+// Casi che servono il client vero (giocatore, HUD, modelli, redstone del mondo), scritti apposta e indipendenti
+// dagli altri scenari. I GameTest coprono la logica lato server; qui si vede quello che vede il giocatore.
+// 1. Cesoie nel dispenser acceso da un blocco di redstone vero (bug riparato: prima venivano sparate fuori).
+// 2. Stati dei modelli in prima persona per il T8: balestra a riposo, in carica (3 fasi) e carica con ognuna delle
+//    8 munizioni; arco teso; canna lanciata; bident in carica. Da guardare negli screenshot.
+{
+  "description": "Casi client: cesoie nel dispenser con redstone, stati dei modelli T8",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode survival", "clear @s", "curios clear @s", "effect clear @s", "time set 6000", "weather clear",
+      "difficulty easy", "gamerule keepInventory true",
+      "tp @s 900.5 -60 900.5 0 0",
+      "kill @e[type=!player,distance=..30]"
+    ]},
+
+    // ---------------------------------------------------------------- 1. cesoie nel dispenser con la redstone
+    {"action": "log", "text": "cesoie T6/T7/T8 nei dispenser davanti a tre pecore, accesi con un blocco di redstone"},
+    {"action": "command", "commands": [
+      "fill 903 -61 905 909 -58 909 minecraft:air",
+      "fill 903 -61 905 909 -61 909 minecraft:stone",
+      "setblock 904 -60 906 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:\"spectral_ascension:trichromatic_shears\",count:1}]}",
+      "setblock 906 -60 906 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:\"spectral_ascension:umbral_shears\",count:1}]}",
+      "setblock 908 -60 906 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:\"spectral_ascension:argent_shears\",count:1}]}",
+      "summon minecraft:sheep 904.5 -60 907.5 {NoAI:1b,Tags:[\"sa_pecora\"]}",
+      "summon minecraft:sheep 906.5 -60 907.5 {NoAI:1b,Tags:[\"sa_pecora\"]}",
+      "summon minecraft:sheep 908.5 -60 907.5 {NoAI:1b,Tags:[\"sa_pecora\"]}"
+    ]},
+    {"action": "wait", "ticks": 10},
+    {"action": "command", "commands": [
+      "setblock 904 -59 906 minecraft:redstone_block", "setblock 906 -59 906 minecraft:redstone_block", "setblock 908 -59 906 minecraft:redstone_block"
+    ]},
+    {"action": "wait", "ticks": 20},
+    {"action": "command", "command": "execute if entity @e[tag=sa_pecora,nbt={Sheared:1b}]", "expect": "success"},
+    {"action": "command", "command": "execute unless entity @e[tag=sa_pecora,nbt={Sheared:0b}]", "expect": "success"},
+    {"action": "command", "command": "execute if block 906 -60 906 minecraft:dispenser{Items:[{id:\"spectral_ascension:umbral_shears\"}]}", "expect": "success"},
+    {"action": "look", "at": [906, -60, 907]},
+    {"action": "screenshot", "name": "pecore_tosate"},
+    {"action": "command", "commands": ["kill @e[tag=sa_pecora]", "kill @e[type=item,distance=..30]", "fill 903 -61 905 909 -58 909 minecraft:air", "fill 903 -61 905 909 -61 909 minecraft:grass_block"]},
+
+    // ---------------------------------------------------------------- 2. stati dei modelli (T8, prima persona)
+    {"action": "look", "yaw": 0, "pitch": 0},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow"},
+    {"action": "wait", "ticks": 20},
+    {"action": "screenshot", "name": "balestra_riposo"},
+    {"action": "command", "command": "item replace entity @s inventory.9 with minecraft:arrow 64"},
+    {"action": "use_item", "keep": true},
+    {"action": "screenshot_series", "name": "balestra_carica", "count": 4, "every": 4},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:argent_crossbow[charged_projectiles]", "slot": "mainhand"},
+    {"action": "screenshot", "name": "balestra_freccia"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"minecraft:firework_rocket\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_razzo"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:malachite_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_vetro_malachite"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:topaz_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_topazio"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:amethyst_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_ametista"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:citrine_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_citrino"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:onyx_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_onice"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"spectrum:moonstone_glass_arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "balestra_moonstone"},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_bow"},
+    {"action": "use_item", "keep": true},
+    {"action": "screenshot_series", "name": "arco_teso", "count": 3, "every": 8},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 10},
+    {"action": "command", "command": "kill @e[type=arrow,distance=..60]"},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_fishing_rod"},
+    {"action": "look", "yaw": 0, "pitch": -20},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 15},
+    {"action": "screenshot", "name": "canna_lanciata"},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 5},
+
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_bident[spectral_ascension:bident_mode=off]"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 12},
+    {"action": "screenshot", "name": "bident_in_carica"},
+    {"action": "release_use"},
+    {"action": "wait", "ticks": 10},
+    {"action": "command", "expect": "any", "commands": ["kill @e[type=!player,distance=..60]", "clear @s", "gamerule keepInventory false", "difficulty easy"]}
+  ]
+}

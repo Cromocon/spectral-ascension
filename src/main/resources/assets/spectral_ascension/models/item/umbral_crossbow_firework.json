@@ -1,0 +1,14 @@
+{
+  "parent": "spectrum:templates_item/crossbow_oversized",
+  "textures": {
+    "layer0": "spectral_ascension:item/umbral_crossbow_firework"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "oversized": 1.0
+      },
+      "model": "spectral_ascension:item/umbral_crossbow_firework_oversized"
+    }
+  ]
+}

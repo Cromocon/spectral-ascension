@@ -1,0 +1,21 @@
+# La repo contiene SOLO la mod: sorgenti e file Gradle.
+# Tutto il resto (PASSAGGIO, ricerca, design, tools, libs/dev, run, build) resta in locale.
+/*
+!/.gitignore
+!/README.md
+!/LICENSE
+!/build.gradle
+!/settings.gradle
+!/gradle.properties
+!/gradlew
+!/gradlew.bat
+!/gradle/
+!/src/
+
+# Generati da Gradle o dall'IDE
+.gradle/
+build/
+.idea/
+*.iml
+out/
+__pycache__/

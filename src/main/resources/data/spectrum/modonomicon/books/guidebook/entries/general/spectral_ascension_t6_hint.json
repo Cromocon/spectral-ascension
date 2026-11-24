@@ -1,0 +1,47 @@
+{
+  "name": "book.spectrum.guidebook.idea",
+  "description": "book.spectral_ascension.added_by",
+  "category": "spectrum:general",
+  "hide_while_locked": true,
+  "parents": [],
+  "background_u_index": 0,
+  "background_v_index": 5,
+  "x": 6,
+  "y": 8,
+  "icon": "spectrum:textures/gui/guidebook/icons/idea.png",
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "spectrum:lategame/create_malachite_tool"
+  },
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "spectrum:hint",
+      "title": "book.spectrum.guidebook.ideas.small_clue",
+      "completion_advancement": "spectral_ascension:triggers/hints/t6_page0",
+      "cost": {
+        "item": "spectrum:moonstone_shard",
+        "count": 8
+      },
+      "amount": {
+        "item": "spectrum:moonstone_shard",
+        "count": 8
+      },
+      "text": "book.spectral_ascension.guidebook.t6_hint.page0.text"
+    },
+    {
+      "type": "spectrum:hint",
+      "title": "book.spectrum.guidebook.ideas.concise_instructions",
+      "completion_advancement": "spectral_ascension:triggers/hints/t6_page1",
+      "cost": {
+        "item": "spectrum:moonstone_shard",
+        "count": 24
+      },
+      "amount": {
+        "item": "spectrum:moonstone_shard",
+        "count": 24
+      },
+      "text": "book.spectral_ascension.guidebook.t6_hint.page1.text"
+    }
+  ]
+}

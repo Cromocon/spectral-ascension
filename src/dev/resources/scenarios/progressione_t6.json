@@ -1,0 +1,316 @@
+// Progressione del T6 (Trichromatic) da un giocatore "vergine" per Spectrum.
+// Si concedono gli advancement passo per passo lungo la catena VERA (ricavata dai JSON generati in
+// src/main/resources/data/spectral_ascension/advancement/ e dai lucchetti delle ricette):
+//   spectral_ascension:unlocks/tiers/trichromatic = advancement_gotten(spectrum:lategame/build_complex_pedestal_structure)
+//                                         E inventory_changed(#c:ingots/allthemodium)
+//   unlocks/equipment/t6/<oggetto>      = advancement_gotten(t6) E gli eventuali sblocchi Spectrum dell'ingrediente
+//   ricette (dal 2026-11-18 tutte alla Fusion Shrine con Dragonrot): spectrum:build_fusion_shrine (sblocco del TIPO di ricetta, FusionShrineRecipe)
+//                          + required_advancement. Le pagine ricetta del libro seguono lo stesso controllo.
+// Ogni lucchetto Spectrum è in OR con un criterio minecraft:tick che controlla di continuo lo stesso advancement
+// (recupero per le partite già avanzate). Le NOSTRE advancement non si concedono mai a mano: devono scattare da sole.
+{
+  "description": "Catena di sblocco del T6: advancement, ricette, voci e pagine del guidebook, EMI",
+  "steps": [
+    // ---------------------------------------------------------------- 0. giocatore vergine
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "tp @s 0.5 -60 -6.5 180 0",
+      "advancement revoke @s everything"
+    ]},
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "wait", "ticks": 10},
+    // La voce T6 ha come genitore quella dei bedrock tools ed è hide_while_locked (come le voci di Spectrum): finché
+    // il tier non è sbloccato resta fuori dalla mappa, anche con i bedrock tools: nessuno spoiler e nessun tooltip.
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/equipment/bedrock_tools"},
+    {"action": "wait", "ticks": 40},  // il client del libro ci mette un po' ad aggiornare la visibilità delle voci
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "unlocked": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/tools_and_armor/bedrock_tools", "unlocked": true},  // serve anche a sincronizzare il libro
+    // prima la voce genitore (apre la categoria Equipment), poi quella T6
+    {"action": "book_focus", "entry": "spectrum:equipment/tools_and_armor/bedrock_tools", "hover": false},
+    {"action": "wait", "ticks": 10},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t6_equipment"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "libro_equipment_t6_nascosta_con_bedrock"},
+    {"action": "close_screen"},
+    // "everything" e non "only": i criteri parziali degli oggetti (bedrock gotten) restano registrati anche se
+    // l'advancement di Spectrum viene tolto, e sporcherebbero i controlli "ancora bloccato" più sotto.
+    {"action": "command", "expect": "any", "command": "advancement revoke @s everything"},
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectrum:lategame/build_complex_pedestal_structure", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate", "unlocked": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_workstaff", "unlocked": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident", "unlocked": false},
+    // voce General: senza condizione, visibile da subito; voce T6: NASCOSTA finché è bloccata (hide_while_locked true)
+    {"action": "assert_book_entry", "entry": "spectrum:general/spectral_ascension", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "unlocked": false},
+    {"action": "book_focus", "entry": "spectrum:general/spectral_ascension"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_general_voce_addon_tooltip"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/spectral_ascension"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_voce_addon"},  // testo: «Perhaps there is a metal out there stronger than bedrock itself…», niente Pedestal
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t6_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_prima_nascosta"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_spada_prima"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 0b. voce Idea («An Idea»): indizio sul metallo
+    // Voce spectrum:hint costruita come le idee di Spectrum, nascosta finché non si crea il primo attrezzo di malachite
+    // (advancement spectrum:lategame/create_malachite_tool: Fusion Shrine con un oggetto di #spectrum:malachite_equipment).
+    // Costo 8 / 24 spectrum:moonstone_shard; le pagine si aprono gratis allo sblocco del T6 (advancement triggers/hints).
+    {"action": "assert_book_entry", "entry": "spectrum:general/spectral_ascension_t6_hint", "unlocked": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page0", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1", "done": false},
+    {"action": "command", "command": "advancement grant @s only spectrum:lategame/create_malachite_tool"},
+    {"action": "wait", "ticks": 40},
+    {"action": "assert_book_entry", "entry": "spectrum:general/spectral_ascension_t6_hint", "unlocked": true},
+    {"action": "book_focus", "entry": "spectrum:general/spectral_ascension_t6_hint"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "idea_t6_mappa_tooltip"},
+    {"action": "close_screen"},
+    // acquisto in sopravvivenza (in creativo il pulsante paga comunque gratis): 40 shard, con il costo 8 + 24.
+    // buy_hint aspetta da solo che il client sia survival; qui si controlla prima che il server lo sia davvero.
+    {"action": "command", "expect": "success", "command": "gamemode survival"},
+    {"action": "command", "expect": "any", "command": "clear @s"},
+    {"action": "command", "expect": "success", "command": "give @s spectrum:moonstone_shard 40"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_item", "item": "spectrum:moonstone_shard", "count": 40, "exact": true, "within": 40},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/spectral_ascension_t6_hint", "page": 0},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "idea_t6_cifrata"},  // entrambe le pagine: testo offuscato e pulsante «Uncover Insight»
+    // le pagine devono essere NON completate prima del clic: l'advancement di completamento è in OR con lo sblocco
+    // reale (hint_purchased), quindi solo da "non fatto" a "fatto" + shard scalati si distingue l'acquisto vero
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page0", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1", "done": false},
+    {"action": "buy_hint", "index": 0},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page0"},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1", "done": false},
+    // il pacchetto GuidebookHintBoughtPayload fa togliere al server il costo (8) da tutto l'inventario.
+    // Causa del vecchio "shard non tolti": BookHintPage.fromJson di Spectrum legge la chiave "amount" (il wiki e i
+    // JSON di Spectrum dicono "cost"): con "cost" il costo resta EMPTY (count 0) e il pagamento è gratis. buy_hint
+    // fallisce se il costo letto è vuoto; la pagina deve quindi usare "amount".
+    {"action": "assert_item", "item": "spectrum:moonstone_shard", "count": 32, "exact": true, "within": 40},
+    {"action": "wait", "ticks": 150},  // il testo si decifra a poco a poco
+    {"action": "screenshot", "name": "idea_t6_pagina0_svelata"},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1", "done": false},  // non già completa prima del clic
+    {"action": "buy_hint", "index": 1},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1"},
+    {"action": "assert_item", "item": "spectrum:moonstone_shard", "count": 8, "exact": true, "within": 40},  // 32 - 24
+    {"action": "wait", "ticks": 250},
+    {"action": "screenshot", "name": "idea_t6_svelata"},
+    {"action": "close_screen"},
+    // le pagine acquistate restano in chiaro: riaprendo la voce niente pulsante, testo subito leggibile
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/spectral_ascension_t6_hint", "page": 0},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "idea_t6_riaperta"},
+    {"action": "close_screen"},
+    // si torna come prima per il resto dello scenario: giocatore vergine, creativo, senza la pagina 1 acquistata
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s",
+      "advancement revoke @s only spectral_ascension:triggers/hints/t6_page1",
+      "advancement revoke @s only spectrum:lategame/create_malachite_tool"
+    ]},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic", "done": false},
+
+    // ---------------------------------------------------------------- 1. Pedestal Moonstone con struttura complex
+    // "until" = l'advancement e i suoi antenati (la catena del Pedestal), non i discendenti
+    // place_pedestal è nel ramo principale, non fra gli antenati del ramo lategame: in partita c'è sempre
+    // (serve a EMI per mostrare le ricette Pedestal: GatedSpectrumEmiRecipe usa lo sblocco del tipo di ricetta)
+    {"action": "command", "commands": [
+      "advancement grant @s until spectrum:place_pedestal",
+      "advancement grant @s until spectrum:lategame/build_complex_pedestal_structure",
+      "advancement grant @s until spectrum:milestones/unlock_ink_use"
+    ]},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectrum:lategame/build_complex_pedestal_structure"},
+    // manca ancora il lingotto di allthemodium
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "unlocked": false},
+
+    // ---------------------------------------------------------------- 2. primo lingotto di allthemodium → T6
+    {"action": "command", "command": "give @s allthemodium:allthemodium_ingot"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic"},
+    // Oggetti costruiti attorno a un attrezzo/armatura di bedrock: la ricetta consuma un oggetto bedrock, quindi
+    // l'advancement deve chiedere anche spectrum:unlocks/equipment/bedrock_tools (la regola di gen_data.py:
+    // "l'advancement dell'oggetto richiede lo sblocco di ogni oggetto di Spectrum usato come base").
+    // Qui il giocatore NON ha ancora i bedrock tools: tutto deve restare chiuso.
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_axe", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shovel", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_hoe", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bow", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_fishing_rod", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shears", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_boots", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 8, "unlocked": false},
+    // quelli che chiedono anche uno sblocco di Spectrum (glass crest, accessori) restano chiusi
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bident", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_chestplate", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_helmet", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_leggings", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_crossbow", "done": false},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_ultra_greatsword", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate", "unlocked": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_workstaff", "unlocked": false},
+    // Idea: allo sblocco del T6 la pagina 1 (non pagata) si completa da sola, senza consumare shard (in OR con hint_purchased)
+    {"action": "assert_item", "item": "spectrum:moonstone_shard", "present": false},  // l'inventario è stato svuotato: nessuno shard comparso
+    {"action": "assert_advancement", "id": "spectral_ascension:triggers/hints/t6_page1"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/spectral_ascension_t6_hint", "page": 0},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "idea_t6_gratis_dopo_t6"},
+    {"action": "close_screen"},
+    // la voce T6 compare con il tier (condizione = unlocks/tiers/trichromatic)
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 0, "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 1, "unlocked": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 13, "unlocked": false},
+    {"action": "book_focus", "entry": "spectrum:equipment/spectral_ascension_t6_equipment"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "libro_equipment_dopo_t6_tooltip"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 0},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t6_senza_bedrock"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 2b. bedrock tools (Spectrum, midgame)
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/equipment/bedrock_tools"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_axe"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shovel"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_hoe"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bow"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_fishing_rod"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shears"},
+    // gli stivali chiedono anche Shieldgrasp Amulet e Azuresque Dike Core (passo 6)
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_boots", "done": false},
+    // la Fusion Shrine come TIPO di ricetta è ancora bloccata (spectrum:build_fusion_shrine): ricetta e pagina chiuse
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": false},
+    {"action": "command", "command": "advancement grant @s until spectrum:build_fusion_shrine"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": true},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_boots", "unlocked": false},
+    // pagina ricetta e ricetta: stesso advancement (checklist §A)
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 8, "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 15, "unlocked": false},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 8},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t6_pagina_spada"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_spada_dopo"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 3. Workstaff: glass crest workstaff + Fusion Shrine
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/malachite/glass_crest_workstaff"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_workstaff", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 1, "unlocked": true},
+    // le altre Fusion restano chiuse dal loro required_advancement
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident", "unlocked": false},
+
+    // ---------------------------------------------------------------- 4. Bident: servono ENTRAMBI i glass crest
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/malachite/ferocious_glass_crest_bident"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bident", "done": false},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident", "unlocked": false},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 4, "unlocked": false},
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/malachite/fractal_glass_crest_bident"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_bident"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 4, "unlocked": true},
+
+    // ---------------------------------------------------------------- 5. crossbow e ultra greatsword
+    {"action": "command", "commands": [
+      "advancement grant @s only spectrum:unlocks/malachite/glass_crest_crossbow",
+      "advancement grant @s only spectrum:unlocks/malachite/glass_crest_ultra_greatsword"
+    ]},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_crossbow", "unlocked": true},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_ultra_greatsword", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 2, "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 3, "unlocked": true},
+
+    // ---------------------------------------------------------------- 6. armatura: accessori Azure Dike
+    // corazza: Azure Dike Ring; elmo: Puff Circlet; gambali: Azure Dike Belt; stivali: Shieldgrasp Amulet E Azuresque Dike Core
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/trinkets/azure_dike_ring"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_chestplate"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 13, "unlocked": true},
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/trinkets/shieldgrasp_amulet"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_boots", "done": false},
+    {"action": "command", "commands": [
+      "advancement grant @s only spectrum:unlocks/trinkets/puff_circlet",
+      "advancement grant @s only spectrum:unlocks/trinkets/azure_dike_belt",
+      "advancement grant @s only spectrum:unlocks/trinkets/azuresque_dike_core"
+    ]},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_boots"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_helmet", "unlocked": true},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_leggings", "unlocked": true},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_boots", "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 12, "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 14, "unlocked": true},
+    {"action": "assert_book_entry", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 15, "unlocked": true},
+
+    // ---------------------------------------------------------------- 7. tutto sbloccato
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_axe"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_shovel"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_hoe"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bow"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_fishing_rod"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_shears"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 0},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t6_tutto_pagine_0"},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 4},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "voce_t6_tutto_pagina_bident"},
+    {"action": "close_screen"},
+    {"action": "open_screen", "screen": "recipes", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_bident"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "emi_bident"},
+    {"action": "close_screen"},
+
+    // ---------------------------------------------------------------- 8. addon aggiunto a una partita già avanzata
+    // Caso ATM10: il giocatore ha già il Pedestal complex (e i glass crest) quando l'addon entra nel modpack.
+    // Si simula togliendo SOLO i nostri advancement: quelli di Spectrum restano. revelationary:advancement_gotten
+    // scatta solo nel momento in cui l'advancement viene ottenuto (PlayerAdvancementTrackerMixin di Revelationary),
+    // quindi non deve servire rifare il late game per ottenere il T6: ora lo recupera il criterio minecraft:tick in OR
+    // (e il lingotto, inventory_changed, scatta al primo cambio d'inventario).
+    {"action": "command", "expect": "any", "commands": [
+      "clear @s",
+      "advancement revoke @s only spectral_ascension:unlocks/tiers/trichromatic",
+      "advancement revoke @s only spectral_ascension:unlocks/equipment/t6/trichromatic_sword",
+      "advancement revoke @s only spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"
+    ]},
+    {"action": "wait", "ticks": 5},
+    {"action": "command", "command": "give @s allthemodium:allthemodium_ingot"},
+    {"action": "wait", "ticks": 20},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/tiers/trichromatic"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_sword"},
+    {"action": "assert_advancement", "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff"},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_sword", "unlocked": true},
+    {"action": "assert_log", "regex": "Exception in server tick loop|Error sending packet|Disconnected", "present": false, "within": 1}
+  ]
+}

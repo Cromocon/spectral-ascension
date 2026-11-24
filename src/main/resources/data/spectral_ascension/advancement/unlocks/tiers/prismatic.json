@@ -1,0 +1,70 @@
+{
+  "criteria": {
+    "unlocked_t8": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/argent"
+      }
+    },
+    "tick_unlocked_t8": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/argent": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "has_vibranium_allthemodium_alloy_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/vibranium_allthemodium_alloy"
+          }
+        ]
+      }
+    },
+    "has_unobtainium_allthemodium_alloy_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/unobtainium_allthemodium_alloy"
+          }
+        ]
+      }
+    },
+    "has_unobtainium_vibranium_alloy_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/unobtainium_vibranium_alloy"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t8",
+      "tick_unlocked_t8"
+    ],
+    [
+      "has_vibranium_allthemodium_alloy_ingot",
+      "has_unobtainium_allthemodium_alloy_ingot",
+      "has_unobtainium_vibranium_alloy_ingot"
+    ]
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "spectrum:templates_item/crossbow_oversized",
+  "textures": {
+    "layer0": "spectral_ascension:item/trichromatic_crossbow_onyx_oversized"
+  }
+}

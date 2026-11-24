@@ -1,0 +1,48 @@
+{
+  "criteria": {
+    "built_complex_pedestal": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:lategame/build_complex_pedestal_structure"
+      }
+    },
+    "tick_built_complex_pedestal": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:lategame/build_complex_pedestal_structure": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "has_allthemodium_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/allthemodium"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "built_complex_pedestal",
+      "tick_built_complex_pedestal"
+    ],
+    [
+      "has_allthemodium_ingot"
+    ]
+  ]
+}

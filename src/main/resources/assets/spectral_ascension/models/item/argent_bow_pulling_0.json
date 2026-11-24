@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/bow",
+  "textures": {
+    "layer0": "spectral_ascension:item/argent_bow_pulling_0"
+  }
+}

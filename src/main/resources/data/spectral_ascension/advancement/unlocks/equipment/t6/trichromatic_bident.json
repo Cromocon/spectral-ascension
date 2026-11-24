@@ -1,0 +1,93 @@
+{
+  "criteria": {
+    "unlocked_t6": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectral_ascension:unlocks/tiers/trichromatic"
+      }
+    },
+    "tick_unlocked_t6": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectral_ascension:unlocks/tiers/trichromatic": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_ferocious_glass_crest_bident": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/malachite/ferocious_glass_crest_bident"
+      }
+    },
+    "tick_unlocked_ferocious_glass_crest_bident": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/malachite/ferocious_glass_crest_bident": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "unlocked_fractal_glass_crest_bident": {
+      "trigger": "revelationary:advancement_gotten",
+      "conditions": {
+        "advancement_identifier": "spectrum:unlocks/malachite/fractal_glass_crest_bident"
+      }
+    },
+    "tick_unlocked_fractal_glass_crest_bident": {
+      "trigger": "minecraft:tick",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "spectrum:unlocks/malachite/fractal_glass_crest_bident": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "unlocked_t6",
+      "tick_unlocked_t6"
+    ],
+    [
+      "unlocked_ferocious_glass_crest_bident",
+      "tick_unlocked_ferocious_glass_crest_bident"
+    ],
+    [
+      "unlocked_fractal_glass_crest_bident",
+      "tick_unlocked_fractal_glass_crest_bident"
+    ]
+  ]
+}

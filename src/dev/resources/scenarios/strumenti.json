@@ -1,0 +1,73 @@
+// Auto-verifica delle azioni del runner non coperte da smoke/presets:
+// ricette Spectrum bloccate da advancement, voci del guidebook, Revelationary, Shift+destro (bident), uso tenuto (arco), log.
+{
+  "description": "Auto-verifica azioni: assert_recipe_unlocked, assert_book_entry, assert_revealed, sneak/use_item, assert_log",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "tp @s 0.5 -60 -6.5 180 0",
+      "advancement revoke @s from spectral_ascension:unlocks/equipment/t7/umbral_sword",
+      "advancement revoke @s only spectral_ascension:unlocks/equipment/t7/umbral_sword",
+      "advancement revoke @s only spectrum:unlocks/blocks/fusion_shrine"
+    ]},
+
+    // --- ricetta Fusion Shrine bloccata da required_advancement (Spectrum GatedRecipe.canPlayerCraft) ---
+    // (spada T7: dal 2026-11-19 anche il T7 è tutto alla Fusion Shrine; serve lo sblocco del tipo di ricetta, vedi sotto)
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t7/umbral_sword", "unlocked": false},
+    // Fusion Shrine: spectrum:build_fusion_shrine (sblocco del TIPO di ricetta) + required_advancement della ricetta
+    {"action": "command", "command": "advancement grant @s until spectrum:build_fusion_shrine"},
+    {"action": "command", "command": "advancement grant @s through spectral_ascension:unlocks/equipment/t7/umbral_sword"},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_recipe_unlocked", "recipe": "spectral_ascension:fusion_shrine/t7/umbral_sword", "unlocked": true},
+
+    // --- voce del guidebook (Modonomicon) sbloccata da advancement ---
+    // gli sblocchi del libro restano anche se l'advancement viene revocato: reset_book li ricalcola da zero
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "assert_book_entry", "entry": "spectrum:general/fusion_shrine", "unlocked": false},
+    {"action": "command", "command": "advancement grant @s only spectrum:unlocks/blocks/fusion_shrine"},
+    {"action": "wait", "ticks": 10},
+    {"action": "assert_book_entry", "entry": "spectrum:general/fusion_shrine", "unlocked": true},
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/fusion_shrine"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "voce_fusion_shrine"},
+    {"action": "close_screen"},
+
+    // --- Revelationary: la spada non è un oggetto nascosto ---
+    {"action": "assert_revealed", "item": "spectral_ascension:trichromatic_sword", "revealed": true},
+
+    // --- Shift + tasto destro: menu del bident, scelta di Fractal ---
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_bident"},
+    // il bident nuovo parte in modalità Ferocious; Shift + destro apre il menu, clic su Fractal
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=ferocious]", "slot": "mainhand"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    // il menu del bident: Fractal è la casella a destra (vedi bident_menu.json)
+    {"action": "gui_click", "screen": "BidentScreen", "offset": [56, -4]},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "predicate": "spectral_ascension:trichromatic_bident[spectral_ascension:bident_mode=fractal]", "slot": "mainhand"},
+    {"action": "screenshot", "name": "bident_fractal"},
+
+    // --- uso tenuto: arco teso, screenshot in terza persona, poi rilascio ---
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:trichromatic_bow"},
+    {"action": "command", "command": "give @s minecraft:arrow 16"},
+    {"action": "third_person", "view": "front"},
+    {"action": "hide_hud", "value": true},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 25},
+    {"action": "screenshot", "name": "arco_teso_terza_persona"},
+    {"action": "release_use"},
+    {"action": "first_person"},
+    {"action": "hide_hud", "value": false},
+
+    // --- log ---
+    // il messaggio in chat del runner all'avvio dello scenario finisce nel log come "[CHAT] [SA] ..."
+    {"action": "assert_log", "regex": "\\[CHAT\\] \\[SA\\] Scenario strumenti avviato"},
+    {"action": "assert_log", "regex": "Exception in server tick loop", "present": false, "within": 1},
+
+    // --- comando client /sa scenario (quello che usa l'utente nel client manuale) ---
+    {"action": "client_command", "command": "sa scenario list"},
+    {"action": "assert_log", "regex": "\\[CHAT\\]\\s+- smoke "},
+    {"action": "client_command", "command": "sa scenario run smoke"},
+    {"action": "assert_log", "regex": "c'è già uno scenario in corso \\(strumenti\\)"}
+  ]
+}

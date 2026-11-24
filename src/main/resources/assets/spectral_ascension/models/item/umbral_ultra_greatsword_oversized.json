@@ -1,0 +1,6 @@
+{
+  "parent": "spectrum:templates_item/handheld_oversized",
+  "textures": {
+    "layer0": "spectral_ascension:item/umbral_ultra_greatsword_oversized"
+  }
+}

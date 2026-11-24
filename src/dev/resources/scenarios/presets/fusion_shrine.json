@@ -1,0 +1,11 @@
+// Fusion Shrine (basalto) con la sua struttura (9x9x5).
+// Dati: data/spectrum/modonomicon/multiblocks/fusion_shrine.json nel jar di Spectrum.
+// "pos" del passo build = posizione della Fusion Shrine; centro '0' = blocco SOTTO la shrine,
+// come FusionShrineBlock.verifyStructure (validate(level, pos.below(), Rotation.NONE)). Serve il cielo libero sopra.
+{
+  "description": "Fusion Shrine di basalto + struttura (fusion_shrine)",
+  "multiblock": "spectrum:fusion_shrine",
+  "center_offset": [0, -1, 0],
+  "clear": true,
+  "validate": true
+}

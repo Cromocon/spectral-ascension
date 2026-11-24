@@ -1,0 +1,14 @@
+{
+  "parent": "spectrum:templates_item/handheld_oversized",
+  "textures": {
+    "layer0": "spectral_ascension:item/trichromatic_ultra_greatsword"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "oversized": 1.0
+      },
+      "model": "spectral_ascension:item/trichromatic_ultra_greatsword_oversized"
+    }
+  ]
+}

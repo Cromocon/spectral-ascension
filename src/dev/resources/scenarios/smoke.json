@@ -1,0 +1,49 @@
+// Smoke test dello scenario runner: spada in mano (+ animazione), advancement, preset Pedestal Moonstone, guidebook.
+{
+  "description": "Smoke test: oggetto in mano, animazione, advancement, struttura preset, guidebook",
+  "stop_on_fail": false,
+  "steps": [
+    // preparazione: "expect": "any" perché clear/revoke falliscono se non c'è niente da togliere
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear",
+      "advancement revoke @s only minecraft:story/mine_stone",
+      "tp @s 0.5 -60 0.5 0 20"
+    ]},
+    {"action": "command", "command": "give @s spectral_ascension:trichromatic_sword"},
+    {"action": "assert_item", "item": "spectral_ascension:trichromatic_sword"},
+    {"action": "hold", "slot": 0},
+    {"action": "first_person"},
+    {"action": "hide_hud", "value": true},
+    {"action": "look", "yaw": 0, "pitch": 20},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "spada_prima_persona"},
+    {"action": "screenshot_series", "name": "spada_animazione", "count": 6, "every": 3},
+    {"action": "hide_hud", "value": false},
+    {"action": "screenshot", "name": "spada_con_hud"},
+    {"action": "third_person", "view": "front"},
+    {"action": "hide_hud", "value": true},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "spada_terza_persona"},
+    {"action": "first_person"},
+    {"action": "hide_hud", "value": false},
+
+    {"action": "assert_advancement", "id": "minecraft:story/mine_stone", "done": false},
+    {"action": "command", "command": "advancement grant @s only minecraft:story/mine_stone"},
+    {"action": "assert_advancement", "id": "minecraft:story/mine_stone", "done": true},
+
+    {"action": "build", "preset": "pedestal_moonstone", "pos": [0, -60, 12]},
+    {"action": "assert_block", "pos": [0, -60, 12], "block": "spectrum:pedestal_moonstone"},
+    {"action": "command", "command": "tp @s 9.5 -54 1.5"},
+    {"action": "fly"},
+    {"action": "look", "at": [0, -59, 12]},
+    {"action": "hide_hud", "value": true, "hand": false},
+    {"action": "wait", "ticks": 20},
+    {"action": "screenshot", "name": "pedestal_moonstone"},
+    {"action": "hide_hud", "value": false},
+
+    {"action": "open_screen", "screen": "guidebook", "entry": "spectrum:general/intro"},
+    {"action": "wait", "ticks": 10},
+    {"action": "screenshot", "name": "guidebook"},
+    {"action": "close_screen"}
+  ]
+}

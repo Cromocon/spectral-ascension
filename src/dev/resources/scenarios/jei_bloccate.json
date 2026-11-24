@@ -1,0 +1,13 @@
+// Solo sviluppo. Giocatore vergine: conta le ricette Fusion Shrine nostre che SpectrumJEI mostra in JEI (attese nascoste/bloccate).
+{
+  "description": "JEI: ricette Fusion Shrine con il giocatore bloccato",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": ["gamemode creative", "clear @s", "advancement revoke @s everything"]},
+    {"action": "reset_book", "book": "spectrum:guidebook"},
+    {"action": "wait", "ticks": 40},
+    {"action": "jei_dump"},
+    {"action": "open_screen", "screen": "jei", "item": "spectral_ascension:prismatic_bident", "wait": 20},
+    {"action": "screenshot", "name": "jei_bloccata_prismatic_bident"},
+    {"action": "close_screen"}
+  ]
+}

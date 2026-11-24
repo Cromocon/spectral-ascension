@@ -1,0 +1,137 @@
+// Balestre: traiettoria della freccia vista dal CLIENT contro quella del server (track_projectile), per la balestra
+// vanilla, quella glass crest di Spectrum, la T6, la T7, la T8 e la T9 (Alloy); poi i modelli in prima persona (standby, in tensione, carica)
+// a confronto con la glass crest, e gli altri oggetti oversized (workstaff, ultra spadone, bident).
+// Il difetto segnalato («non va dritta, poi lo diventa») era solo del client: i pacchetti vanilla tagliano la velocità
+// a ±3,9 per componente e le frecce T6/T7/T8/T9 partono a 6,3, 7,9, circa 9,8 e 12,3 blocchi/tick (vedi ProjectileVelocityPayload).
+{
+  "description": "Balestre: freccia client contro server, modelli in prima persona e oggetti oversized",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "tp @s 300.5 -60 300.5 0 0"
+    ]},
+    {"action": "wait", "ticks": 40},
+
+    // ---------------------------------------------------------------- 1. traiettoria: client contro server
+    // 20° verso l'alto lungo +Z: la componente z supera 3,9 per glass crest, T6, T7, T8 e T9. Limite 1°: fra client e server
+    // c'è al massimo un tick di sfasamento (la gravità sposta la direzione di meno di mezzo grado a tick).
+    {"action": "look", "yaw": 0, "pitch": -20},
+    {"action": "hold", "slot": 0, "item": "minecraft:crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+    // glass crest di Spectrum: stesso difetto, più piccolo (4,7 b/t); non lo correggiamo, si registra soltanto
+    {"action": "hold", "slot": 1, "item": "spectrum:glass_crest_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8},
+    {"action": "hold", "slot": 2, "item": "spectral_ascension:trichromatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+    {"action": "hold", "slot": 3, "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+    {"action": "hold", "slot": 4, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+    {"action": "hold", "slot": 5, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+    // anche in orizzontale lungo un asse (z = 6,3 sopra il limite, y quasi zero)
+    {"action": "look", "yaw": 0, "pitch": -2},
+    {"action": "hold", "slot": 2, "item": "spectral_ascension:trichromatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "track_projectile", "ticks": 8, "max_angle": 1.0},
+
+    // ---------------------------------------------------------------- 2. modelli in prima persona
+    {"action": "command", "expect": "any", "command": "clear @s"},
+    {"action": "look", "yaw": 0, "pitch": 0},
+    {"action": "first_person"},
+    {"action": "hide_hud", "value": true},
+    {"action": "hold", "slot": 0, "item": "spectrum:glass_crest_crossbow"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "glass_crest_standby"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 8},
+    {"action": "screenshot", "name": "glass_crest_tensione"},
+    {"action": "release_use"},
+    {"action": "hold", "slot": 0, "item": "spectrum:glass_crest_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 15},
+    {"action": "screenshot", "name": "glass_crest_carica"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_crossbow"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "t6_standby"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 8},
+    {"action": "screenshot", "name": "t6_tensione"},
+    {"action": "release_use"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "t6_carica"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:umbral_crossbow"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "t7_standby"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:umbral_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "t7_carica"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "t8_standby"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 6},
+    {"action": "screenshot", "name": "t8_tensione"},
+    {"action": "release_use"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "t8_carica"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "t9_standby"},
+    {"action": "use_item", "keep": true},
+    {"action": "wait", "ticks": 4},
+    {"action": "screenshot", "name": "t9_tensione"},
+    {"action": "release_use"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "t9_carica"},
+    {"action": "hold", "slot": 0, "item": "minecraft:crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 5},
+    {"action": "screenshot", "name": "vanilla_carica"},
+
+    // ---------------------------------------------------------------- 3. altri oversized: glass crest contro T6/T7/T8/T9
+    {"action": "hold", "slot": 0, "item": "spectrum:glass_crest_workstaff"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "workstaff_glass_crest"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_workstaff"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "workstaff_t6"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:umbral_workstaff"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "workstaff_t7"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_workstaff"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "workstaff_t8"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_workstaff"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "workstaff_t9"},
+    {"action": "hold", "slot": 0, "item": "spectrum:glass_crest_ultra_greatsword"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "spadone_glass_crest"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_ultra_greatsword"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "spadone_t6"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_ultra_greatsword"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "spadone_t8"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_ultra_greatsword"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "spadone_t9"},
+    {"action": "hold", "slot": 0, "item": "spectrum:ferocious_glass_crest_bident"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "bident_glass_crest"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:trichromatic_bident"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "bident_t6"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:umbral_bident"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "bident_t7"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_bident"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "bident_t8"},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_bident"},
+    {"action": "wait", "ticks": 15},  // animazione di cambio oggetto: la mano risale
+    {"action": "screenshot", "name": "bident_t9"},
+    {"action": "hide_hud", "value": false},
+    {"action": "command", "expect": "any", "command": "clear @s"}
+  ]
+}
