@@ -57,6 +57,10 @@ Spectral Ascension aligns Spectrum's enchanting with the enchantment caps of ATM
 
 Spectral Ascension adds its own chapters to Spectrum's guidebook, written as journal entries like the rest of the book, and an Idea that hints at the first step. Each tier, its guidebook chapter and its recipes unlock with an advancement as you progress, and recipe viewers show them as locked until then. Controls and switches are explained in the item tooltips. All items, already enchanted, appear in the Equipment section of Spectrum's creative tab.
 
+## Download
+
+Get the latest jar from the [Releases](https://github.com/Cromocon/spectral-ascension/releases) page.
+
 ## Requirements
 
 Install on both client and server.
@@ -83,7 +87,6 @@ Known limitations:
 - Balance is still being tuned, and some values may change between versions.
 - The ATM10 enchantment caps are a fixed table matching ATM10's defaults; they do not follow changes to Apothic Enchanting's configuration.
 - On a dedicated server, the tooltips of the ultra greatsword and crossbow can fail if another mod asks for them on the server side. The error comes from inside Spectrum and affects Spectrum's own glass crest items too.
-- No release has been published yet. When available, the jar will be on the [Releases](https://github.com/Cromocon/spectral-ascension/releases) page.
 
 ## License
 
