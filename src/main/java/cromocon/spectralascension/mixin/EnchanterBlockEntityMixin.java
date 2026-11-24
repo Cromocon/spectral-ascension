@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 /**
  * Spectrum salva {@code canOwnerOverenchant} nell'Enchanter solo in {@code setOwner} (quando un giocatore lo usa):
  * dopo aver ottenuto l'advancement {@code spectrum:milestones/unlock_overenchanting_with_enchanter} (che da noi si
- * sblocca trovando un libro oltre il massimo vanilla) un Enchanter già piazzato continuerebbe a rifiutare
+ * sblocca trovando un libro o un oggetto non nostro oltre il massimo vanilla) un Enchanter già piazzato continuerebbe a rifiutare
  * l'overenchanting finché qualcuno non lo tocca di nuovo. Le due letture del campo (scelta della ricetta in
  * {@code calculateCurrentRecipe}, controllo prima di craftare in {@code checkRecipeRequirements}) diventano
  * {@code valore salvato || il proprietario ha l'advancement adesso}. Proprietario offline o sconosciuto: resta il

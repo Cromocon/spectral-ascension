@@ -10,6 +10,7 @@ import cromocon.spectralascension.registry.SAArmorMaterials;
 import cromocon.spectralascension.registry.SAComponents;
 import cromocon.spectralascension.registry.SAItems;
 import cromocon.spectralascension.registry.SAMenus;
+import cromocon.spectralascension.registry.SAPredicates;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -36,6 +37,7 @@ public final class SpectralAscension {
         SAComponents.register(modBus);                                 // mod bus: data component (modalità del bident)
         SAItems.register(modBus);                                      // mod bus: registrazione degli item
         SAMenus.register(modBus);                                      // mod bus: menu (bident, workstaff T7+)
+        SAPredicates.register(modBus);                                 // mod bus: predicati degli item (advancement)
         modBus.addListener(ProjectileVelocityPayload::register);       // mod bus: velocità esatta delle frecce veloci
         modBus.addListener(BidentModePayload::register);               // mod bus: modalità scelta nel menu del bident
         modBus.addListener(WorkstaffOptionPayload::register);          // mod bus: voce scelta nel menu della workstaff T7+

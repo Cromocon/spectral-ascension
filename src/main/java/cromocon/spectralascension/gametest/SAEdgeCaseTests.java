@@ -833,7 +833,10 @@ public final class SAEdgeCaseTests {
         var adv = level.getServer().getAdvancements().get(SpectrumAdvancements.OVERENCHANTING);
         helper.assertTrue(adv != null, "advancement mancante: " + SpectrumAdvancements.OVERENCHANTING);
         Set<String> expected = new HashSet<>();
-        for (ResourceLocation id : SAEnchantCap.tableIds()) expected.add("book_" + id.getPath() + "_above_vanilla");
+        for (ResourceLocation id : SAEnchantCap.tableIds()) {
+            expected.add("book_" + id.getPath() + "_above_vanilla");
+            expected.add("item_" + id.getPath() + "_above_vanilla");
+        }
         if (!adv.value().criteria().keySet().equals(expected))
             problems.add("criteri " + adv.value().criteria().keySet() + " invece di " + expected);
         if (adv.value().requirements().requirements().size() != 1) problems.add("i criteri non sono in OR: " + adv.value().requirements());
@@ -850,6 +853,16 @@ public final class SAEdgeCaseTests {
             player.getInventory().add(above.copy());
             CriteriaTriggers.INVENTORY_CHANGED.trigger(player, player.getInventory(), above);
             if (!player.getAdvancements().getOrStartProgress(adv).isDone()) problems.add(id + ": il libro di livello " + (vanillaMax + 1) + " non dà l'overenchanting");
+            // oggetto incantato (non nostro, un bastone qualsiasi): stesso confine
+            ServerPlayer holder = mockPlayer(helper);
+            for (int lvl : new int[]{vanillaMax, vanillaMax + 1}) {
+                ItemStack stick = new ItemStack(Items.STICK);
+                stick.enchant(ench, lvl);
+                holder.getInventory().add(stick.copy());
+                CriteriaTriggers.INVENTORY_CHANGED.trigger(holder, holder.getInventory(), stick);
+                boolean done = holder.getAdvancements().getOrStartProgress(adv).isDone();
+                if (done != (lvl > vanillaMax)) problems.add(id + ": oggetto di livello " + lvl + (done ? " dà" : " non dà") + " l'overenchanting");
+            }
             if (id.getPath().equals("sharpness")) {
                 boolean has = de.dafuqs.revelationary.api.advancements.AdvancementHelper.hasAdvancement(player, SpectrumAdvancements.OVERENCHANTING);
                 report.add("libro Sharpness V: niente; Sharpness VI: overenchanting " + (has ? "sbloccato" : "NON sbloccato") + " (come lo legge l'Enchanter)");
@@ -903,6 +916,65 @@ public final class SAEdgeCaseTests {
             }
         }
         finish(helper, "overenchanting: advancement e tetto delle ricette", problems, report);
+    }
+
+    /**
+     * Overenchanting con un OGGETTO incantato oltre il massimo vanilla (decisione utente 2026-11-24, criteri item_* con
+     * spectral_ascension:not_ours): conta qualunque oggetto non nostro (vanilla, Spectrum, altre mod), non i nostri pezzi
+     * T6-T9; i libri come prima. Due strade vere del gioco, senza chiamare il trigger a mano: oggetto già in inventario
+     * al login (ServerPlayer.initInventoryMenu, come PlayerList.placeNewPlayer) e oggetto preso dopo (broadcastChanges
+     * del menu dell'inventario, come il tick del giocatore).
+     */
+    @GameTest(template = EMPTY, timeoutTicks = 200)
+    public static void overenchanting_items(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        var level = helper.getLevel();
+        var registry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        var adv = level.getServer().getAdvancements().get(SpectrumAdvancements.OVERENCHANTING);
+        helper.assertTrue(adv != null, "advancement mancante: " + SpectrumAdvancements.OVERENCHANTING);
+        Holder<Enchantment> sharpness = registry.getOrThrow(Enchantments.SHARPNESS);
+        Holder<Enchantment> fortune = registry.getOrThrow(Enchantments.FORTUNE);
+        Holder<Enchantment> sweeping = registry.getOrThrow(Enchantments.SWEEPING_EDGE);
+
+        ItemStack swordVI = new ItemStack(Items.DIAMOND_SWORD);
+        swordVI.enchant(sharpness, 6);
+        ItemStack swordV = new ItemStack(Items.DIAMOND_SWORD);
+        swordV.enchant(sharpness, 5);
+        ItemStack workstaff = enchanted(helper, SAItems.TRICHROMATIC_WORKSTAFF.get());
+        ItemStack glassCrest = enchanted(helper, SpectrumItems.GLASS_CREST_ULTRA_GREATSWORD.get());
+        if (workstaff.getEnchantments().getLevel(fortune) != 6) problems.add("la workstaff T6 non ha Fortune VI: " + workstaff.getEnchantments());
+        if (glassCrest.getEnchantments().getLevel(sweeping) != 4) problems.add("lo spadone glass crest non ha Sweeping Edge IV: " + glassCrest.getEnchantments());
+        // lo spadone di malachite come esce dalla ricetta della Fusion Shrine (la glass crest ne copia i componenti)
+        ItemStack malachite = level.getRecipeManager().byKey(ResourceLocation.fromNamespaceAndPath("spectrum", "fusion_shrine/malachite/malachite_ultra_greatsword"))
+                .map(h -> h.value().getResultItem(level.registryAccess()).copy()).orElse(ItemStack.EMPTY);
+        if (malachite.getEnchantments().getLevel(sweeping) != 4) problems.add("lo spadone di malachite della ricetta non ha Sweeping Edge IV: " + malachite.getEnchantments());
+
+        record Case(String name, ItemStack stack, boolean unlocks) {
+        }
+        for (Case c : List.of(new Case("spada di diamante Sharpness VI", swordVI, true),
+                new Case("libro Sharpness VI", book(sharpness, 6), true),
+                new Case("workstaff T6 (Fortune VI, nostra)", workstaff, false),
+                new Case("spadone glass crest di Spectrum (Sweeping Edge IV)", glassCrest, true),
+                new Case("spadone di malachite dalla ricetta (Sweeping Edge IV)", malachite, true),
+                new Case("spada di diamante Sharpness V (massimo vanilla)", swordV, false))) {
+            ServerPlayer atLogin = mockPlayer(helper);
+            atLogin.getInventory().add(c.stack().copy());
+            atLogin.initInventoryMenu();
+            boolean login = atLogin.getAdvancements().getOrStartProgress(adv).isDone();
+
+            ServerPlayer pickup = mockPlayer(helper);
+            pickup.initInventoryMenu();
+            boolean before = pickup.getAdvancements().getOrStartProgress(adv).isDone();
+            pickup.getInventory().add(c.stack().copy());
+            pickup.inventoryMenu.broadcastChanges();
+            boolean picked = pickup.getAdvancements().getOrStartProgress(adv).isDone();
+
+            report.add(c.name() + ": al login " + (login ? "sblocca" : "no") + ", preso dopo " + (picked ? "sblocca" : "no"));
+            if (before) problems.add(c.name() + ": inventario vuoto ma advancement già ottenuto");
+            if (login != c.unlocks()) problems.add(c.name() + " al login: " + (login ? "sblocca" : "non sblocca"));
+            if (picked != c.unlocks()) problems.add(c.name() + " preso dopo: " + (picked ? "sblocca" : "non sblocca"));
+        }
+        finish(helper, "overenchanting: oggetti incantati oltre il massimo vanilla", problems, report);
     }
 
     static ItemStack anvil(ServerPlayer player, ItemStack left, ItemStack right) {
