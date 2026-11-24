@@ -91,10 +91,10 @@ public final class SAItems {
 
     /**
      * Ultra greatsword: Sweeping Edge VI (Spectrum IV), che è anche la forza del ground slam. Danno extra e velocità
-     * come la glass crest (5, -2,8F) sommati al bonus del tier; portata extra 1,5 invece di 1,0 (PROVVISORIA).
+     * come la glass crest (5, -2,8F) sommati al bonus del tier; portata extra 1,25 (glass crest 1,0, +0,25 per tier).
      */
     public static final DeferredItem<SATools.UltraGreatsword> TRICHROMATIC_ULTRA_GREATSWORD = tab(ITEMS.register("trichromatic_ultra_greatsword",
-            () -> new SATools.UltraGreatsword(SATier.T6, 5, -2.8F, 1.5F, tool(SATier.T6),
+            () -> new SATools.UltraGreatsword(SATier.T6, 5, -2.8F, 1.25F, tool(SATier.T6),
                     Map.of(Enchantments.SWEEPING_EDGE, 6))));
 
     /**
@@ -176,9 +176,9 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T7, tool(SATier.T7).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 8))));
 
-    /** Ultra greatsword T7: portata extra 2,0 (glass crest 1,0, T6 1,5). PROVVISORIA. */
+    /** Ultra greatsword T7: portata extra 1,5 (glass crest 1,0, T6 1,25). */
     public static final DeferredItem<SATools.UltraGreatsword> UMBRAL_ULTRA_GREATSWORD = tab(ITEMS.register("umbral_ultra_greatsword",
-            () -> new SATools.UltraGreatsword(SATier.T7, 5, -2.8F, 2.0F, tool(SATier.T7),
+            () -> new SATools.UltraGreatsword(SATier.T7, 5, -2.8F, 1.5F, tool(SATier.T7),
                     Map.of(Enchantments.SWEEPING_EDGE, 7))));
 
     /** Balestra T7: velocità 2,5, tempo di carica 1,25, divergenza 0,53 (T6 2,0 / 1,6 / 0,63). PROVVISORI. */
@@ -254,9 +254,9 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T8, tool(SATier.T8).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 9))));
 
-    /** Ultra greatsword T8: portata extra 2,5 (T6 1,5, T7 2,0). PROVVISORIA. */
+    /** Ultra greatsword T8: portata extra 1,75 (T6 1,25, T7 1,5). */
     public static final DeferredItem<SATools.UltraGreatsword> ARGENT_ULTRA_GREATSWORD = tab(ITEMS.register("argent_ultra_greatsword",
-            () -> new SATools.UltraGreatsword(SATier.T8, 5, -2.8F, 2.5F, tool(SATier.T8),
+            () -> new SATools.UltraGreatsword(SATier.T8, 5, -2.8F, 1.75F, tool(SATier.T8),
                     Map.of(Enchantments.SWEEPING_EDGE, 8))));
 
     /**
@@ -301,7 +301,7 @@ public final class SAItems {
     // stack, libro estratto all'incudine da un nostro oggetto tagliato, Bedrock Anvil che non abbassa mai (mixin).
     // Danni (+25%, regola in SATier): spada 37, ascia 39 (base 6), spadone 39 (base 6), workstaff 31 (base -2),
     // pala 31 (base -2), zappa 33 (base 0), bident 33 (round(17 × 1,25³)), balestra velocità 3,9. Arco come gli altri.
-    // PROVVISORI come nel T8: carica e divergenza della balestra, portata dello spadone, perforazione del bident.
+    // PROVVISORI come nel T8: carica e divergenza della balestra, perforazione del bident (portata dello spadone decisa il 2026-11-24).
     // Menu della workstaff Alloy: come il T8 più l'area 9×9, gratis (2026-11-19).
 
     /**
@@ -339,9 +339,9 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.ALLOY, tool(SATier.ALLOY).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 12))));
 
-    /** Ultra greatsword Alloy: danno base 6 (totale 39), portata extra 3,0 (T6 1,5, T7 2,0, T8 2,5). PROVVISORIA. */
+    /** Ultra greatsword Alloy: danno base 6 (totale 39), portata extra 2,0 (T6 1,25, T7 1,5, T8 1,75). */
     public static final DeferredItem<SATools.UltraGreatsword> PRISMATIC_ULTRA_GREATSWORD = tab(ITEMS.register("prismatic_ultra_greatsword",
-            () -> new SATools.UltraGreatsword(SATier.ALLOY, 6, -2.8F, 3.0F, tool(SATier.ALLOY),
+            () -> new SATools.UltraGreatsword(SATier.ALLOY, 6, -2.8F, 2.0F, tool(SATier.ALLOY),
                     Map.of(Enchantments.SWEEPING_EDGE, 11))));
 
     /**
