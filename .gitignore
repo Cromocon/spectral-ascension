@@ -11,6 +11,7 @@
 !/gradlew.bat
 !/gradle/
 !/src/
+!/docs/
 
 # Generati da Gradle o dall'IDE
 .gradle/
