@@ -3,7 +3,9 @@ package cromocon.spectralascension;
 import com.mojang.logging.LogUtils;
 import cromocon.spectralascension.item.SAArmorSet;
 import cromocon.spectralascension.item.SAEnchantCap;
+import cromocon.spectralascension.item.PrismaticTrail;
 import cromocon.spectralascension.network.BidentModePayload;
+import cromocon.spectralascension.network.PrismaticTrailPayload;
 import cromocon.spectralascension.network.ProjectileVelocityPayload;
 import cromocon.spectralascension.network.WorkstaffOptionPayload;
 import cromocon.spectralascension.registry.SAArmorMaterials;
@@ -39,6 +41,9 @@ public final class SpectralAscension {
         SAMenus.register(modBus);                                      // mod bus: menu (bident, workstaff T7+)
         SAPredicates.register(modBus);                                 // mod bus: predicati degli item (advancement)
         modBus.addListener(ProjectileVelocityPayload::register);       // mod bus: velocità esatta delle frecce veloci
+        PrismaticTrail.register(modBus);                               // mod bus: attachment della scia delle frecce T9
+        modBus.addListener(PrismaticTrailPayload::register);           // mod bus: scia delle frecce T9 al client
+        NeoForge.EVENT_BUS.addListener(PrismaticTrail::onEntityJoin);  // game bus: marca le frecce tirate da arco/balestra T9
         modBus.addListener(BidentModePayload::register);               // mod bus: modalità scelta nel menu del bident
         modBus.addListener(WorkstaffOptionPayload::register);          // mod bus: voce scelta nel menu della workstaff T7+
         NeoForge.EVENT_BUS.addListener(SAItems::addToSpectrumSubTabs); // game bus: sotto-tab "Equipment" di Spectrum

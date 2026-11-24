@@ -2,6 +2,7 @@ package cromocon.spectralascension.gametest;
 
 import cromocon.spectralascension.SpectralAscension;
 import cromocon.spectralascension.item.BidentMode;
+import cromocon.spectralascension.item.PrismaticTrail;
 import cromocon.spectralascension.item.SABident;
 import cromocon.spectralascension.item.SATier;
 import cromocon.spectralascension.item.SATools;
@@ -436,6 +437,66 @@ public final class SAFunctionTests {
         double v = arrows.getFirst().getDeltaMovement().length();
         clearAround(helper, base, 5);
         return v;
+    }
+
+    /**
+     * Scia delle frecce T9 ({@link PrismaticTrail}), lato server: le frecce tirate dall'arco e dalla balestra Prismatic
+     * (anche spettrali, tipped, le tre del Multishot con Piercing) hanno il marcatore che il client usa per le
+     * scintille; quelle dell'arco vanilla, dell'arco e della balestra T8 no. Le particelle si guardano nello scenario
+     * client {@code scia_frecce}.
+     */
+    @GameTest(template = EMPTY)
+    public static void prismatic_trail_marker(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        var registry = helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        int row = 0;
+        record Shot(String what, ItemStack weapon, ItemStack ammo, boolean expected) {
+        }
+        ItemStack multishot = chained(helper, SATier.ALLOY, "crossbow");
+        multishot.enchant(registry.getOrThrow(Enchantments.MULTISHOT), 1);
+        List<Shot> shots = List.of(
+                new Shot("arco vanilla", new ItemStack(Items.BOW), new ItemStack(Items.ARROW), false),
+                new Shot("arco T8", enchanted(helper, item(SATier.T8, "bow")), new ItemStack(Items.ARROW), false),
+                new Shot("arco T9", enchanted(helper, item(SATier.ALLOY, "bow")), new ItemStack(Items.ARROW), true),
+                new Shot("arco T9 + freccia spettrale", enchanted(helper, item(SATier.ALLOY, "bow")), new ItemStack(Items.SPECTRAL_ARROW), true),
+                new Shot("arco T9 + freccia tipped", enchanted(helper, item(SATier.ALLOY, "bow")),
+                        net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.TIPPED_ARROW, net.minecraft.world.item.alchemy.Potions.SLOWNESS), true),
+                new Shot("balestra T8", chained(helper, SATier.T8, "crossbow"), new ItemStack(Items.ARROW), false),
+                new Shot("balestra T9", chained(helper, SATier.ALLOY, "crossbow"), new ItemStack(Items.ARROW), true),
+                new Shot("balestra T9 + freccia di vetro", chained(helper, SATier.ALLOY, "crossbow"), new ItemStack(SpectrumItems.TOPAZ_GLASS_ARROW.get()), true),
+                new Shot("balestra T9 + Multishot", multishot, new ItemStack(Items.ARROW), true));
+        for (Shot shot : shots) {
+            BlockPos base = slot(helper, row++);
+            ServerPlayer player = mockPlayer(helper);
+            aim(player, base, 0, -10);
+            player.getInventory().setItem(9, shot.ammo().copy());
+            ItemStack stack = shot.weapon();
+            Item weapon = stack.getItem();
+            player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+            weapon.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+            if (weapon instanceof CrossbowItem) {
+                stack.releaseUsing(helper.getLevel(), player, 0);
+                player.stopUsingItem();
+                if (!CrossbowItem.isCharged(player.getMainHandItem())) {
+                    problems.add(shot.what() + ": la balestra non si carica");
+                    continue;
+                }
+                weapon.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+            } else {
+                stack.releaseUsing(helper.getLevel(), player, stack.getUseDuration(player) - 20);
+                player.stopUsingItem();
+            }
+            var arrows = helper.getLevel().getEntitiesOfClass(AbstractArrow.class, new AABB(base).inflate(6), a -> a.getOwner() == player);
+            int expectedCount = stack == multishot ? 3 : 1;
+            if (arrows.size() != expectedCount) problems.add(shot.what() + ": frecce tirate " + arrows.size() + " invece di " + expectedCount);
+            long marked = arrows.stream().filter(PrismaticTrail::isMarked).count();
+            if (shot.expected() && marked != arrows.size()) problems.add(shot.what() + ": frecce con la scia " + marked + "/" + arrows.size());
+            if (!shot.expected() && marked != 0) problems.add(shot.what() + ": " + marked + " frecce con la scia (non dovrebbero averla)");
+            report.add(shot.what() + ": " + arrows.size() + " frecce (" + arrows.stream().map(a -> BuiltInRegistries.ENTITY_TYPE.getKey(a.getType()).getPath()).distinct().toList()
+                    + "), con la scia " + marked);
+            clearAround(helper, base, 8);
+        }
+        finish(helper, "scia delle frecce T9", problems, report);
     }
 
     /**

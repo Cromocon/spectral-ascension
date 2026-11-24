@@ -1,0 +1,114 @@
+// Scia colorata delle frecce del T9 (PrismaticTrail + PrismaticTrailParticles): tiri VERI con la balestra e l'arco
+// Prismatic (anche Multishot), confronto con arco/balestra T8 (niente scia), freccia marcata evocata con /summon che passa
+// di lato (attachment salvato nell'NBT), freccia piantata a terra (niente scia), tiri di notte.
+// Terza persona da dietro, HUD nascosto. Si tira verso nord-ovest (yaw 0 = sud, +Z) e subito dopo si gira la visuale di
+// 75° (look): la terza persona sta dietro al giocatore, e senza girarsi la scia resterebbe nascosta dal giocatore stesso.
+// A x 600, z 600 (lontano dagli altri scenari).
+{
+  "description": "Scia delle frecce T9: balestra e arco Prismatic contro T8, /summon di lato, freccia piantata, notte",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode creative", "clear @s", "time set 6000", "weather clear", "kill @e[type=#minecraft:arrows,distance=..300]",
+      "tp @s 600.5 -60 600.5 0 0"
+    ]},
+    {"action": "wait", "ticks": 40},
+    {"action": "third_person", "view": "back"},
+    {"action": "hide_hud", "value": true, "hand": true},
+
+    // ---------------------------------------------------------------- 1. balestra T9 (12 b/t: la scia è lunga)
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "balestra_t9"},
+    {"action": "wait", "ticks": 30},
+
+    // ---------------------------------------------------------------- 2. balestra T9 con Multishot (3 frecce)
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1},{id:\"minecraft:arrow\",count:1},{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "balestra_t9_multishot"},
+    {"action": "wait", "ticks": 30},
+
+    // ---------------------------------------------------------------- 3. arco T9: carica piena, poi rilascio
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:prismatic_bow"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item", "hold_ticks": 22},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 4},
+    {"action": "screenshot", "name": "arco_t9"},
+    {"action": "wait", "ticks": 30},
+
+    // ---------------------------------------------------------------- 4. confronto: arco e balestra T8, niente scia
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 2, "item": "spectral_ascension:argent_bow"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item", "hold_ticks": 22},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 4},
+    {"action": "screenshot", "name": "arco_t8_senza_scia"},
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 3, "item": "spectral_ascension:argent_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "balestra_t8_senza_scia"},
+    {"action": "wait", "ticks": 20},
+
+    // ---------------------------------------------------------------- 5. di lato: freccia marcata evocata con /summon
+    // passa da sinistra a destra 10 blocchi davanti al giocatore; il marcatore viene dall'NBT (neoforge:attachments)
+    {"action": "look", "yaw": 0, "pitch": 0},
+    {"action": "command", "as": "server", "command": "summon minecraft:arrow 590.5 -58.5 610.5 {Motion:[1.6d,0.15d,0.0d],pickup:0b,\"neoforge:attachments\":{\"spectral_ascension:prismatic_trail\":1b}}"},
+    {"action": "wait", "ticks": 6},
+    {"action": "screenshot", "name": "summon_di_lato"},
+    {"action": "wait", "ticks": 20},
+
+    // ---------------------------------------------------------------- 6. freccia piantata a terra: la scia si ferma
+    {"action": "command", "expect": "any", "command": "kill @e[type=#minecraft:arrows,distance=..300]"},
+    {"action": "look", "yaw": 0, "pitch": 30},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:prismatic_bow"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item", "hold_ticks": 22},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 40, "pitch": 30},
+    {"action": "wait", "ticks": 1},
+    {"action": "screenshot", "name": "verso_terra_in_volo"},
+    {"action": "wait", "ticks": 40},
+    {"action": "screenshot", "name": "piantata_niente_scia"},
+
+    // ---------------------------------------------------------------- 7. di notte (le scintille brillano al buio)
+    {"action": "command", "expect": "any", "commands": ["time set 18000", "kill @e[type=#minecraft:arrows,distance=..300]"]},
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "wait", "ticks": 10},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_crossbow[charged_projectiles=[{id:\"minecraft:arrow\",count:1},{id:\"minecraft:arrow\",count:1},{id:\"minecraft:arrow\",count:1}]]"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item"},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "notte_balestra_t9"},
+    {"action": "wait", "ticks": 20},
+    {"action": "look", "yaw": 0, "pitch": -4},
+    {"action": "hold", "slot": 1, "item": "spectral_ascension:prismatic_bow"},
+    {"action": "wait", "ticks": 10},
+    {"action": "use_item", "hold_ticks": 22},
+    {"action": "wait", "ticks": 1},
+    {"action": "look", "yaw": 75, "pitch": -4},
+    {"action": "wait", "ticks": 4},
+    {"action": "screenshot", "name": "notte_arco_t9"},
+
+    {"action": "command", "expect": "any", "commands": ["time set 6000", "kill @e[type=#minecraft:arrows,distance=..300]", "clear @s"]}
+  ]
+}
