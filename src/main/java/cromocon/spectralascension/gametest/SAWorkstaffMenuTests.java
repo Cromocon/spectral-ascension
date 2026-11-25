@@ -33,6 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -562,6 +563,29 @@ public final class SAWorkstaffMenuTests {
             expect(problems, level(t7, SpectrumEnchantmentKeys.FOUNDRY) == (silkTouch ? 0 : 1)
                     && WorkstaffOption.foundryPaused(t7) == silkTouch,
                     "T6 → T7 ha uno stato Foundry errato con " + mode.getKey() + ": " + ench(t7));
+            ItemStack customRecipe = umbralRecipe.copy();
+            EnchantmentHelper.updateEnchantments(customRecipe, enchantments -> {
+                enchantments.removeIf(holder -> holder.is(Enchantments.FORTUNE));
+                enchantments.set(registry.getOrThrow(mode.getValue()), 2);
+            });
+            ItemStack customResult = fusionResult(customRecipe, t6);
+            expect(problems, level(customResult, mode.getValue()) == 2,
+                    "T6 → T7 ha abbassato il livello della modalità nella ricetta: " + ench(customResult));
+
+            var otherMode = silkTouch ? SpectrumEnchantmentKeys.RESONANCE : Enchantments.SILK_TOUCH;
+            EnchantmentHelper.updateEnchantments(customRecipe, enchantments -> {
+                enchantments.removeIf(holder -> holder.is(mode.getValue()));
+                enchantments.set(registry.getOrThrow(otherMode), 1);
+            });
+            ItemStack conflictResult = fusionResult(customRecipe, t6);
+            expect(problems, level(conflictResult, otherMode) == 1 && level(conflictResult, mode.getValue()) == 0,
+                    "T6 → T7 ha mescolato modalità incompatibili: " + ench(conflictResult));
+
+            t6.enchant(registry.getOrThrow(otherMode), 1);
+            ItemStack ambiguousResult = fusionResult(umbralRecipe, t6);
+            expect(problems, level(ambiguousResult, Enchantments.FORTUNE) == level(umbralRecipe, Enchantments.FORTUNE),
+                    "T6 → T7 ha selezionato una delle due modalità arbitrariamente: " + ench(ambiguousResult));
+
             WorkstaffOption.apply(player, t7, WorkstaffOption.SELECT_FORTUNE);
             expect(problems, level(t7, Enchantments.FORTUNE) == level(umbralRecipe, Enchantments.FORTUNE)
                     && level(t7, SpectrumEnchantmentKeys.FOUNDRY) == 1,
@@ -583,7 +607,7 @@ public final class SAWorkstaffMenuTests {
         report.add("T8 con Insertion spenta → Alloy " + ench(t9));
         // Stack con Silk Touch e Foundry (es. dall'advancement dei conflitti): riallineato, Foundry sospesa.
         ItemStack both = staff(helper, SAItems.UMBRAL_WORKSTAFF.get());
-        net.minecraft.world.item.enchantment.EnchantmentHelper.updateEnchantments(both, m -> m.set(registry.getOrThrow(Enchantments.SILK_TOUCH), 1));
+        EnchantmentHelper.updateEnchantments(both, m -> m.set(registry.getOrThrow(Enchantments.SILK_TOUCH), 1));
         WorkstaffOption.syncDropEnchantments(helper.getLevel().registryAccess(), both);
         expect(problems, level(both, SpectrumEnchantmentKeys.FOUNDRY) == 0 && WorkstaffOption.foundryPaused(both), "Silk Touch + Foundry non riallineato: " + ench(both));
         // Il componente sopravvive al salvataggio.

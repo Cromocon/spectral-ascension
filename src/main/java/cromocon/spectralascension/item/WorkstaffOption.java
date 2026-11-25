@@ -7,6 +7,7 @@ import de.dafuqs.spectrum.items.tools.WorkstaffItem;
 import de.dafuqs.spectrum.items.tools.WorkstaffItem.GUIToggle;
 import de.dafuqs.spectrum.registries.SpectrumDataComponentTypes;
 import de.dafuqs.spectrum.registries.SpectrumEnchantmentKeys;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -184,20 +185,27 @@ public enum WorkstaffOption {
         if (has(input, Enchantments.FORTUNE)) return;
 
         var inputEnchantments = input.getTagEnchantments();
-        var selectedMode = inputEnchantments.keySet().stream()
-                .filter(holder -> holder.is(Enchantments.SILK_TOUCH) || holder.is(SpectrumEnchantmentKeys.RESONANCE))
-                .findFirst().orElse(null);
-        if (selectedMode == null) return;
+        var activeModes = inputEnchantments.keySet().stream()
+                .filter(WorkstaffOption::isAlternateMiningMode).toList();
+        if (activeModes.size() != 1) return;
 
+        var selectedMode = activeModes.getFirst();
         var resultEnchantments = result.getTagEnchantments();
+        if (resultEnchantments.keySet().stream()
+                .anyMatch(holder -> isAlternateMiningMode(holder) && !holder.equals(selectedMode))) return;
+
         int fortuneLevel = resultEnchantments.keySet().stream().filter(holder -> holder.is(Enchantments.FORTUNE))
                 .mapToInt(resultEnchantments::getLevel).findFirst().orElse(0);
         result.update(SpectrumDataComponentTypes.WORKSTAFF, WorkstaffComponent.DEFAULT, component ->
                 new WorkstaffComponent(component.canTill(), component.canShoot(), Math.max(component.fortuneLevel(), fortuneLevel)));
         EnchantmentHelper.updateEnchantments(result, enchantments -> {
             enchantments.removeIf(holder -> holder.is(Enchantments.FORTUNE));
-            enchantments.set(selectedMode, inputEnchantments.getLevel(selectedMode));
+            enchantments.upgrade(selectedMode, inputEnchantments.getLevel(selectedMode));
         });
+    }
+
+    private static boolean isAlternateMiningMode(Holder<Enchantment> enchantment) {
+        return enchantment.is(Enchantments.SILK_TOUCH) || enchantment.is(SpectrumEnchantmentKeys.RESONANCE);
     }
 
     /** Lo stack ha l'incantesimo (senza bisogno del registro). */
