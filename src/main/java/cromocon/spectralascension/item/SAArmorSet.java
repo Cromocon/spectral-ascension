@@ -88,6 +88,11 @@ public final class SAArmorSet {
     public static void applySetDike(LivingEntity entity) {
         DikeStats s = dikeStats();
         AzureDikeAttachmentType attachment = entity.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE);
+        if (attachment.getMaxCharges() == s.max()
+                && attachment.getTicksToReplenishCharge() == s.ticksPerCharge()
+                && attachment.getTicksToReplenishChargeAfterGettingHit() == s.rechargeDelayAfterDamage()) {
+            return;
+        }
         attachment.set(s.max(), s.ticksPerCharge(), s.rechargeDelayAfterDamage(), false);
         attachment.sync(entity);
     }
