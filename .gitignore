@@ -10,6 +10,9 @@
 !/gradlew
 !/gradlew.bat
 !/gradle/
+!/.forgejo/
+!/.github/
+!/CHANGELOG.md
 !/src/
 !/docs/
 

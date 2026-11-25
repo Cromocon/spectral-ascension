@@ -1,0 +1,178 @@
+name: Release
+
+# Runs when a tag like v0.1.2 is pushed. The tag must match mod_version in gradle.properties.
+# Secrets: CURSEFORGE_TOKEN, GH_RELEASE_TOKEN. Variable: CURSEFORGE_PROJECT_ID.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: docker
+    container:
+      image: eclipse-temurin:21-jdk
+    env:
+      GH_REPO: Cromocon/spectral-ascension
+      # CurseForge relations: slugs of the required/optional projects (project IDs in comments).
+      CF_REQUIRED_SLUGS: 'spectrum revelationary allthemodium' # 556967, 656526, 364466
+      CF_OPTIONAL_SLUGS: 'spectrumjei' # 1258607
+    steps:
+      - name: Install tools
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git curl jq ca-certificates nodejs
+
+      - name: Check out
+        uses: https://data.forgejo.org/actions/checkout@v4
+
+      - name: Check tag against mod_version
+        run: |
+          mod_version=$(sed -n 's/^mod_version=//p' gradle.properties | tr -d '\r' | head -n1)
+          version=${mod_version%%-*}
+          tag="${GITHUB_REF_NAME}"
+          if [ -z "$mod_version" ]; then
+            echo "::error::mod_version not found in gradle.properties"; exit 1
+          fi
+          if [ "$tag" != "v$version" ]; then
+            echo "::error::Tag $tag does not match mod_version $mod_version (expected tag v$version). Fix gradle.properties or re-tag."
+            exit 1
+          fi
+          {
+            echo "MOD_VERSION=$mod_version"
+            echo "VERSION=$version"
+            echo "TAG=$tag"
+            echo "JAR=build/libs/spectral_ascension-$mod_version.jar"
+          } >> "$GITHUB_ENV"
+          echo "Releasing $version ($mod_version)"
+
+      - name: Extract changelog
+        run: |
+          awk -v v="$VERSION" '
+            /^## / { if (found) exit; if ($2 == v) { found = 1; next } }
+            found { print }
+          ' CHANGELOG.md | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' | sed '/./,$!d' > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "::error::CHANGELOG.md has no (or an empty) '## $VERSION' section"; exit 1
+          fi
+          echo "---- release notes ----"; cat release_notes.md
+
+      - name: Build
+        run: |
+          sh ./gradlew build --no-daemon --console=plain
+          test -f "$JAR" || { echo "::error::$JAR was not produced"; ls build/libs; exit 1; }
+
+      - name: Forgejo release
+        env:
+          FORGEJO_TOKEN: ${{ github.token }}
+          API: ${{ github.server_url }}/api/v1
+          REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          auth="Authorization: token $FORGEJO_TOKEN"
+          name="Spectral Ascension $VERSION"
+          jar_name=$(basename "$JAR")
+          code=$(curl -s -o rel.json -w '%{http_code}' -H "$auth" "$API/repos/$REPO/releases/tags/$TAG")
+          if [ "$code" = 200 ]; then
+            echo "Release $TAG already exists on Forgejo, reusing it."
+          elif [ "$code" = 404 ]; then
+            jq -n --arg tag "$TAG" --arg name "$name" --rawfile body release_notes.md --arg sha "$GITHUB_SHA" \
+              '{tag_name:$tag, name:$name, body:$body, target_commitish:$sha, draft:false, prerelease:false}' > payload.json
+            code=$(curl -s -o rel.json -w '%{http_code}' -H "$auth" -H 'Content-Type: application/json' \
+              -X POST -d @payload.json "$API/repos/$REPO/releases")
+            [ "$code" = 201 ] || { echo "::error::Forgejo create release failed (HTTP $code)"; cat rel.json; exit 1; }
+          else
+            echo "::error::Forgejo release lookup failed (HTTP $code)"; cat rel.json; exit 1
+          fi
+          id=$(jq -r .id rel.json)
+          if jq -e --arg n "$jar_name" '.assets // [] | map(.name) | index($n)' rel.json > /dev/null; then
+            echo "Asset $jar_name already attached, skipping upload."
+          else
+            code=$(curl -s -o asset.json -w '%{http_code}' -H "$auth" -F "attachment=@$JAR" \
+              "$API/repos/$REPO/releases/$id/assets?name=$jar_name")
+            [ "$code" = 201 ] || { echo "::error::Forgejo asset upload failed (HTTP $code)"; cat asset.json; exit 1; }
+          fi
+          echo "Forgejo release OK."
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        run: |
+          set -eu
+          [ -n "$GH_TOKEN" ] || { echo "::error::Secret GH_RELEASE_TOKEN is not set"; exit 1; }
+          api="https://api.github.com/repos/$GH_REPO"
+          hdr_auth="Authorization: Bearer $GH_TOKEN"
+          hdr_v="X-GitHub-Api-Version: 2022-11-28"
+          name="Spectral Ascension $VERSION"
+          jar_name=$(basename "$JAR")
+          # The push mirror may not have copied the commit to GitHub yet: wait for it (up to 15 minutes).
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -H "$hdr_auth" -H "$hdr_v" "$api/commits/$GITHUB_SHA")
+            [ "$code" = 200 ] && break
+            echo "Commit $GITHUB_SHA not on GitHub yet (HTTP $code), waiting for the mirror... ($i/30)"
+            sleep 30
+          done
+          [ "$code" = 200 ] || { echo "::error::Commit $GITHUB_SHA never reached GitHub. Check the push mirror on Forgejo."; exit 1; }
+          code=$(curl -s -o gh.json -w '%{http_code}' -H "$hdr_auth" -H "$hdr_v" "$api/releases/tags/$TAG")
+          if [ "$code" = 200 ]; then
+            echo "Release $TAG already exists on GitHub, reusing it."
+          elif [ "$code" = 404 ]; then
+            # target_commitish only matters when the tag does not exist yet (mirror delay).
+            jq -n --arg tag "$TAG" --arg name "$name" --rawfile body release_notes.md --arg sha "$GITHUB_SHA" \
+              '{tag_name:$tag, name:$name, body:$body, target_commitish:$sha, draft:false, prerelease:false}' > gh_payload.json
+            code=$(curl -s -o gh.json -w '%{http_code}' -H "$hdr_auth" -H "$hdr_v" -H 'Content-Type: application/json' \
+              -X POST -d @gh_payload.json "$api/releases")
+            [ "$code" = 201 ] || { echo "::error::GitHub create release failed (HTTP $code)"; jq -r '.message // empty' gh.json; exit 1; }
+          else
+            echo "::error::GitHub release lookup failed (HTTP $code)"; jq -r '.message // empty' gh.json; exit 1
+          fi
+          id=$(jq -r .id gh.json)
+          if jq -e --arg n "$jar_name" '.assets // [] | map(.name) | index($n)' gh.json > /dev/null; then
+            echo "Asset $jar_name already attached, skipping upload."
+          else
+            code=$(curl -s -o gh_asset.json -w '%{http_code}' -H "$hdr_auth" -H "$hdr_v" \
+              -H 'Content-Type: application/java-archive' --data-binary "@$JAR" \
+              "https://uploads.github.com/repos/$GH_REPO/releases/$id/assets?name=$jar_name")
+            [ "$code" = 201 ] || { echo "::error::GitHub asset upload failed (HTTP $code)"; jq -r '.message // empty' gh_asset.json; exit 1; }
+          fi
+          echo "GitHub release OK."
+
+      # Last on purpose: CurseForge uploads cannot be made idempotent. If this step fails,
+      # fix it and upload by hand or re-run only after checking the project's files page.
+      - name: CurseForge upload
+        env:
+          CF_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CF_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+        run: |
+          set -eu
+          [ -n "$CF_TOKEN" ] || { echo "::error::Secret CURSEFORGE_TOKEN is not set"; exit 1; }
+          [ -n "$CF_PROJECT_ID" ] || { echo "::error::Variable CURSEFORGE_PROJECT_ID is not set"; exit 1; }
+          base="https://minecraft.curseforge.com/api"
+          code=$(curl -s -o versions.json -w '%{http_code}' -H "X-Api-Token: $CF_TOKEN" "$base/game/versions")
+          [ "$code" = 200 ] || { echo "::error::CurseForge game versions request failed (HTTP $code)"; head -c 500 versions.json; exit 1; }
+          ids='[]'
+          for want in "1.21.1" "NeoForge" "Java 21" "Client" "Server"; do
+            id=$(jq -r --arg n "$want" '[.[] | select(.name == $n)] | .[0].id // empty' versions.json)
+            if [ -z "$id" ]; then
+              echo "::error::CurseForge game version '$want' not found. Available names:"
+              jq -r '[.[].name] | unique | join(", ")' versions.json | fold -w 200
+              exit 1
+            fi
+            echo "game version '$want' -> $id"
+            ids=$(echo "$ids" | jq -c --argjson i "$id" '. + [$i]')
+          done
+          projects=$(
+            { for s in $CF_REQUIRED_SLUGS; do jq -n --arg s "$s" '{slug:$s, type:"requiredDependency"}'; done
+              for s in $CF_OPTIONAL_SLUGS; do jq -n --arg s "$s" '{slug:$s, type:"optionalDependency"}'; done; } | jq -s -c .)
+          jq -n --rawfile log release_notes.md --arg name "Spectral Ascension $VERSION" \
+            --argjson gv "$ids" --argjson projects "$projects" \
+            '{changelog:$log, changelogType:"markdown", displayName:$name, releaseType:"release",
+              gameVersions:$gv, relations:{projects:$projects}}' > cf_metadata.json
+          code=$(curl -s -o cf_resp.json -w '%{http_code}' -H "X-Api-Token: $CF_TOKEN" \
+            -F "metadata=<cf_metadata.json;type=application/json" -F "file=@$JAR" \
+            "$base/projects/$CF_PROJECT_ID/upload-file")
+          if [ "$code" != 200 ]; then
+            echo "::error::CurseForge upload failed (HTTP $code)"; cat cf_resp.json; exit 1
+          fi
+          echo "CurseForge upload OK: $(cat cf_resp.json)"

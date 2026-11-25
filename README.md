@@ -59,7 +59,9 @@ Spectral Ascension adds its own chapters to Spectrum's guidebook, written as jou
 
 ## Download
 
-Get the latest jar from the [Releases](https://github.com/Cromocon/spectral-ascension/releases) page.
+Get the latest version on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/spectral-ascension).
+
+Every version is also published as a release, with the jar attached, on [Forgejo](https://git.artysan.me/cromocon/spectral-ascension/releases) and [GitHub](https://github.com/Cromocon/spectral-ascension/releases).
 
 ## Requirements
 
@@ -92,4 +94,8 @@ Known limitations:
 
 LGPL-3.0-only
 
-Source code and documentation: https://github.com/Cromocon/spectral-ascension
+## Source code and issues
+
+- Source code: https://git.artysan.me/cromocon/spectral-ascension (main repository)
+- Mirror: https://github.com/Cromocon/spectral-ascension
+- Bug reports and suggestions: https://github.com/Cromocon/spectral-ascension/issues
