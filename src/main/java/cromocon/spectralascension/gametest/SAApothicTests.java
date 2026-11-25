@@ -56,6 +56,7 @@ public final class SAApothicTests {
         return List.of(
                 test("apothic_max_levels_match_table", SAApothicTests::maxLevelsMatchTable),
                 test("apothic_extraction_tome", SAApothicTests::extractionTome),
+                test("apothic_prismatic_web", SAApothicTests::prismaticWeb),
                 test("apothic_vanilla_anvil", SAApothicTests::vanillaAnvil),
                 test("apothic_enchanter_extracted_book", SAApothicTests::enchanterExtractedBook),
                 test("apothic_overenchanting", SAApothicTests::overenchanting));
@@ -77,6 +78,23 @@ public final class SAApothicTests {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("EnchHooks.getMaxLevel non raggiungibile", e);
         }
+    }
+
+    private static void prismaticWeb(GameTestHelper helper) {
+        var player = mockPlayer(helper);
+        var curse = ench(helper, Enchantments.VANISHING_CURSE);
+        var sharpness = ench(helper, Enchantments.SHARPNESS);
+        ItemStack sword = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "sword"));
+        sword.enchant(curse, 1);
+        Item web = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(APOTHIC, "prismatic_web"));
+        helper.assertTrue(web != Items.AIR, "Prismatic Web mancante");
+
+        ItemStack output = SAEdgeCaseTests.anvil(player, sword, new ItemStack(web));
+        helper.assertTrue(output.is(sword.getItem()), "la Prismatic Web deve restituire la spada");
+        helper.assertTrue(output.getEnchantments().getLevel(curse) == 0, "la maledizione è tornata");
+        helper.assertTrue(output.getEnchantments().getLevel(sharpness) == sword.getEnchantments().getLevel(sharpness),
+                "la Prismatic Web ha cambiato Sharpness");
+        helper.succeed();
     }
 
     private static ItemStack extractionTome() {
