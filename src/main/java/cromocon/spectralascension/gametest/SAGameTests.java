@@ -630,6 +630,15 @@ public final class SAGameTests {
         equip(player, EquipmentSlot.FEET, new ItemStack(SAItems.TRICHROMATIC_BOOTS.get()));
         max = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
         helper.assertTrue(max == SET_DIKE, "set misto Alloy + stivali T6: Dike " + max + " invece di " + SET_DIKE);
+
+        var dike = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE);
+        dike.absorbDamage(player, 2);
+        dike.serverTick(player);
+        int remainingDelay = dike.getCurrentRechargeDelay();
+        equip(player, EquipmentSlot.HEAD, new ItemStack(SAItems.UMBRAL_HELMET.get()));
+        helper.assertTrue(remainingDelay == stats.rechargeDelayAfterDamage() - 1
+                        && dike.getCurrentRechargeDelay() == remainingDelay,
+                "cambiare elmo con il set completo ha alterato il ritardo dell'Azure Dike");
         equip(player, EquipmentSlot.FEET, ItemStack.EMPTY);
 
         // Accessorio Curios: disattivato dal set, di nuovo attivo senza set.
