@@ -7,7 +7,7 @@ import de.dafuqs.spectrum.blocks.enchanter.EnchanterBlockEntity;
 import de.dafuqs.spectrum.registries.SpectrumAdvancements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +63,9 @@ public abstract class EnchanterBlockEntityMixin {
 
     @Unique
     private static boolean spectral_ascension$ownerHasUnlock(EnchanterBlockEntity enchanter, Level level) {
-        Player owner = enchanter.getOwnerIfOnline(level);
-        return owner != null && AdvancementHelper.hasAdvancement(owner, SpectrumAdvancements.OVERENCHANTING);
+        if (!(enchanter.getOwnerIfOnline(level) instanceof ServerPlayer owner)) return false;
+        // Revelationary registra un errore per ogni chiamata se il datapack non carica l'avanzamento.
+        return owner.server.getAdvancements().get(SpectrumAdvancements.OVERENCHANTING) != null
+                && AdvancementHelper.hasAdvancement(owner, SpectrumAdvancements.OVERENCHANTING);
     }
 }
