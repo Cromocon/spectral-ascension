@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * più alto (T9 Sharpness XII) combinato con un libro dello stesso incantesimo verrebbe ABBASSATO (V senza Apothic, IX
  * con Apothic). Come per la Bedrock Anvil ({@link BedrockAnvilScreenHandlerMixin}): a ogni uscita di
  * {@code createResult}, se a sinistra c'è un nostro oggetto e il risultato è lo STESSO oggetto (non un libro: l'Extraction
- * Tome di Apothic resta com'è, tagliato da {@link SAEnchantCap#onAnvilUpdate}), ogni incantesimo che il risultato ha più
- * basso di quello di partenza torna al livello di partenza. Gli aumenti per regola (VII + VII → VIII) restano; il costo
+ * Tome di Apothic resta com'è, tagliato da {@link SAEnchantCap#onAnvilUpdate}), ripristina il livello degli incantesimi
+ * ancora presenti che l'incudine ha abbassato. La Prismatic Web può così rimuovere le maledizioni. Il costo
  * in XP è quello calcolato dal gioco (non toccato). Gli oggetti di altre mod e vanilla non cambiano.
  *
  * <p>Iniezione a RETURN (tutti i return, non solo l'ultimo): non dipende dalle chiamate a getMaxLevel, quindi convive
@@ -37,7 +37,8 @@ public abstract class AnvilMenuMixin {
         ItemEnchantments after = EnchantmentHelper.getEnchantmentsForCrafting(result);
         ItemEnchantments.Mutable fixed = null;
         for (var e : before.entrySet()) {
-            if (after.getLevel(e.getKey()) < e.getIntValue()) {
+            int resultLevel = after.getLevel(e.getKey());
+            if (resultLevel > 0 && resultLevel < e.getIntValue()) {
                 if (fixed == null) fixed = new ItemEnchantments.Mutable(after);
                 fixed.set(e.getKey(), e.getIntValue());
             }
