@@ -581,6 +581,17 @@ public final class SAWorkstaffMenuTests {
             expect(problems, level(conflictResult, otherMode) == 1 && level(conflictResult, mode.getValue()) == 0,
                     "T6 → T7 ha mescolato modalità incompatibili: " + ench(conflictResult));
 
+            if (!silkTouch) {
+                EnchantmentHelper.updateEnchantments(customRecipe, enchantments -> {
+                    enchantments.removeIf(holder -> holder.is(otherMode));
+                    enchantments.set(registry.getOrThrow(SpectrumEnchantmentKeys.PEST_CONTROL), 1);
+                });
+                ItemStack pestControlResult = fusionResult(customRecipe, t6);
+                expect(problems, level(pestControlResult, SpectrumEnchantmentKeys.PEST_CONTROL) == 1
+                                && level(pestControlResult, SpectrumEnchantmentKeys.RESONANCE) == 0,
+                        "T6 → T7 ha aggiunto Resonance a Pest Control: " + ench(pestControlResult));
+            }
+
             t6.enchant(registry.getOrThrow(otherMode), 1);
             ItemStack ambiguousResult = fusionResult(umbralRecipe, t6);
             expect(problems, level(ambiguousResult, Enchantments.FORTUNE) == level(umbralRecipe, Enchantments.FORTUNE),

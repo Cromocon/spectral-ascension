@@ -190,9 +190,15 @@ public enum WorkstaffOption {
         if (activeModes.size() != 1) return;
 
         var selectedMode = activeModes.getFirst();
+        if (!result.supportsEnchantment(selectedMode)) return;
+
         var resultEnchantments = result.getTagEnchantments();
+        boolean suspendsFoundry = selectedMode.is(Enchantments.SILK_TOUCH)
+                && result.getItem() instanceof SATools.Workstaff staff && staff.tier().ordinal() >= SATier.T7.ordinal();
         if (resultEnchantments.keySet().stream()
-                .anyMatch(holder -> isAlternateMiningMode(holder) && !holder.equals(selectedMode))) return;
+                .filter(holder -> !holder.equals(selectedMode) && !holder.is(Enchantments.FORTUNE))
+                .filter(holder -> !suspendsFoundry || !holder.is(SpectrumEnchantmentKeys.FOUNDRY))
+                .anyMatch(holder -> !Enchantment.areCompatible(holder, selectedMode))) return;
 
         int fortuneLevel = resultEnchantments.keySet().stream().filter(holder -> holder.is(Enchantments.FORTUNE))
                 .mapToInt(resultEnchantments::getLevel).findFirst().orElse(0);
