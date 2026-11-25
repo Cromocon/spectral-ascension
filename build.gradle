@@ -141,9 +141,12 @@ if (project.hasProperty('apothic')) {
     tasks.matching { it.name in ['runClient', 'runClientAuto', 'runGameTestServer'] }.configureEach { dependsOn copyApothicConfig }
 }
 
-// Crea il mondo di test sa_test se non esiste (non lo sovrascrive mai).
+// Crea il mondo di test sa_test se non esiste (non lo sovrascrive mai). Lo script è solo locale (tools/ è fuori dalla
+// repo): in un clone pulito il task viene saltato e runClient parte con un mondo nuovo.
+var resetTestWorldScript = file('tools/reset_test_world.py')
 var ensureTestWorld = tasks.register('ensureTestWorld', Exec) {
-    commandLine 'python3', '-I', file('tools/reset_test_world.py').absolutePath
+    onlyIf('tools/reset_test_world.py esiste') { resetTestWorldScript.exists() }
+    commandLine 'python3', '-I', resetTestWorldScript.absolutePath
     outputs.upToDateWhen { false }
 }
 tasks.matching { it.name == 'runClient' || it.name == 'runClientAuto' }.configureEach { dependsOn ensureTestWorld }
