@@ -475,12 +475,12 @@ public final class SAEdgeCaseTests {
 
     // ---------- Enchanter: l'overenchanting sbloccato dopo si vede senza toccarlo (EnchanterBlockEntityMixin) ----------
 
-    /** Esegue calculateCurrentRecipe (privato: lo chiama serverTick quando le bowl cambiano) e dice se ha scelto una ricetta. */
+    /** Fa avanzare il tick reale dell'Enchanter e controlla se ha selezionato una ricetta. */
     private static boolean enchanterHasUpgradeRecipe(EnchanterBlockEntity enchanter) {
+        var level = enchanter.getLevel();
+        var pos = enchanter.getBlockPos();
+        EnchanterBlockEntity.serverTick(level, pos, level.getBlockState(pos), enchanter);
         try {
-            var calc = EnchanterBlockEntity.class.getDeclaredMethod("calculateCurrentRecipe", net.minecraft.world.level.Level.class, EnchanterBlockEntity.class);
-            calc.setAccessible(true);
-            calc.invoke(null, enchanter.getLevel(), enchanter);
             Field f = EnchanterBlockEntity.class.getDeclaredField("currentRecipe");
             f.setAccessible(true);
             return f.get(enchanter) != null;
@@ -544,7 +544,6 @@ public final class SAEdgeCaseTests {
             CriteriaTriggers.INVENTORY_CHANGED.trigger(owner, owner.getInventory(), above);
             if (!de.dafuqs.revelationary.api.advancements.AdvancementHelper.hasAdvancement(owner, SpectrumAdvancements.OVERENCHANTING))
                 problems.add("il libro Thorns IV non ha sbloccato l'overenchanting");
-            enchanter.inventoryChanged();
             boolean after = enchanterHasUpgradeRecipe(enchanter);
             report.add("stesso Enchanter, advancement ottenuto dopo (senza setOwner): " + (after ? "upgrade accettato" : "upgrade rifiutato"));
             if (!after) problems.add("l'Enchanter non si accorge dell'advancement ottenuto dopo");
