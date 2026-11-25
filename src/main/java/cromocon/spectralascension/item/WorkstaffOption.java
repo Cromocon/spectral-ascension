@@ -2,6 +2,7 @@ package cromocon.spectralascension.item;
 
 import cromocon.spectralascension.SpectralAscension;
 import cromocon.spectralascension.registry.SAComponents;
+import de.dafuqs.spectrum.components.WorkstaffComponent;
 import de.dafuqs.spectrum.items.tools.WorkstaffItem;
 import de.dafuqs.spectrum.items.tools.WorkstaffItem.GUIToggle;
 import de.dafuqs.spectrum.registries.SpectrumDataComponentTypes;
@@ -176,6 +177,27 @@ public enum WorkstaffOption {
         if (staff.tier().ordinal() >= SATier.T8.ordinal()) {
             setLevel(registries, stack, SpectrumEnchantmentKeys.INVENTORY_INSERTION, drops.insertion() ? 1 : 0);
         }
+    }
+
+    /** Conserva la modalità selezionata fra tier. La Fortune della ricetta resta disponibile nel menu. */
+    public static void preserveMiningMode(ItemStack input, ItemStack result) {
+        if (has(input, Enchantments.FORTUNE)) return;
+
+        var inputEnchantments = input.getTagEnchantments();
+        var selectedMode = inputEnchantments.keySet().stream()
+                .filter(holder -> holder.is(Enchantments.SILK_TOUCH) || holder.is(SpectrumEnchantmentKeys.RESONANCE))
+                .findFirst().orElse(null);
+        if (selectedMode == null) return;
+
+        var resultEnchantments = result.getTagEnchantments();
+        int fortuneLevel = resultEnchantments.keySet().stream().filter(holder -> holder.is(Enchantments.FORTUNE))
+                .mapToInt(resultEnchantments::getLevel).findFirst().orElse(0);
+        result.update(SpectrumDataComponentTypes.WORKSTAFF, WorkstaffComponent.DEFAULT, component ->
+                new WorkstaffComponent(component.canTill(), component.canShoot(), Math.max(component.fortuneLevel(), fortuneLevel)));
+        EnchantmentHelper.updateEnchantments(result, enchantments -> {
+            enchantments.removeIf(holder -> holder.is(Enchantments.FORTUNE));
+            enchantments.set(selectedMode, inputEnchantments.getLevel(selectedMode));
+        });
     }
 
     /** Lo stack ha l'incantesimo (senza bisogno del registro). */

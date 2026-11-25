@@ -523,7 +523,7 @@ public final class SAWorkstaffMenuTests {
     /**
      * Incantesimi dei risultati: le ricette T7/T8/Alloy della workstaff danno Foundry (e dal T8 Inventory Insertion)
      * oltre agli altri, come SAItems; il componente parte acceso; le workstaff accettano i due incantesimi (tag
-     * enchantable di Spectrum). Fusion Shrine: un T6 con Silk Touch dà un T7 senza Silk Touch insieme a Foundry; un T7
+     * enchantable di Spectrum). Fusion Shrine: un T6 in Silk Touch o Resonance conserva la modalità sul T7; un T7
      * con Foundry spenta dà un T8 senza Foundry; un T8 con Insertion spenta dà un Alloy senza Insertion. Uno stack con
      * Silk Touch e Foundry viene riallineato (Foundry sospesa).
      */
@@ -548,15 +548,25 @@ public final class SAWorkstaffMenuTests {
                     && out.supportsEnchantment(registry.getOrThrow(SpectrumEnchantmentKeys.INVENTORY_INSERTION)), id(e.getValue()) + ": non accetta Foundry o Inventory Insertion");
             report.add(e.getKey() + " → " + ench(out));
         }
-        // T6 con Silk Touch → T7
-        ItemStack t6 = staff(helper, SAItems.TRICHROMATIC_WORKSTAFF.get());
-        WorkstaffOption.apply(mockPlayer(helper), t6, WorkstaffOption.SELECT_SILK_TOUCH);
-        expect(problems, level(t6, Enchantments.SILK_TOUCH) == 1, "T6: Silk Touch non selezionato");
-        ItemStack t7 = fusionResult(recipeOutput(helper, "fusion_shrine/t7/umbral_workstaff"), t6);
-        expect(problems, t7.is(SAItems.UMBRAL_WORKSTAFF.get()), "la fusione T7 produce " + t7);
-        expect(problems, !(level(t7, Enchantments.SILK_TOUCH) > 0 && level(t7, SpectrumEnchantmentKeys.FOUNDRY) > 0), "T6 Silk Touch → T7 con Silk Touch e Foundry insieme: " + ench(t7));
-        expect(problems, WorkstaffOption.drops(t7).foundry(), "T6 Silk Touch → T7: Foundry non ricordata accesa");
-        report.add("T6 con Silk Touch → T7 " + ench(t7) + (WorkstaffOption.foundryPaused(t7) ? " (Foundry sospesa)" : ""));
+        ItemStack umbralRecipe = recipeOutput(helper, "fusion_shrine/t7/umbral_workstaff");
+        for (var mode : Map.of(WorkstaffOption.SELECT_SILK_TOUCH, Enchantments.SILK_TOUCH,
+                WorkstaffOption.SELECT_RESONANCE, SpectrumEnchantmentKeys.RESONANCE).entrySet()) {
+            var player = mockPlayer(helper);
+            ItemStack t6 = staff(helper, SAItems.TRICHROMATIC_WORKSTAFF.get());
+            WorkstaffOption.apply(player, t6, mode.getKey());
+            expect(problems, level(t6, mode.getValue()) == 1, "T6: modalità non selezionata " + mode.getKey());
+            ItemStack t7 = fusionResult(umbralRecipe, t6);
+            expect(problems, t7.is(SAItems.UMBRAL_WORKSTAFF.get()) && level(t7, mode.getValue()) == 1
+                    && level(t7, Enchantments.FORTUNE) == 0, "T6 → T7 perde " + mode.getKey() + ": " + ench(t7));
+            boolean silkTouch = mode.getValue().equals(Enchantments.SILK_TOUCH);
+            expect(problems, level(t7, SpectrumEnchantmentKeys.FOUNDRY) == (silkTouch ? 0 : 1)
+                    && WorkstaffOption.foundryPaused(t7) == silkTouch,
+                    "T6 → T7 ha uno stato Foundry errato con " + mode.getKey() + ": " + ench(t7));
+            WorkstaffOption.apply(player, t7, WorkstaffOption.SELECT_FORTUNE);
+            expect(problems, level(t7, Enchantments.FORTUNE) == level(umbralRecipe, Enchantments.FORTUNE)
+                    && level(t7, SpectrumEnchantmentKeys.FOUNDRY) == 1,
+                    "T6 → T7 non ripristina Fortune del nuovo tier e Foundry: " + ench(t7));
+        }
         // T7 con Foundry spenta → T8 senza Foundry
         ItemStack t7off = staff(helper, SAItems.UMBRAL_WORKSTAFF.get());
         WorkstaffOption.apply(mockPlayer(helper), t7off, WorkstaffOption.FOUNDRY_OFF);

@@ -22,10 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * bedrock con Sharpness IX uscirebbe con Sharpness VII). Per i NOSTRI risultati lo correggiamo: per lo stesso
  * incantesimo vince il livello più alto, senza sommare (VII + VII = VII). Non tocca gli altri incantesimi.
  * <p>
- * Workstaff T7+: il result della ricetta ha Foundry (e dal T8 Inventory Insertion), ma il pezzo di partenza può averle
- * spente dal menu (componente spectral_ascension:workstaff_drops, copiato da copy_components) o avere Silk Touch: alla
- * fine si allineano gli incantesimi al componente ({@link WorkstaffOption#syncDropEnchantments}), così Foundry e
- * Silk Touch non escono mai insieme e un interruttore spento resta spento.
+ * Fra tier Spectral la workstaff conserva la modalità di scavo selezionata. Foundry e Inventory Insertion vengono
+ * poi allineati agli interruttori copiati da Spectrum, così Foundry resta sospesa se è attivo Silk Touch.
  */
 @Mixin(value = GatedSpectrumRecipe.class, remap = false)
 public abstract class GatedSpectrumRecipeMixin {
@@ -37,6 +35,9 @@ public abstract class GatedSpectrumRecipeMixin {
             return;
         }
         if (result.getItem() instanceof SATools.Workstaff) {
+            if (input.getItem() instanceof SATools.Workstaff) {
+                WorkstaffOption.preserveMiningMode(input, result);
+            }
             WorkstaffOption.syncDropEnchantments(null, result);
             cir.setReturnValue(result);
         }
