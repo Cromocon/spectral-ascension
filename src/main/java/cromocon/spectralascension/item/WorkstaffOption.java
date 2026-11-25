@@ -2,10 +2,12 @@ package cromocon.spectralascension.item;
 
 import cromocon.spectralascension.SpectralAscension;
 import cromocon.spectralascension.registry.SAComponents;
+import de.dafuqs.spectrum.components.WorkstaffComponent;
 import de.dafuqs.spectrum.items.tools.WorkstaffItem;
 import de.dafuqs.spectrum.items.tools.WorkstaffItem.GUIToggle;
 import de.dafuqs.spectrum.registries.SpectrumDataComponentTypes;
 import de.dafuqs.spectrum.registries.SpectrumEnchantmentKeys;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -176,6 +178,40 @@ public enum WorkstaffOption {
         if (staff.tier().ordinal() >= SATier.T8.ordinal()) {
             setLevel(registries, stack, SpectrumEnchantmentKeys.INVENTORY_INSERTION, drops.insertion() ? 1 : 0);
         }
+    }
+
+    /** Conserva la modalità selezionata fra tier. La Fortune della ricetta resta disponibile nel menu. */
+    public static void preserveMiningMode(ItemStack input, ItemStack result) {
+        if (has(input, Enchantments.FORTUNE)) return;
+
+        var inputEnchantments = input.getTagEnchantments();
+        var activeModes = inputEnchantments.keySet().stream()
+                .filter(WorkstaffOption::isAlternateMiningMode).toList();
+        if (activeModes.size() != 1) return;
+
+        var selectedMode = activeModes.getFirst();
+        if (!result.supportsEnchantment(selectedMode)) return;
+
+        var resultEnchantments = result.getTagEnchantments();
+        boolean suspendsFoundry = selectedMode.is(Enchantments.SILK_TOUCH)
+                && result.getItem() instanceof SATools.Workstaff staff && staff.tier().ordinal() >= SATier.T7.ordinal();
+        if (resultEnchantments.keySet().stream()
+                .filter(holder -> !holder.equals(selectedMode) && !holder.is(Enchantments.FORTUNE))
+                .filter(holder -> !suspendsFoundry || !holder.is(SpectrumEnchantmentKeys.FOUNDRY))
+                .anyMatch(holder -> !Enchantment.areCompatible(holder, selectedMode))) return;
+
+        int fortuneLevel = resultEnchantments.keySet().stream().filter(holder -> holder.is(Enchantments.FORTUNE))
+                .mapToInt(resultEnchantments::getLevel).findFirst().orElse(0);
+        result.update(SpectrumDataComponentTypes.WORKSTAFF, WorkstaffComponent.DEFAULT, component ->
+                new WorkstaffComponent(component.canTill(), component.canShoot(), Math.max(component.fortuneLevel(), fortuneLevel)));
+        EnchantmentHelper.updateEnchantments(result, enchantments -> {
+            enchantments.removeIf(holder -> holder.is(Enchantments.FORTUNE));
+            enchantments.upgrade(selectedMode, inputEnchantments.getLevel(selectedMode));
+        });
+    }
+
+    private static boolean isAlternateMiningMode(Holder<Enchantment> enchantment) {
+        return enchantment.is(Enchantments.SILK_TOUCH) || enchantment.is(SpectrumEnchantmentKeys.RESONANCE);
     }
 
     /** Lo stack ha l'incantesimo (senza bisogno del registro). */
