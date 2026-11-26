@@ -141,10 +141,10 @@ public final class SAGameTests {
             "t9", new ArmorStats(Map.of(ArmorItem.Type.HELMET, 9, ArmorItem.Type.CHESTPLATE, 19, ArmorItem.Type.LEGGINGS, 13,
                     ArmorItem.Type.BOOTS, 9), 7.5, 0.3));
     /**
-     * Fotogrammi dell'armatura indossata animata per tier (T6 Castone, T7 Umbral, T8 Argent: 20; Alloy Prismatic: 40;
+     * Fotogrammi dell'armatura indossata animata per tier (T6 Castone, T7 Umbral, T8 Argent: 1, statici; Alloy Prismatic: 40;
      * 15 tick l'uno).
      */
-    private static final Map<String, Integer> ARMOR_FRAMES = Map.of("t6", 20, "t7", 20, "t8", 20, "t9", 40);
+    private static final Map<String, Integer> ARMOR_FRAMES = Map.of("t6", 1, "t7", 1, "t8", 1, "t9", 40);
     /**
      * Sblocchi che l'advancement di un pezzo d'armatura deve richiedere: gli accessori di Spectrum nella ricetta T6,
      * il pezzo del tier precedente per T7 e T8 (checklist §A/§B).

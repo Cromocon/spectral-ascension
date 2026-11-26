@@ -160,8 +160,8 @@ public final class SAEdgeCaseTests {
                 if (!seen.contains("spectral_ascension:item/" + id + state)) problems.add(id + ": nessun override porta allo stato " + state);
             }
         }
-        // Fotogrammi dell'armatura indossata: 20 per T6, T7 e T8, 40 per l'Alloy (Prismatic).
-        Map<SATier, Integer> frames = Map.of(SATier.T6, 20, SATier.T7, 20, SATier.T8, 20, SATier.ALLOY, 40);
+        // Fotogrammi dell'armatura indossata: 1 per T6, T7 e T8 (statici), 40 per l'Alloy (Prismatic).
+        Map<SATier, Integer> frames = Map.of(SATier.T6, 1, SATier.T7, 1, SATier.T8, 1, SATier.ALLOY, 40);
         for (var fe : frames.entrySet()) {
             SATier tier = fe.getKey();
             int n = fe.getValue();
