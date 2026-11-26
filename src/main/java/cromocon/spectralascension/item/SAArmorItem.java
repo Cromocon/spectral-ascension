@@ -27,21 +27,22 @@ import java.util.Map;
 public final class SAArmorItem extends BedrockArmorItem {
     private final Map<ResourceKey<Enchantment>, Integer> enchantments;
     /**
-     * Numero di fotogrammi dell'armatura indossata animata per tier (textures/armor/<prefisso>_armor_0..N-1.png):
-     * T6 Castone 20, T7 Umbral 20, T8 Argent 20 (ciclo di 5 s), Alloy Prismatic 40 (ciclo di 10 s). Deve coincidere con TIERS di
-     * tools/install_textures.py, che li installa; tools/validate.py legge questa mappa e controlla i file.
+     * Numero di fotogrammi dell'armatura indossata per tier (textures/armor/<prefisso>_armor_0..N-1.png): solo l'Alloy
+     * Prismatic e' animato (40 fotogrammi, ciclo di 10 s); T6, T7 e T8 hanno un solo fotogramma (_0) e non ne calcolano.
+     * Deve coincidere con TIERS di tools/install_textures.py, che li installa; tools/validate.py legge questa mappa e
+     * controlla i file.
      */
     private static final Map<SATier, Integer> ARMOR_FRAMES = Map.of(
-            SATier.T6, 20,
-            SATier.T7, 20,
-            SATier.T8, 20,
+            SATier.T6, 1,
+            SATier.T7, 1,
+            SATier.T8, 1,
             SATier.ALLOY, 40);
-    /** Fotogrammi per un tier senza set animato (non dovrebbe servire: ogni tier con armatura è nella mappa). */
+    /** Fotogrammi per un tier senza set animato (non dovrebbe servire: ogni tier con armatura e' nella mappa). */
     private static final int DEFAULT_ARMOR_FRAMES = 1;
-    /** Tick di gioco per ogni fotogramma, uguale per tutti i tier (15 tick = 0,75 s, come le icone). */
+    /** Tick di gioco per ogni fotogramma dell'armatura animata (15 tick = 0,75 s). */
     private static final int ARMOR_FRAME_TICKS = 15;
 
-    private final String texturePrefix;
+    private final ResourceLocation[] textures;
     private final int armorFrames;
     private final SATier tier;
 
@@ -51,8 +52,11 @@ public final class SAArmorItem extends BedrockArmorItem {
         this.enchantments = Map.copyOf(enchantments);
         this.tier = tier;
         // Stesso layout 128×128 di spectrum:textures/armor/bedrock_armor.png.
-        this.texturePrefix = "textures/armor/" + tier.idPrefix() + "_armor";
-        this.armorFrames = ARMOR_FRAMES.getOrDefault(tier, DEFAULT_ARMOR_FRAMES);
+        // Tutte le ResourceLocation dei fotogrammi, calcolate una volta sola: getArmorTexture non ne crea a ogni frame.
+        int n = ARMOR_FRAMES.getOrDefault(tier, DEFAULT_ARMOR_FRAMES);
+        this.textures = new ResourceLocation[n];
+        for (int i = 0; i < n; i++) this.textures[i] = SpectralAscension.id("textures/armor/" + tier.idPrefix() + "_armor_" + i + ".png");
+        this.armorFrames = textures.length;
     }
 
     /** Il tier del pezzo. */
@@ -73,9 +77,10 @@ public final class SAArmorItem extends BedrockArmorItem {
     /** Chiamata a ogni frame di render. Usata sia dal modello dell'armatura sia dal mantello di Spectrum. */
     @Override
     public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
-        // Senza entità (anteprime, GUI) si usa il fotogramma 0; altrimenti si anima col tempo di gioco.
-        int frame = entity == null ? 0 : (int) ((entity.level().getGameTime() / ARMOR_FRAME_TICKS) % armorFrames);
-        return SpectralAscension.id(texturePrefix + "_" + frame + ".png");
+        // Un solo fotogramma (T6-T8): nessun calcolo. Senza entita' (anteprime, GUI) si usa il fotogramma 0;
+        // altrimenti si anima col tempo di gioco.
+        if (armorFrames == 1 || entity == null) return textures[0];
+        return textures[(int) ((entity.level().getGameTime() / ARMOR_FRAME_TICKS) % armorFrames)];
     }
 
     @Override

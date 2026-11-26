@@ -137,6 +137,16 @@
     },
     {
       "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.umbral_mace",
+      "recipe_id": "spectral_ascension:fusion_shrine/t7/umbral_mace",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t7/umbral_mace"
+      },
+      "text": "book.spectral_ascension.guidebook.t7_equipment.umbral_mace.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
       "title": "item.spectral_ascension.umbral_helmet",
       "recipe_id": "spectral_ascension:fusion_shrine/t7/umbral_helmet",
       "condition": {

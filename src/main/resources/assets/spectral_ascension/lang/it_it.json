@@ -213,5 +213,18 @@
   "gui.spectral_ascension.workstaff_menu.silk_touch.tooltip_pauses_foundry": "Mette in pausa Foundry finché non torni a Fortuna o Resonance",
   "gui.spectral_ascension.workstaff_menu.enable_insertion": "Accendi Inventory Insertion",
   "gui.spectral_ascension.workstaff_menu.disable_insertion": "Spegni Inventory Insertion",
-  "gui.spectral_ascension.workstaff_menu.insertion.tooltip": "I drop finiscono dritti nell'inventario"
+  "gui.spectral_ascension.workstaff_menu.insertion.tooltip": "I drop finiscono dritti nell'inventario",
+  "item.spectral_ascension.bedrock_mace": "Mazza di bedrock",
+  "book.spectral_ascension.guidebook.bedrock_mace.name": "Mazza di bedrock",
+  "book.spectral_ascension.guidebook.bedrock_mace.page0.text": "La mia mazza colpisce forte quando piombo su qualcosa dall'alto, ma ogni colpo la consuma un po'. Così ho provato quello che aveva già funzionato con gli altri miei attrezzi, e la bedrock l'ha accolta senza fare storie.\\\n\\\n*Più pesante del cielo, e non si romperà mai.*",
+  "book.spectral_ascension.guidebook.bedrock_mace.page1.text": "Ora ogni colpo dall'alto finisce in una folata di vento che mi rilancia verso il cielo.",
+  "recipeGroup.spectrum.spectral_ascension_bedrock_tools": "Attrezzi di bedrock",
+  "item.spectral_ascension.trichromatic_mace": "Mazza tricromatica",
+  "book.spectral_ascension.guidebook.t6_equipment.trichromatic_mace.text": "Anche la mia mazza di bedrock ha assorbito i tre pigmenti. Cade più pesante di prima, e il vento che solleva mi porta più in alto.",
+  "item.spectral_ascension.umbral_mace": "Mazza umbrale",
+  "book.spectral_ascension.guidebook.t7_equipment.umbral_mace.text": "Cade dal cielo come un'ombra, e la folata che segue mi porta ancora più in alto.",
+  "item.spectral_ascension.argent_mace": "Mazza argentea",
+  "book.spectral_ascension.guidebook.t8_equipment.argent_mace.text": "Un lampo pallido dall'alto, e il vento mi rilancia su verso la luna.",
+  "item.spectral_ascension.prismatic_mace": "Mazza prismatica",
+  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "Queste leghe la rendono leggera in mano e pesantissima quando colpisce. Il vento che solleva ora mi lancia più in alto di quanto oserei mai saltare."
 }

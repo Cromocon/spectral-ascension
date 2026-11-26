@@ -160,6 +160,8 @@ public final class SAFunctionTests {
                 "hoe", new double[]{17, 21, 27, 33, 4.0},
                 "ultra_greatsword", new double[]{20, 25, 31, 39, 1.2},
                 "workstaff", new double[]{16, 20, 25, 31, 1.2},
+                // mazza (2026-11-25): come lo spadone, velocità vanilla 0,6
+                "mace", new double[]{20, 25, 31, 39, 0.6},
                 // bident: il parametro "danno" di SAItems (15 / 18 / 21 / 24, NON segue il +25%) è l'attributo; col +1 della
                 // mano 16 / 19 / 22 / 25
                 "bident", new double[]{16, 19, 22, 25, 1.8});

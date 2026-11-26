@@ -35,7 +35,7 @@ import java.util.Map;
 import static cromocon.spectralascension.gametest.SATestUtil.*;
 
 /**
- * Craft veri per tutte le 60 ricette, seguendo la catena T6 → T7 → T8 → Alloy come un giocatore:
+ * Craft veri per tutte le 64 ricette dei tier (la mazza di bedrock: SAMaceTests), seguendo la catena T6 → T7 → T8 → Alloy come un giocatore:
  * <ul>
  * <li>Fusion Shrine (tutti i pezzi di T6, T7, T8 e Alloy dal 2026-11-19): shrine piazzata, liquido del tier a
  * pieno, ingredienti negli slot, {@code matches} e poi {@code craft}. Il risultato esce a terra; quello del tier prima
@@ -50,7 +50,7 @@ public final class SACraftTests {
     private static final String EMPTY = "empty";
     private static final List<SATier> TIERS = List.of(SATier.T6, SATier.T7, SATier.T8, SATier.ALLOY);
     private static final List<String> KINDS = List.of("workstaff", "ultra_greatsword", "crossbow", "bident", "axe", "shovel", "hoe",
-            "sword", "bow", "fishing_rod", "shears", "helmet", "chestplate", "leggings", "boots");
+            "sword", "bow", "fishing_rod", "shears", "mace", "helmet", "chestplate", "leggings", "boots");
 
     private SACraftTests() {
     }
@@ -118,6 +118,7 @@ public final class SACraftTests {
             Map.entry("bow", new T7Spec(6, 48, 1600, 24f, Map.of("power", 8))),
             Map.entry("fishing_rod", new T7Spec(4, 32, 1600, 24f, Map.of("luck_of_the_sea", 7, "lure", 4))),
             Map.entry("shears", new T7Spec(2, 16, 1600, 24f, Map.of("efficiency", 8))),
+            Map.entry("mace", new T7Spec(8, 64, 2000, 48f, Map.of("wind_burst", 6))),
             Map.entry("ultra_greatsword", new T7Spec(8, 64, 2000, 48f, Map.of("sweeping_edge", 7))),
             Map.entry("crossbow", new T7Spec(6, 48, 2000, 48f, Map.of("piercing", 6, "quick_charge", 4))),
             Map.entry("bident", new T7Spec(8, 64, 2000, 48f, Map.of("impaling", 7))),
@@ -139,6 +140,7 @@ public final class SACraftTests {
             Map.entry("bow", new T8Spec(6, 48, 2000, 48f, Map.of("power", 9))),
             Map.entry("fishing_rod", new T8Spec(4, 32, 2000, 48f, Map.of("luck_of_the_sea", 8, "lure", 5))),
             Map.entry("shears", new T8Spec(2, 16, 2000, 48f, Map.of("efficiency", 9))),
+            Map.entry("mace", new T8Spec(8, 64, 2400, 64f, Map.of("wind_burst", 7))),
             Map.entry("ultra_greatsword", new T8Spec(8, 64, 2400, 64f, Map.of("sweeping_edge", 8))),
             Map.entry("crossbow", new T8Spec(6, 48, 2400, 64f, Map.of("piercing", 7, "quick_charge", 4, "sniping", 1))),
             Map.entry("bident", new T8Spec(8, 64, 2400, 64f, Map.of("impaling", 8))),
@@ -166,6 +168,7 @@ public final class SACraftTests {
             Map.entry("bow", new T9Spec(1, 24, 2000, 48f, Map.of("power", 12))),
             Map.entry("fishing_rod", new T9Spec(1, 16, 2000, 48f, Map.of("luck_of_the_sea", 11, "lure", 5))),
             Map.entry("shears", new T9Spec(1, 8, 2000, 48f, Map.of("efficiency", 12))),
+            Map.entry("mace", new T9Spec(2, 32, 2400, 64f, Map.of("wind_burst", 11))),
             Map.entry("helmet", new T9Spec(1, 20, 2000, 48f, Map.of("projectile_protection", 14))),
             Map.entry("chestplate", new T9Spec(2, 32, 2000, 48f, Map.of("protection", 11))),
             Map.entry("leggings", new T9Spec(2, 28, 2000, 48f, Map.of("blast_protection", 12))),
@@ -181,7 +184,7 @@ public final class SACraftTests {
         return out;
     }
 
-    /** Le 15 ricette T7 sono tutte Fusion Shrine (Dragonrot, pezzo T6 + vibranium + onice), niente Pedestal; T6 corretti. */
+    /** Le 16 ricette T7 sono tutte Fusion Shrine (Dragonrot, pezzo T6 + vibranium + onice), niente Pedestal; T6 corretti. */
     @GameTest(template = EMPTY, timeoutTicks = 100)
     public static void t7_fusion_recipes(GameTestHelper helper) {
         List<String> problems = new ArrayList<>(), report = new ArrayList<>();
@@ -234,7 +237,7 @@ public final class SACraftTests {
         finish(helper, "ricette T7 e T6 corrette", problems, report);
     }
 
-    /** Le 15 ricette T8 sono tutte Fusion Shrine (Dragonrot, pezzo T7 + unobtainium + moonstone), niente Pedestal. */
+    /** Le 16 ricette T8 sono tutte Fusion Shrine (Dragonrot, pezzo T7 + unobtainium + moonstone), niente Pedestal. */
     @GameTest(template = EMPTY, timeoutTicks = 100)
     public static void t8_fusion_recipes(GameTestHelper helper) {
         List<String> problems = new ArrayList<>(), report = new ArrayList<>();
@@ -278,7 +281,7 @@ public final class SACraftTests {
     }
 
     /**
-     * Le 15 ricette T9 sono tutte Fusion Shrine (Dragonrot, pezzo T8 + 1 lingotto per ciascuna delle 3 leghe + Colorful
+     * Le 16 ricette T9 sono tutte Fusion Shrine (Dragonrot, pezzo T8 + 1 lingotto per ciascuna delle 3 leghe + Colorful
      * Shooting Star, una per slot perché si impilano a 1, + Stardust), niente Pedestal e niente polveri di gemma.
      */
     @GameTest(template = EMPTY, timeoutTicks = 100)
@@ -365,7 +368,7 @@ public final class SACraftTests {
         return stack;
     }
 
-    private static ItemStack fusionCraft(GameTestHelper helper, FusionShrineRecipe recipe, ItemStack previous, BlockPos pos,
+    static ItemStack fusionCraft(GameTestHelper helper, FusionShrineRecipe recipe, ItemStack previous, BlockPos pos,
                                          List<String> problems, String id) {
         var level = helper.getLevel();
         level.setBlockAndUpdate(pos, SpectrumBlocks.FUSION_SHRINE_BASALT.get().defaultBlockState());

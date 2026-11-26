@@ -13,6 +13,7 @@
     "spectral_ascension:trichromatic_bow",
     "spectral_ascension:trichromatic_fishing_rod",
     "spectral_ascension:trichromatic_shears",
+    "spectral_ascension:trichromatic_mace",
     "spectral_ascension:trichromatic_helmet",
     "spectral_ascension:trichromatic_chestplate",
     "spectral_ascension:trichromatic_leggings",
@@ -41,12 +42,14 @@
     "spectral_ascension:prismatic_bow",
     "spectral_ascension:prismatic_fishing_rod",
     "spectral_ascension:prismatic_shears",
+    "spectral_ascension:prismatic_mace",
     "spectral_ascension:prismatic_helmet",
     "spectral_ascension:prismatic_chestplate",
     "spectral_ascension:prismatic_leggings",
     "spectral_ascension:prismatic_boots"
   ],
   "spectrum:black": [
+    "spectral_ascension:bedrock_mace",
     "spectral_ascension:umbral_workstaff",
     "spectral_ascension:umbral_ultra_greatsword",
     "spectral_ascension:umbral_crossbow",
@@ -58,10 +61,14 @@
     "spectral_ascension:umbral_bow",
     "spectral_ascension:umbral_fishing_rod",
     "spectral_ascension:umbral_shears",
+    "spectral_ascension:umbral_mace",
     "spectral_ascension:umbral_helmet",
     "spectral_ascension:umbral_chestplate",
     "spectral_ascension:umbral_leggings",
     "spectral_ascension:umbral_boots"
+  ],
+  "spectrum:gray": [
+    "minecraft:mace"
   ],
   "spectrum:white": [
     "spectral_ascension:argent_workstaff",
@@ -75,6 +82,7 @@
     "spectral_ascension:argent_bow",
     "spectral_ascension:argent_fishing_rod",
     "spectral_ascension:argent_shears",
+    "spectral_ascension:argent_mace",
     "spectral_ascension:argent_helmet",
     "spectral_ascension:argent_chestplate",
     "spectral_ascension:argent_leggings",

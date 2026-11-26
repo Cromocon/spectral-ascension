@@ -120,6 +120,8 @@ public final class SAGameTests {
             Map.entry("bow", List.of(ItemTags.BOW_ENCHANTABLE)),
             Map.entry("fishing_rod", List.of(ItemTags.FISHING_ENCHANTABLE)),
             Map.entry("shears", List.of(ItemTags.MINING_ENCHANTABLE)),
+            Map.entry("mace", List.of(ItemTags.MACE_ENCHANTABLE, ItemTags.WEAPON_ENCHANTABLE, ItemTags.FIRE_ASPECT_ENCHANTABLE,
+                    net.neoforged.neoforge.common.Tags.Items.TOOLS_MACE)),
             Map.entry("helmet", List.of(ItemTags.HEAD_ARMOR, ItemTags.HEAD_ARMOR_ENCHANTABLE, ItemTags.ARMOR_ENCHANTABLE)),
             Map.entry("chestplate", List.of(ItemTags.CHEST_ARMOR, ItemTags.CHEST_ARMOR_ENCHANTABLE, ItemTags.ARMOR_ENCHANTABLE)),
             Map.entry("leggings", List.of(ItemTags.LEG_ARMOR, ItemTags.LEG_ARMOR_ENCHANTABLE, ItemTags.ARMOR_ENCHANTABLE)),
@@ -139,10 +141,10 @@ public final class SAGameTests {
             "t9", new ArmorStats(Map.of(ArmorItem.Type.HELMET, 9, ArmorItem.Type.CHESTPLATE, 19, ArmorItem.Type.LEGGINGS, 13,
                     ArmorItem.Type.BOOTS, 9), 7.5, 0.3));
     /**
-     * Fotogrammi dell'armatura indossata animata per tier (T6 Castone, T7 Umbral, T8 Argent: 20; Alloy Prismatic: 40;
+     * Fotogrammi dell'armatura indossata animata per tier (T6 Castone, T7 Umbral, T8 Argent: 1, statici; Alloy Prismatic: 40;
      * 15 tick l'uno).
      */
-    private static final Map<String, Integer> ARMOR_FRAMES = Map.of("t6", 20, "t7", 20, "t8", 20, "t9", 40);
+    private static final Map<String, Integer> ARMOR_FRAMES = Map.of("t6", 1, "t7", 1, "t8", 1, "t9", 40);
     /**
      * Sblocchi che l'advancement di un pezzo d'armatura deve richiedere: gli accessori di Spectrum nella ricetta T6,
      * il pezzo del tier precedente per T7 e T8 (checklist §A/§B).
@@ -213,6 +215,11 @@ public final class SAGameTests {
             Map.entry("trichromatic_crossbow", List.of("spectrum:glass_crest_crossbow", "spectrum:unlocks/malachite/glass_crest_crossbow")),
             Map.entry("trichromatic_bident", List.of("spectrum:ferocious_glass_crest_bident",
                     "spectrum:unlocks/malachite/ferocious_glass_crest_bident", "spectrum:unlocks/malachite/fractal_glass_crest_bident")),
+            // Mazza (2026-11-25): T6 dalla NOSTRA mazza di bedrock, poi la catena dei tier come gli altri oggetti.
+            Map.entry("trichromatic_mace", List.of("spectral_ascension:bedrock_mace", BEDROCK_TOOLS)),
+            Map.entry("umbral_mace", List.of("spectral_ascension:trichromatic_mace", "spectral_ascension:unlocks/equipment/t6/trichromatic_mace")),
+            Map.entry("argent_mace", List.of("spectral_ascension:umbral_mace", "spectral_ascension:unlocks/equipment/t7/umbral_mace")),
+            Map.entry("prismatic_mace", List.of("spectral_ascension:argent_mace", "spectral_ascension:unlocks/equipment/t8/argent_mace")),
             // T7: upgrade del pezzo T6, il cui sblocco va richiesto.
             Map.entry("umbral_workstaff", List.of("spectral_ascension:trichromatic_workstaff", "spectral_ascension:unlocks/equipment/t6/trichromatic_workstaff")),
             Map.entry("umbral_ultra_greatsword", List.of("spectral_ascension:trichromatic_ultra_greatsword",
@@ -1208,7 +1215,8 @@ public final class SAGameTests {
                 List.of(SAItems.TRICHROMATIC_HOE, SAItems.UMBRAL_HOE),
                 List.of(SAItems.TRICHROMATIC_SWORD, SAItems.UMBRAL_SWORD),
                 List.of(SAItems.TRICHROMATIC_ULTRA_GREATSWORD, SAItems.UMBRAL_ULTRA_GREATSWORD),
-                List.of(SAItems.TRICHROMATIC_BIDENT, SAItems.UMBRAL_BIDENT)),
+                List.of(SAItems.TRICHROMATIC_BIDENT, SAItems.UMBRAL_BIDENT),
+                List.of(SAItems.TRICHROMATIC_MACE, SAItems.UMBRAL_MACE)),
                 SAItems.TRICHROMATIC_CROSSBOW.get(), SAItems.UMBRAL_CROSSBOW.get(),
                 19, 24, 41, "c:incorrect_for_vibranium_tool", "allthemodium:vibranium_ore");
     }
@@ -1226,7 +1234,8 @@ public final class SAGameTests {
                 List.of(SAItems.UMBRAL_HOE, SAItems.ARGENT_HOE),
                 List.of(SAItems.UMBRAL_SWORD, SAItems.ARGENT_SWORD),
                 List.of(SAItems.UMBRAL_ULTRA_GREATSWORD, SAItems.ARGENT_ULTRA_GREATSWORD),
-                List.of(SAItems.UMBRAL_BIDENT, SAItems.ARGENT_BIDENT)),
+                List.of(SAItems.UMBRAL_BIDENT, SAItems.ARGENT_BIDENT),
+                List.of(SAItems.UMBRAL_MACE, SAItems.ARGENT_MACE)),
                 SAItems.UMBRAL_CROSSBOW.get(), SAItems.ARGENT_CROSSBOW.get(),
                 24, 30, 46, "c:incorrect_for_unobtainium_tool", "allthemodium:unobtainium_ore");
     }
@@ -1244,7 +1253,8 @@ public final class SAGameTests {
                 List.of(SAItems.ARGENT_HOE, SAItems.PRISMATIC_HOE),
                 List.of(SAItems.ARGENT_SWORD, SAItems.PRISMATIC_SWORD),
                 List.of(SAItems.ARGENT_ULTRA_GREATSWORD, SAItems.PRISMATIC_ULTRA_GREATSWORD),
-                List.of(SAItems.ARGENT_BIDENT, SAItems.PRISMATIC_BIDENT)),
+                List.of(SAItems.ARGENT_BIDENT, SAItems.PRISMATIC_BIDENT),
+                List.of(SAItems.ARGENT_MACE, SAItems.PRISMATIC_MACE)),
                 SAItems.ARGENT_CROSSBOW.get(), SAItems.PRISMATIC_CROSSBOW.get(),
                 30, 37, 50, "c:incorrect_for_allthemodiumalloy_tool", "allthemodium:unobtainium_ore");
     }

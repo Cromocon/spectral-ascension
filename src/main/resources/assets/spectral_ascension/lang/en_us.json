@@ -213,5 +213,18 @@
   "gui.spectral_ascension.workstaff_menu.silk_touch.tooltip_pauses_foundry": "Pauses Foundry until you switch back to Fortune or Resonance",
   "gui.spectral_ascension.workstaff_menu.enable_insertion": "Enable Inventory Insertion",
   "gui.spectral_ascension.workstaff_menu.disable_insertion": "Disable Inventory Insertion",
-  "gui.spectral_ascension.workstaff_menu.insertion.tooltip": "Drops go straight into your inventory"
+  "gui.spectral_ascension.workstaff_menu.insertion.tooltip": "Drops go straight into your inventory",
+  "item.spectral_ascension.bedrock_mace": "Bedrock Mace",
+  "book.spectral_ascension.guidebook.bedrock_mace.name": "Bedrock Mace",
+  "book.spectral_ascension.guidebook.bedrock_mace.page0.text": "My mace hits hard when I drop on something from high above, but every blow wears it down a little. So I tried what had already worked for my other tools, and the bedrock took to it without complaint.\\\n\\\n*Heavier than the sky, and it will never break.*",
+  "book.spectral_ascension.guidebook.bedrock_mace.page1.text": "Now every blow from above ends in a gust of wind that throws me back up toward the sky.",
+  "recipeGroup.spectrum.spectral_ascension_bedrock_tools": "Bedrock Tools",
+  "item.spectral_ascension.trichromatic_mace": "Trichromatic Mace",
+  "book.spectral_ascension.guidebook.t6_equipment.trichromatic_mace.text": "My Bedrock Mace drank in the three pigments too. It falls heavier than before, and the wind it raises lifts me higher.",
+  "item.spectral_ascension.umbral_mace": "Umbral Mace",
+  "book.spectral_ascension.guidebook.t7_equipment.umbral_mace.text": "It falls from the sky like a shadow, and the gust that follows carries me even higher.",
+  "item.spectral_ascension.argent_mace": "Argent Mace",
+  "book.spectral_ascension.guidebook.t8_equipment.argent_mace.text": "A pale flash from above, and the wind throws me back up toward the moon.",
+  "item.spectral_ascension.prismatic_mace": "Prismatic Mace",
+  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "These alloys make it light in my hand and terribly heavy when it lands. The wind it raises now throws me higher than I would ever dare to jump."
 }

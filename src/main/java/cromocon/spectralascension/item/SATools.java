@@ -1,6 +1,7 @@
 package cromocon.spectralascension.item;
 
 import de.dafuqs.spectrum.api.ink.InkPowered;
+import de.dafuqs.spectrum.api.item.Preenchanted;
 import cromocon.spectralascension.menu.WorkstaffMenu;
 import de.dafuqs.spectrum.items.tools.BedrockAxeItem;
 import de.dafuqs.spectrum.items.tools.BedrockBowItem;
@@ -19,10 +20,15 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -288,6 +294,66 @@ public final class SATools {
         @Override
         public float getDivergenceMod(ItemStack stack, LivingEntity shooter) {
             return super.getDivergenceMod(stack, shooter) * (divergence / GLASS_CREST_DIVERGENCE);
+        }
+    }
+
+    /**
+     * Mazza (2026-11-25): estende la mazza vanilla ({@link MaceItem}), così eredita tutta la smash attack di Minecraft
+     * 1.21.1: danno extra dalla caduta ({@code getAttackDamageBonus}: 4 per blocco fino a 3, poi 2 fino a 8, poi 1, più
+     * Density), onda d'urto e suoni ({@code hurtEnemy}), azzeramento della caduta ({@code postHurtEnemy}). Wind Burst è un
+     * incantesimo a dati (effetto post_attack), funziona su qualsiasi oggetto in {@code #minecraft:enchantable/mace}.
+     * <p>
+     * Come gli attrezzi bedrock di Spectrum: indistruttibile (componente unbreakable, durata nominale, fuori da
+     * {@code #minecraft:enchantable/durability}), niente riparazione (la vanilla si ripara con la breeze rod),
+     * incantesimi preimpostati ({@link Preenchanted}). Danno e velocità sono attributi espliciti ({@link #attributes}),
+     * incantabilità quella del tier (o della bedrock di Spectrum per la mazza di bedrock).
+     */
+    public static final class Mace extends MaceItem implements Preenchanted {
+        /** Modificatore di danno della mazza vanilla (MaceItem.createAttributes): 5, cioè 6 col pugno. */
+        public static final double VANILLA_DAMAGE = 5.0;
+        /** Modificatore di velocità della mazza vanilla: -3,4, cioè 0,6 colpi al secondo. */
+        public static final float VANILLA_SPEED = -3.4F;
+
+        private final int enchantmentValue;
+        private final Map<ResourceKey<Enchantment>, Integer> enchantments;
+
+        public Mace(int enchantmentValue, Properties properties, Map<ResourceKey<Enchantment>, Integer> enchantments) {
+            super(properties);
+            this.enchantmentValue = enchantmentValue;
+            this.enchantments = Map.copyOf(enchantments);
+        }
+
+        /** Attributi in mano principale, con gli stessi id della vanilla (BASE_ATTACK_DAMAGE_ID / BASE_ATTACK_SPEED_ID). */
+        public static ItemAttributeModifiers attributes(double damage, float speed) {
+            return ItemAttributeModifiers.builder()
+                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, damage,
+                            AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, speed,
+                            AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .build();
+        }
+
+        @Override
+        public Map<ResourceKey<Enchantment>, Integer> getDefaultEnchantments() {
+            return enchantments;
+        }
+
+        /** La vanilla restituisce 15: qui l'incantabilità del tier. */
+        @Override
+        public int getEnchantmentValue() {
+            return enchantmentValue;
+        }
+
+        /** Come BedrockSwordItem: incantabile anche se indistruttibile. */
+        @Override
+        public boolean isEnchantable(ItemStack stack) {
+            return true;
+        }
+
+        /** Indistruttibile: la mazza vanilla accetterebbe la breeze rod. */
+        @Override
+        public boolean isValidRepairItem(ItemStack stack, ItemStack ingredient) {
+            return false;
         }
     }
 
