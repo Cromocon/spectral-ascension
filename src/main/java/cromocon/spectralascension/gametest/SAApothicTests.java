@@ -38,7 +38,7 @@ import static cromocon.spectralascension.gametest.SATestUtil.*;
 
 /**
  * Tetto degli incantesimi con il VERO Apothic Enchanting caricato (dev: {@code ./gradlew runGameTestServer -Papothic},
- * jar dell'istanza ATM10 in libs/dev). Senza Apothic questi test non vengono nemmeno registrati (il generatore
+ * jar scaricati da Gradle da Modrinth). Senza Apothic questi test non vengono nemmeno registrati (il generatore
  * restituisce una lista vuota): la run normale resta identica.
  *
  * <p>Batch separato ({@code sa_apothic}) perché l'Enchanter si piazza nello stesso punto dei test di SAEdgeCaseTests.

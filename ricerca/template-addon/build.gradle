@@ -1,0 +1,81 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.140'
+}
+
+version = mod_version
+group = mod_group_id
+base { archivesName = mod_id }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    maven { url = 'https://maven.is-immensely.gay/releases' }                 // Revelationary, Fractal, Arrowhead (DaFuqs)
+    maven { url = 'https://dl.cloudsmith.io/public/klikli-dev/mods/maven/' }  // Modonomicon
+    maven { url = 'https://maven.theillusivec4.top/' }                        // Curios
+    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' } // GeckoLib (richiesto da Allthemodium)
+    maven { url = 'https://api.modrinth.com/maven'; content { includeGroup 'maven.modrinth' } }
+    maven { url = 'https://cfa2.cursemaven.com';    content { includeGroup 'curse.maven' } }
+}
+
+neoForge {
+    version = project.neo_version
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+    mods {
+        "${mod_id}" { sourceSet(sourceSets.main) }
+    }
+}
+
+dependencies {
+    // Spectrum 1.12.9: solo su Modrinth (il maven di DaFuqs si ferma a 1.12.5). Il POM Modrinth è vuoto,
+    // quindi le dipendenze di Spectrum vanno dichiarate a mano qui sotto.
+    implementation "maven.modrinth:spectrum:${spectrum_version}"
+    implementation "de.dafuqs:revelationary-neoforge:${revelationary_version}"
+    implementation("com.klikli_dev:modonomicon-1.21.1-neoforge:${modonomicon_version}") { exclude group: 'mezz.jei' }
+    compileOnly    "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    runtimeOnly    "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+
+    // Librerie che Spectrum include al suo interno (jar-in-jar): servono per compilare se usiamo le loro classi.
+    compileOnly "de.dafuqs:Fractal:${fractal_version}"     // CreativeSubTabEvent (sotto-tab del creativo di Spectrum)
+    compileOnly "de.dafuqs:arrowhead:${arrowhead_version}" // serve per estendere le balestre di Spectrum
+
+    // Allthemodium 3.2.1 (su Modrinth c'è solo fino a 3.0.1) + GeckoLib, che Allthemodium richiede.
+    implementation "curse.maven:allthemodium-364466:${allthemodium_cf_file}"
+    runtimeOnly    "software.bernie.geckolib:geckolib-neoforge-1.21.1:${geckolib_version}"
+}
+
+// Riempie i ${...} di neoforge.mods.toml con i valori di gradle.properties.
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version_range     : minecraft_version_range,
+            neo_version_range           : neo_version_range,
+            mod_id                      : mod_id,
+            mod_name                    : mod_name,
+            mod_license                 : mod_license,
+            mod_version                 : mod_version,
+            mod_authors                 : mod_authors,
+            mod_description             : mod_description,
+            spectrum_version_range      : spectrum_version_range,
+            allthemodium_version_range  : allthemodium_version_range,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }

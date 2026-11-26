@@ -1,5 +1,5 @@
-# La repo contiene SOLO la mod: sorgenti e file Gradle.
-# Tutto il resto (PASSAGGIO, ricerca, design, tools, libs/dev, run, build) resta in locale.
+# La repo contiene la mod (sorgenti, file Gradle), gli strumenti (tools/) e la ricerca (ricerca/).
+# Resta in locale: PASSAGGIO, design, libs, run, build.
 /*
 !/.gitignore
 !/README.md
@@ -15,6 +15,8 @@
 !/CHANGELOG.md
 !/src/
 !/docs/
+!/tools/
+!/ricerca/
 
 # Generati da Gradle o dall'IDE
 .gradle/
@@ -23,3 +25,8 @@ build/
 *.iml
 out/
 __pycache__/
+
+# Script locale dell'autore (mondo di test), fuori dalla repo per scelta
+tools/reset_test_world.py
+# Risultati dei test ciechi sulle texture (output generato)
+tools/test_cieco/risultati/

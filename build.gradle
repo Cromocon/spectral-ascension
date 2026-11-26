@@ -116,33 +116,34 @@ dependencies {
         if (!project.hasProperty('jeiOnly')) runtimeOnly "maven.modrinth:emi:${emi_version}"
         runtimeOnly "mezz.jei:jei-1.21.1-neoforge:${jei_version}"
         // SpectrumJEI contiene già FractalJEI e JEIDrawables (jar-in-jar).
-        if (project.hasProperty('jeiOnly')) runtimeOnly files('libs/dev/SpectrumJEI-21.1.11.1-neoforge.jar')
+        if (project.hasProperty('jeiOnly')) runtimeOnly "maven.modrinth:spectrumjei:21.1.11.1+neoforge"
     }
 
-    // -Papothic: Apothic Enchanting VERO (+ Placebo e Apothic Attributes, sue dipendenze obbligatorie), jar copiati
-    // dall'istanza ATM10 «Mio» in libs/dev. Solo sviluppo/test (runClient, runClientAuto, runGameTestServer): i GameTest
-    // SAApothicTests girano solo con Apothic caricato. La config di Apothic dell'istanza (libs/dev/apotheosis) viene
+    // -Papothic: Apothic Enchanting VERO (+ Placebo e Apothic Attributes, sue dipendenze obbligatorie), scaricati
+    // da Modrinth (stessi jar dell'istanza ATM10). Solo sviluppo/test (runClient, runClientAuto, runGameTestServer): i GameTest
+    // SAApothicTests girano solo con Apothic caricato. La config di Apothic dell'istanza (src/gametest-config/apotheosis) viene
     // copiata nella cartella della run da copyApothicConfig.
     if (project.hasProperty('apothic')) {
-        runtimeOnly files('libs/dev/ApothicEnchanting-1.21.1-1.6.4.jar', 'libs/dev/ApothicAttributes-1.21.1-2.11.0.jar',
-                'libs/dev/Placebo-1.21.1-9.9.4.jar')
+        runtimeOnly "maven.modrinth:apothic-enchanting:1.21.1-1.6.4"
+        runtimeOnly "maven.modrinth:apothic-attributes:1.21.1-2.11.0"
+        runtimeOnly "maven.modrinth:placebo:1.21.1-9.9.4"
     }
 }
 
-// Con -Papothic: copia la config di Apothic dell'istanza ATM10 (libs/dev/apotheosis, copia in sola lettura di
-// config/apotheosis di «Mio») nelle cartelle delle run, a ogni avvio (Placebo può riscriverla: si riparte sempre da quella).
+// Con -Papothic: copia la config di Apothic dell'istanza ATM10 (src/gametest-config/apotheosis, copia di
+// config/apotheosis dell'istanza ATM10) nelle cartelle delle run, a ogni avvio (Placebo può riscriverla: si riparte sempre da quella).
 var copyApothicConfig = tasks.register('copyApothicConfig', Copy) {
     outputs.upToDateWhen { false }
     into 'run'
-    from('libs/dev/apotheosis') { into 'gametest/config/apotheosis' }
-    from('libs/dev/apotheosis') { into 'client/config/apotheosis' }
+    from('src/gametest-config/apotheosis') { into 'gametest/config/apotheosis' }
+    from('src/gametest-config/apotheosis') { into 'client/config/apotheosis' }
 }
 if (project.hasProperty('apothic')) {
     tasks.matching { it.name in ['runClient', 'runClientAuto', 'runGameTestServer'] }.configureEach { dependsOn copyApothicConfig }
 }
 
-// Crea il mondo di test sa_test se non esiste (non lo sovrascrive mai). Lo script è solo locale (tools/ è fuori dalla
-// repo): in un clone pulito il task viene saltato e runClient parte con un mondo nuovo.
+// Crea il mondo di test sa_test se non esiste (non lo sovrascrive mai). Lo script è solo locale (tools/reset_test_world.py è
+// in .gitignore): in un clone pulito il task viene saltato e runClient parte con un mondo nuovo.
 var resetTestWorldScript = file('tools/reset_test_world.py')
 var ensureTestWorld = tasks.register('ensureTestWorld', Exec) {
     onlyIf('tools/reset_test_world.py esiste') { resetTestWorldScript.exists() }
