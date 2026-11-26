@@ -137,6 +137,16 @@
     },
     {
       "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.trichromatic_mace",
+      "recipe_id": "spectral_ascension:fusion_shrine/t6/trichromatic_mace",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t6/trichromatic_mace"
+      },
+      "text": "book.spectral_ascension.guidebook.t6_equipment.trichromatic_mace.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
       "title": "item.spectral_ascension.trichromatic_helmet",
       "recipe_id": "spectral_ascension:fusion_shrine/t6/trichromatic_helmet",
       "condition": {

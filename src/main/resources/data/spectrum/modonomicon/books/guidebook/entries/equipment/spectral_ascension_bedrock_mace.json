@@ -1,0 +1,39 @@
+{
+  "name": "book.spectral_ascension.guidebook.bedrock_mace.name",
+  "description": "book.spectral_ascension.added_by",
+  "condition": {
+    "type": "modonomicon:advancement",
+    "advancement_id": "spectrum:unlocks/equipment/bedrock_tools"
+  },
+  "icon": {
+    "item": "spectral_ascension:bedrock_mace"
+  },
+  "category": "spectrum:equipment",
+  "hide_while_locked": true,
+  "parents": [
+    {
+      "entry": "spectrum:equipment/tools_and_armor/bedrock_tools"
+    }
+  ],
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "x": -1,
+  "y": 2,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "title": "book.spectral_ascension.guidebook.bedrock_mace.name",
+      "text": "book.spectral_ascension.guidebook.bedrock_mace.page0.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.bedrock_mace",
+      "recipe_id": "spectral_ascension:fusion_shrine/bedrock/bedrock_mace",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectrum:unlocks/equipment/bedrock_tools"
+      },
+      "text": "book.spectral_ascension.guidebook.bedrock_mace.page1.text"
+    }
+  ]
+}

@@ -117,7 +117,20 @@
     },
     {
       "action": "log",
-      "text": "== T6 Trichromatic: 15 oggetti"
+      "text": "== Mazza di bedrock"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectrum:unlocks/equipment/bedrock_tools (until): ricetta e pagina della mazza di bedrock (attrezzi bedrock di Spectrum)"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s until spectrum:unlocks/equipment/bedrock_tools"
+    },
+    {
+      "action": "log",
+      "text": "== T6 Trichromatic: 16 oggetti"
     },
     {
       "action": "log",
@@ -211,15 +224,6 @@
     },
     {
       "action": "log",
-      "text": "concedo spectrum:unlocks/equipment/bedrock_tools (until): ingrediente di trichromatic_axe"
-    },
-    {
-      "action": "command",
-      "expect": "any",
-      "command": "advancement grant @s until spectrum:unlocks/equipment/bedrock_tools"
-    },
-    {
-      "action": "log",
       "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_axe (only): ricetta e pagina di trichromatic_axe"
     },
     {
@@ -280,6 +284,15 @@
       "action": "command",
       "expect": "any",
       "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_shears"
+    },
+    {
+      "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t6/trichromatic_mace (only): ricetta e pagina di trichromatic_mace"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t6/trichromatic_mace"
     },
     {
       "action": "log",
@@ -382,7 +395,7 @@
     },
     {
       "action": "log",
-      "text": "== T7 Umbral: 15 oggetti"
+      "text": "== T7 Umbral: 16 oggetti"
     },
     {
       "action": "log",
@@ -494,6 +507,15 @@
     },
     {
       "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_mace (only): ricetta e pagina di umbral_mace"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t7/umbral_mace"
+    },
+    {
+      "action": "log",
       "text": "concedo spectral_ascension:unlocks/equipment/t7/umbral_helmet (only): ricetta e pagina di umbral_helmet"
     },
     {
@@ -530,7 +552,7 @@
     },
     {
       "action": "log",
-      "text": "== T8 Argent: 15 oggetti"
+      "text": "== T8 Argent: 16 oggetti"
     },
     {
       "action": "log",
@@ -651,6 +673,15 @@
     },
     {
       "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_mace (only): ricetta e pagina di argent_mace"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t8/argent_mace"
+    },
+    {
+      "action": "log",
       "text": "concedo spectral_ascension:unlocks/equipment/t8/argent_helmet (only): ricetta e pagina di argent_helmet"
     },
     {
@@ -687,7 +718,7 @@
     },
     {
       "action": "log",
-      "text": "== T9 Prismatic: 15 oggetti"
+      "text": "== T9 Prismatic: 16 oggetti"
     },
     {
       "action": "log",
@@ -799,6 +830,15 @@
     },
     {
       "action": "log",
+      "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_mace (only): ricetta e pagina di prismatic_mace"
+    },
+    {
+      "action": "command",
+      "expect": "any",
+      "command": "advancement grant @s only spectral_ascension:unlocks/equipment/t9/prismatic_mace"
+    },
+    {
+      "action": "log",
       "text": "concedo spectral_ascension:unlocks/equipment/t9/prismatic_helmet (only): ricetta e pagina di prismatic_helmet"
     },
     {
@@ -891,6 +931,10 @@
     },
     {
       "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_mace"
+    },
+    {
+      "action": "assert_advancement",
       "id": "spectral_ascension:unlocks/equipment/t6/trichromatic_shears"
     },
     {
@@ -948,6 +992,10 @@
     {
       "action": "assert_advancement",
       "id": "spectral_ascension:unlocks/equipment/t7/umbral_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t7/umbral_mace"
     },
     {
       "action": "assert_advancement",
@@ -1011,6 +1059,10 @@
     },
     {
       "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t8/argent_mace"
+    },
+    {
+      "action": "assert_advancement",
       "id": "spectral_ascension:unlocks/equipment/t8/argent_shears"
     },
     {
@@ -1068,6 +1120,10 @@
     {
       "action": "assert_advancement",
       "id": "spectral_ascension:unlocks/equipment/t9/prismatic_leggings"
+    },
+    {
+      "action": "assert_advancement",
+      "id": "spectral_ascension:unlocks/equipment/t9/prismatic_mace"
     },
     {
       "action": "assert_advancement",
@@ -1202,6 +1258,21 @@
       "id": "spectrum:unlocks/trinkets/shieldgrasp_amulet"
     },
     {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/bedrock/bedrock_mace"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_bedrock_mace",
+      "unlocked": true
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_bedrock_mace",
+      "page": 1,
+      "unlocked": true
+    },
+    {
       "action": "assert_book_entry",
       "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
       "unlocked": true
@@ -1318,7 +1389,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_helmet"
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_mace"
     },
     {
       "action": "assert_book_entry",
@@ -1328,7 +1399,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate"
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_helmet"
     },
     {
       "action": "assert_book_entry",
@@ -1338,7 +1409,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_leggings"
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_chestplate"
     },
     {
       "action": "assert_book_entry",
@@ -1348,12 +1419,22 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_boots"
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_leggings"
     },
     {
       "action": "assert_book_entry",
       "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
       "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t6/trichromatic_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t6_equipment",
+      "page": 16,
       "unlocked": true
     },
     {
@@ -1511,7 +1592,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_helmet"
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_mace"
     },
     {
       "action": "assert_book_entry",
@@ -1521,7 +1602,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_chestplate"
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_helmet"
     },
     {
       "action": "assert_book_entry",
@@ -1531,7 +1612,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_leggings"
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_chestplate"
     },
     {
       "action": "assert_book_entry",
@@ -1541,12 +1622,22 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_boots"
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_leggings"
     },
     {
       "action": "assert_book_entry",
       "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
       "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t7/umbral_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t7_equipment",
+      "page": 16,
       "unlocked": true
     },
     {
@@ -1699,7 +1790,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t8/argent_helmet"
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_mace"
     },
     {
       "action": "assert_book_entry",
@@ -1709,7 +1800,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t8/argent_chestplate"
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_helmet"
     },
     {
       "action": "assert_book_entry",
@@ -1719,7 +1810,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t8/argent_leggings"
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_chestplate"
     },
     {
       "action": "assert_book_entry",
@@ -1729,12 +1820,22 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t8/argent_boots"
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_leggings"
     },
     {
       "action": "assert_book_entry",
       "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
       "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t8/argent_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t8_equipment",
+      "page": 16,
       "unlocked": true
     },
     {
@@ -1887,7 +1988,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_helmet"
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_mace"
     },
     {
       "action": "assert_book_entry",
@@ -1897,7 +1998,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_chestplate"
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_helmet"
     },
     {
       "action": "assert_book_entry",
@@ -1907,7 +2008,7 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_leggings"
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_chestplate"
     },
     {
       "action": "assert_book_entry",
@@ -1917,12 +2018,22 @@
     },
     {
       "action": "assert_recipe_unlocked",
-      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_boots"
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_leggings"
     },
     {
       "action": "assert_book_entry",
       "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
       "page": 15,
+      "unlocked": true
+    },
+    {
+      "action": "assert_recipe_unlocked",
+      "recipe": "spectral_ascension:fusion_shrine/t9/prismatic_boots"
+    },
+    {
+      "action": "assert_book_entry",
+      "entry": "spectrum:equipment/spectral_ascension_t9_equipment",
+      "page": 16,
       "unlocked": true
     },
     {
@@ -1960,7 +2071,7 @@
     },
     {
       "action": "log",
-      "text": "Fatto: 90 advancement concessi in ordine"
+      "text": "Fatto: 94 advancement concessi in ordine"
     }
   ]
 }

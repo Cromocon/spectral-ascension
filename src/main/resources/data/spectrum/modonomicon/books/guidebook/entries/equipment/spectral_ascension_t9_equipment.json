@@ -137,6 +137,16 @@
     },
     {
       "type": "spectrum:fusion_shrine_crafting",
+      "title": "item.spectral_ascension.prismatic_mace",
+      "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_mace",
+      "condition": {
+        "type": "modonomicon:advancement",
+        "advancement_id": "spectral_ascension:unlocks/equipment/t9/prismatic_mace"
+      },
+      "text": "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text"
+    },
+    {
+      "type": "spectrum:fusion_shrine_crafting",
       "title": "item.spectral_ascension.prismatic_helmet",
       "recipe_id": "spectral_ascension:fusion_shrine/t9/prismatic_helmet",
       "condition": {

@@ -8,6 +8,7 @@ import cromocon.spectralascension.item.SATier;
 import cromocon.spectralascension.item.SATools;
 import cromocon.spectralascension.item.WorkstaffDrops;
 import de.dafuqs.spectrum.registries.SpectrumEnchantmentKeys;
+import de.dafuqs.spectrum.registries.SpectrumToolTiers;
 import de.dafuqs.fractal.api.CreativeSubTabEvent;
 import de.dafuqs.spectrum.api.item.Preenchanted;
 import de.dafuqs.spectrum.api.item_group.ItemGroupIDs;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.ShovelItem;
@@ -46,6 +48,35 @@ public final class SAItems {
 
     /** Ordine in cui compaiono nella sotto-tab Equipment di Spectrum. */
     private static final List<DeferredItem<? extends Item>> EQUIPMENT_TAB = new ArrayList<>();
+
+    // ---------- Mazze (2026-11-25) ----------
+    // Danno e velocità della mazza con lo stesso criterio di spade e spadoni rispetto al loro oggetto bedrock/glass crest:
+    // il danno base proprio dell'oggetto (vanilla 5, SATools.Mace.VANILLA_DAMAGE) più il bonus danno del materiale, e la
+    // velocità del tipo d'oggetto che non cambia fra i tier (spada -2,4, spadone -2,8, mazza vanilla -3,4 = 0,6).
+    // Danno TOTALE (con il +1 della mano), regola +25% per tier di SATier:
+    //   bedrock  5 + 5 (bonus della bedrock di Spectrum, config bedrock_attack_damage) + 1 = 11  (spada bedrock 4+5+1 = 10)
+    //   T6       5 + 14 + 1 = 20                                                             (spadone T6 20, spada 19)
+    //   T7       5 + 19 + 1 = 25  (20 × 1,25)
+    //   T8       5 + 25 + 1 = 31  (20 × 1,5625 = 31,25)
+    //   T9       6 + 32 + 1 = 39  (20 × 1,953 = 39,06: base 6 come lo spadone Alloy)
+    // Velocità 0,6 in tutti i tier, come la vanilla. Smash attack e Wind Burst: vedi SATools.Mace.
+
+    /**
+     * Mazza di bedrock: Spectrum non ne ha una. Come i suoi attrezzi bedrock (SpectrumItems.BEDROCK_SWORD): UNCOMMON,
+     * resistente al fuoco, indistruttibile, incantabilità e bonus danno della bedrock di Spectrum (SpectrumToolTiers.BEDROCK).
+     * Wind Burst IV. Ricetta come la spada bedrock (tools/gen_data.py, BEDROCK_MACE). Non è nella lista {@link #equipment()}
+     * (gli oggetti dei tier): entra nel creativo da {@link #addToSpectrumSubTabs}, prima di loro.
+     */
+    public static final DeferredItem<SATools.Mace> BEDROCK_MACE = ITEMS.register("bedrock_mace",
+            () -> new SATools.Mace(SpectrumToolTiers.BEDROCK.getEnchantmentValue(),
+                    mace(new Item.Properties()
+                                    .stacksTo(1)
+                                    .rarity(Rarity.UNCOMMON)
+                                    .fireResistant()
+                                    .durability(SpectrumToolTiers.BEDROCK.getUses())
+                                    .component(DataComponents.UNBREAKABLE, new Unbreakable(false)),
+                            SATools.Mace.VANILLA_DAMAGE + SpectrumToolTiers.BEDROCK.getAttackDamageBonus()),
+                    Map.of(Enchantments.WIND_BURST, 4)));
 
     // ---------- T6 · Tricromatico (Trichromatic) ----------
     // Incantesimi del T6 decisi dall'utente il 2026-11-18 insieme alle ricette alla Fusion Shrine con Dragonrot
@@ -85,6 +116,12 @@ public final class SAItems {
     public static final DeferredItem<SATools.Shears> TRICHROMATIC_SHEARS = tab(ITEMS.register("trichromatic_shears",
             () -> new SATools.Shears(SATier.T6, tool(SATier.T6).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 7))));
+
+    /** Mazza T6: upgrade della mazza di bedrock. Danno totale 20, velocità 0,6 (vedi «Mazze»), Wind Burst V. */
+    public static final DeferredItem<SATools.Mace> TRICHROMATIC_MACE = tab(ITEMS.register("trichromatic_mace",
+            () -> new SATools.Mace(SATier.T6.getEnchantmentValue(),
+                    mace(tool(SATier.T6), SATools.Mace.VANILLA_DAMAGE + SATier.T6.getAttackDamageBonus()),
+                    Map.of(Enchantments.WIND_BURST, 5))));
 
     // Oggetti speciali: upgrade alla Fusion Shrine delle versioni glass crest, con il loro incantesimo caratteristico
     // (quello della versione malachite, che le glass crest ereditano) al tetto T6.
@@ -176,6 +213,12 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T7, tool(SATier.T7).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 8))));
 
+    /** Mazza T7: danno totale 25, velocità 0,6, Wind Burst VI. */
+    public static final DeferredItem<SATools.Mace> UMBRAL_MACE = tab(ITEMS.register("umbral_mace",
+            () -> new SATools.Mace(SATier.T7.getEnchantmentValue(),
+                    mace(tool(SATier.T7), SATools.Mace.VANILLA_DAMAGE + SATier.T7.getAttackDamageBonus()),
+                    Map.of(Enchantments.WIND_BURST, 6))));
+
     /** Ultra greatsword T7: portata extra 1,5 (glass crest 1,0, T6 1,25). */
     public static final DeferredItem<SATools.UltraGreatsword> UMBRAL_ULTRA_GREATSWORD = tab(ITEMS.register("umbral_ultra_greatsword",
             () -> new SATools.UltraGreatsword(SATier.T7, 5, -2.8F, 1.5F, tool(SATier.T7),
@@ -253,6 +296,12 @@ public final class SAItems {
     public static final DeferredItem<SATools.Shears> ARGENT_SHEARS = tab(ITEMS.register("argent_shears",
             () -> new SATools.Shears(SATier.T8, tool(SATier.T8).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 9))));
+
+    /** Mazza T8: danno totale 31, velocità 0,6, Wind Burst VII (sotto il tetto ATM10 VIII). */
+    public static final DeferredItem<SATools.Mace> ARGENT_MACE = tab(ITEMS.register("argent_mace",
+            () -> new SATools.Mace(SATier.T8.getEnchantmentValue(),
+                    mace(tool(SATier.T8), SATools.Mace.VANILLA_DAMAGE + SATier.T8.getAttackDamageBonus()),
+                    Map.of(Enchantments.WIND_BURST, 7))));
 
     /** Ultra greatsword T8: portata extra 1,75 (T6 1,25, T7 1,5). */
     public static final DeferredItem<SATools.UltraGreatsword> ARGENT_ULTRA_GREATSWORD = tab(ITEMS.register("argent_ultra_greatsword",
@@ -339,6 +388,15 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.ALLOY, tool(SATier.ALLOY).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 12))));
 
+    /**
+     * Mazza Alloy: danno base 6 (totale 39, come lo spadone Alloy), velocità 0,6, Wind Burst XI (tetto ATM10 VIII + 3,
+     * DEVE coincidere con T9_ENCHANTMENTS["mace"] di tools/gen_data.py).
+     */
+    public static final DeferredItem<SATools.Mace> PRISMATIC_MACE = tab(ITEMS.register("prismatic_mace",
+            () -> new SATools.Mace(SATier.ALLOY.getEnchantmentValue(),
+                    mace(tool(SATier.ALLOY), SATools.Mace.VANILLA_DAMAGE + 1 + SATier.ALLOY.getAttackDamageBonus()),
+                    Map.of(Enchantments.WIND_BURST, 11))));
+
     /** Ultra greatsword Alloy: danno base 6 (totale 39), portata extra 2,0 (T6 1,25, T7 1,5, T8 1,75). */
     public static final DeferredItem<SATools.UltraGreatsword> PRISMATIC_ULTRA_GREATSWORD = tab(ITEMS.register("prismatic_ultra_greatsword",
             () -> new SATools.UltraGreatsword(SATier.ALLOY, 6, -2.8F, 2.0F, tool(SATier.ALLOY),
@@ -396,6 +454,15 @@ public final class SAItems {
     }
 
     /**
+     * Mazza: attributi (danno = modificatore, velocità vanilla -3,4) e componente tool della vanilla
+     * (MaceItem.createToolProperties: non scava, come la mazza di Minecraft).
+     */
+    private static Item.Properties mace(Item.Properties properties, double damage) {
+        return properties.attributes(SATools.Mace.attributes(damage, SATools.Mace.VANILLA_SPEED))
+                .component(DataComponents.TOOL, MaceItem.createToolProperties());
+    }
+
+    /**
      * Workstaff T7+: interruttori del menu (Foundry, Inventory Insertion) accesi di default, così anche lo stack dato
      * con /give o preso dal creativo parte nello stato giusto (gli incantesimi li mette Preenchanted / la ricetta).
      */
@@ -412,8 +479,17 @@ public final class SAItems {
         return item instanceof Preenchanted p ? p.getDefaultEnchantments() : Map.of();
     }
 
+    /** Gli oggetti dei tier T6-T9 (16 per tier), nell'ordine del creativo. La mazza di bedrock NON c'è: vedi {@link #all()}. */
     public static List<DeferredItem<? extends Item>> equipment() {
         return List.copyOf(EQUIPMENT_TAB);
+    }
+
+    /** Tutti gli oggetti della mod nell'ordine del creativo: la mazza di bedrock, poi {@link #equipment()}. */
+    public static List<DeferredItem<? extends Item>> all() {
+        List<DeferredItem<? extends Item>> all = new ArrayList<>();
+        all.add(BEDROCK_MACE);
+        all.addAll(EQUIPMENT_TAB);
+        return List.copyOf(all);
     }
 
     /** I pezzi d'armatura di un tier, nell'ordine elmo, corazza, gambali, stivali (vuoto per i tier non ancora fatti). */
@@ -441,7 +517,7 @@ public final class SAItems {
             return;
         }
         var lookup = event.getParameters().holders();
-        for (DeferredItem<? extends Item> holder : EQUIPMENT_TAB) {
+        for (DeferredItem<? extends Item> holder : all()) {
             ItemStack stack = new ItemStack(holder.get());
             if (holder.get() instanceof Preenchanted preenchanted) {
                 stack.set(DataComponents.ENCHANTMENTS, Preenchanted.buildDefaultEnchantments(lookup, preenchanted));

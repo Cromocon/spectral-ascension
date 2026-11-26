@@ -123,7 +123,7 @@ public final class SAEdgeCaseTests {
         JsonObject en = json("assets/spectral_ascension/lang/en_us.json");
         JsonObject it = json("assets/spectral_ascension/lang/it_it.json");
         int models = 0, textures = 0;
-        for (var holder : SAItems.equipment()) {
+        for (var holder : SAItems.all()) {
             Item item = holder.get();
             String id = id(item);
             String key = item.getDescriptionId();
@@ -186,7 +186,7 @@ public final class SAEdgeCaseTests {
             if (!en.has(full)) problems.add("manca la chiave inglese " + full);
             if (!it.has(full)) problems.add("manca la chiave italiana " + full);
         }
-        finish(helper, "nomi, modelli e texture", problems, List.of(SAItems.equipment().size() + " oggetti, " + models + " modelli e "
+        finish(helper, "nomi, modelli e texture", problems, List.of(SAItems.all().size() + " oggetti, " + models + " modelli e "
                 + textures + " riferimenti a texture controllati, armatura 3 × 20 + 40 (Alloy) fotogrammi"));
     }
 
@@ -197,19 +197,20 @@ public final class SAEdgeCaseTests {
     @GameTest(template = EMPTY)
     public static void ink_colors(GameTestHelper helper) {
         List<String> problems = new ArrayList<>();
+        // bedrock (la mazza di bedrock, 2026-11-25): nero come gli attrezzi bedrock di Spectrum.
         Map<String, Object> expected = Map.of("trichromatic", InkColors.ORANGE, "umbral", InkColors.BLACK, "argent", InkColors.WHITE,
-                "prismatic", InkColors.MAGENTA);
-        for (var holder : SAItems.equipment()) {
+                "prismatic", InkColors.MAGENTA, "bedrock", InkColors.BLACK);
+        for (var holder : SAItems.all()) {
             Item item = holder.get();
             var color = ColorRegistry.ITEM_COLORS.getInkColor(item);
             Object want = expected.get(id(item).substring(0, id(item).indexOf('_')));
             if (color.isEmpty()) problems.add(id(item) + ": nessun colore Ink");
             else if (color.get() != want) problems.add(id(item) + ": colore " + color.get() + " invece di " + want);
         }
-        finish(helper, "colore Ink", problems, List.of(SAItems.equipment().size() + " oggetti col colore del tier"));
+        finish(helper, "colore Ink", problems, List.of(SAItems.all().size() + " oggetti col colore del tier"));
     }
 
-    /** Sotto-tab Equipment del creativo di Spectrum: tutti i 60 oggetti, già con gli incantesimi preimpostati. */
+    /** Sotto-tab Equipment del creativo di Spectrum: tutti i 65 oggetti (64 dei tier + la mazza di bedrock), già incantati. */
     @GameTest(template = EMPTY)
     public static void creative_tab(GameTestHelper helper) {
         List<String> problems = new ArrayList<>();
@@ -226,7 +227,7 @@ public final class SAEdgeCaseTests {
             return;
         }
         var shown = equipment.getDisplayItems();
-        for (var holder : SAItems.equipment()) {
+        for (var holder : SAItems.all()) {
             Item item = holder.get();
             var stack = shown.stream().filter(s -> s.is(item)).findFirst();
             if (stack.isEmpty()) {
@@ -240,12 +241,12 @@ public final class SAEdgeCaseTests {
                     problems.add(id(item) + ": nel creativo senza " + e.getKey().location() + " " + e.getValue());
             }
         }
-        finish(helper, "creativo", problems, List.of(SAItems.equipment().size() + " oggetti nella sotto-tab Equipment, incantati"));
+        finish(helper, "creativo", problems, List.of(SAItems.all().size() + " oggetti nella sotto-tab Equipment, incantati"));
     }
 
     /**
      * Ricette dell'Alloy (T9): ogni ricetta chiede 1 lingotto di ciascuna delle 3 leghe (decisione dell'utente,
-     * ricerca/14), mai il Piglich Heart (decisione dell'utente 2026-11-18). Dal 2026-11-19 sono tutte e 15 alla Fusion
+     * ricerca/14), mai il Piglich Heart (decisione dell'utente 2026-11-18). Dal 2026-11-19 sono tutte (16 con la mazza) alla Fusion
      * Shrine (Dragonrot), senza polveri di gemma (quantità e tempi: SACraftTests.t9_fusion_recipes).
      */
     @GameTest(template = EMPTY)
@@ -274,7 +275,7 @@ public final class SAEdgeCaseTests {
             }
             if (ingredients.stream().anyMatch(i -> i.test(new ItemStack(heart, 64)))) problems.add(holder.id() + ": chiede il Piglich Heart");
         }
-        if (pedestal != 0 || fusion != 15) problems.add("ricette T9: " + pedestal + " Pedestal e " + fusion + " Fusion invece di 0 e 15");
+        if (pedestal != 0 || fusion != 16) problems.add("ricette T9: " + pedestal + " Pedestal e " + fusion + " Fusion invece di 0 e 16");
         report.add("ricette Alloy: " + pedestal + " al Pedestal e " + fusion + " alla Fusion Shrine, 1 lingotto per lega, niente Piglich Heart");
         finish(helper, "ricette Alloy", problems, report);
     }
@@ -336,6 +337,8 @@ public final class SAEdgeCaseTests {
     /** Oggetto di Spectrum equivalente (per capire se un problema è nostro o ereditato). */
     private static Item spectrumTwin(Item item) {
         String kind = kind(item);
+        // Mazza (anche quella di bedrock): Spectrum non ne ha una, il gemello è la mazza vanilla.
+        if (kind.equals("mace")) return Items.MACE;
         String twin = switch (kind) {
             case "workstaff", "ultra_greatsword", "crossbow" -> "glass_crest_" + kind;
             case "bident" -> "ferocious_glass_crest_bident";
@@ -353,7 +356,7 @@ public final class SAEdgeCaseTests {
     public static void dedicated_server(GameTestHelper helper) {
         List<String> problems = new ArrayList<>(), report = new ArrayList<>();
         var context = Item.TooltipContext.of(helper.getLevel());
-        for (var holder : SAItems.equipment()) {
+        for (var holder : SAItems.all()) {
             Item item = holder.get();
             ItemStack stack = enchanted(helper, item);
             Throwable ours = tooltipError(stack, context);
@@ -401,7 +404,7 @@ public final class SAEdgeCaseTests {
         Holder<Enchantment> unbreaking = registry.getOrThrow(Enchantments.UNBREAKING), mending = registry.getOrThrow(Enchantments.MENDING);
         ServerPlayer player = mockPlayer(helper);
         player.experienceLevel = 1000;
-        for (var holder : SAItems.equipment()) {
+        for (var holder : SAItems.all()) {
             Item item = holder.get();
             String id = id(item);
             ItemStack stack = enchanted(helper, item);
@@ -990,7 +993,7 @@ public final class SAEdgeCaseTests {
     }
 
     /**
-     * Morte in sopravvivenza con i 15 oggetti di un tier: cadono tutti a terra (niente sparisce), resistono alla lava e
+     * Morte in sopravvivenza con i 16 oggetti di un tier: cadono tutti a terra (niente sparisce), resistono alla lava e
      * al fuoco, e un altro giocatore li raccoglie. Respawn con keepInventory: l'armatura resta indossata e il set
      * ridà 40 di Dike.
      */
