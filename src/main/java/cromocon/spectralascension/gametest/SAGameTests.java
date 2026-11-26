@@ -140,7 +140,7 @@ public final class SAGameTests {
                     ArmorItem.Type.BOOTS, 9), 7.5, 0.3));
     /**
      * Fotogrammi dell'armatura indossata animata per tier (T6 Castone, T7 Umbral, T8 Argent: 20; Alloy Prismatic: 40;
-     * 5 tick l'uno).
+     * 15 tick l'uno).
      */
     private static final Map<String, Integer> ARMOR_FRAMES = Map.of("t6", 20, "t7", 20, "t8", 20, "t9", 40);
     /**

@@ -38,8 +38,8 @@ public final class SAArmorItem extends BedrockArmorItem {
             SATier.ALLOY, 40);
     /** Fotogrammi per un tier senza set animato (non dovrebbe servire: ogni tier con armatura è nella mappa). */
     private static final int DEFAULT_ARMOR_FRAMES = 1;
-    /** Tick di gioco per ogni fotogramma, uguale per tutti i tier (5 tick = 0,25 s, come le icone). */
-    private static final int ARMOR_FRAME_TICKS = 5;
+    /** Tick di gioco per ogni fotogramma, uguale per tutti i tier (15 tick = 0,75 s, come le icone). */
+    private static final int ARMOR_FRAME_TICKS = 15;
 
     private final String texturePrefix;
     private final int armorFrames;

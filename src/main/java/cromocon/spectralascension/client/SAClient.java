@@ -12,7 +12,11 @@ import de.dafuqs.spectrum.render.armor.BedrockArmorModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,6 +31,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.EnumMap;
@@ -42,6 +47,21 @@ import java.util.Map;
 @EventBusSubscriber(modid = SpectralAscension.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class SAClient {
     private SAClient() {
+    }
+
+    /**
+     * Resource pack opzionale «Eternal Classics» (cartella `resourcepacks/spectral_ascension_eternal_classics` nel jar,
+     * come fa Spectrum con il suo). Non è attivo di default: si accende dal menu dei resource pack.
+     */
+    @SubscribeEvent
+    public static void onAddPackFinders(AddPackFindersEvent event) {
+        event.addPackFinders(
+                ResourceLocation.fromNamespaceAndPath(SpectralAscension.MOD_ID, "resourcepacks/spectral_ascension_eternal_classics"),
+                PackType.CLIENT_RESOURCES,
+                Component.literal("Spectral Ascension: Eternal Classics"),
+                PackSource.BUILT_IN,
+                false,
+                Pack.Position.TOP);
     }
 
     @SubscribeEvent
