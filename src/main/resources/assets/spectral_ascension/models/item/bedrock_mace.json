@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld_mace",
   "textures": {
-    "layer0": "spectrum:item/bedrock_sword"
+    "layer0": "spectral_ascension:item/bedrock_mace"
   }
 }
