@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0
+
+Texture update.
+
+### New
+- **Eternal Classics textures:** an optional built-in resource pack, **Spectral Ascension: Eternal Classics**, redraws all four tiers (Trichromatic, Umbral, Argent and Prismatic) in the style of the Eternal Classics resource pack for Spectrum. It is off by default: turn it on in Options > Resource Packs.
+
+### Changes
+- **Animations:** item and armor textures now animate much more slowly (one full cycle every 15 seconds, 30 seconds for Prismatic).
+
+### Requirements
+Unchanged: Minecraft 1.21.1, NeoForge 21.1.265 or newer, Spectrum 1.12.9 and Revelationary 1.5.2 (not part of ATM10), Allthemodium 3.2.1 or newer. Install on both client and server.
+
 ## 0.1.1
 
 Bug fix release.

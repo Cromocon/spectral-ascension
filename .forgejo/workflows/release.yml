@@ -152,8 +152,18 @@ jobs:
           code=$(curl -s -o versions.json -w '%{http_code}' -H "X-Api-Token: $CF_TOKEN" "$base/game/versions")
           [ "$code" = 200 ] || { echo "::error::CurseForge game versions request failed (HTTP $code)"; head -c 500 versions.json; exit 1; }
           ids='[]'
+          # "1.21.1" exists under several version types (Bukkit, addons...): take the one of type "Minecraft 1.21".
+          code=$(curl -s -o vtypes.json -w '%{http_code}' -H "X-Api-Token: $CF_TOKEN" "$base/game/version-types")
+          [ "$code" = 200 ] || { echo "::error::CurseForge version types request failed (HTTP $code)"; head -c 500 vtypes.json; exit 1; }
+          mc_type=$(jq -r '[.[] | select(.slug == "minecraft-1-21")] | .[0].id // empty' vtypes.json)
+          [ -n "$mc_type" ] || { echo "::error::CurseForge version type 'minecraft-1-21' not found"; exit 1; }
+          echo "version type 'minecraft-1-21' -> $mc_type"
           for want in "1.21.1" "NeoForge" "Java 21" "Client" "Server"; do
-            id=$(jq -r --arg n "$want" '[.[] | select(.name == $n)] | .[0].id // empty' versions.json)
+            if [ "$want" = "1.21.1" ]; then
+              id=$(jq -r --arg n "$want" --argjson t "$mc_type" '[.[] | select(.name == $n and .gameVersionTypeID == $t)] | .[0].id // empty' versions.json)
+            else
+              id=$(jq -r --arg n "$want" '[.[] | select(.name == $n)] | .[0].id // empty' versions.json)
+            fi
             if [ -z "$id" ]; then
               echo "::error::CurseForge game version '$want' not found. Available names:"
               jq -r '[.[].name] | unique | join(", ")' versions.json | fold -w 200
