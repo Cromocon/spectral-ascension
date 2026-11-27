@@ -37,8 +37,6 @@ public final class SAArmorItem extends BedrockArmorItem {
             SATier.T7, 1,
             SATier.T8, 1,
             SATier.ALLOY, 40);
-    /** Fotogrammi per un tier senza set animato (non dovrebbe servire: ogni tier con armatura e' nella mappa). */
-    private static final int DEFAULT_ARMOR_FRAMES = 1;
     /** Tick di gioco per ogni fotogramma dell'armatura animata (15 tick = 0,75 s). */
     private static final int ARMOR_FRAME_TICKS = 15;
 
@@ -53,7 +51,7 @@ public final class SAArmorItem extends BedrockArmorItem {
         this.tier = tier;
         // Stesso layout 128×128 di spectrum:textures/armor/bedrock_armor.png.
         // Tutte le ResourceLocation dei fotogrammi, calcolate una volta sola: getArmorTexture non ne crea a ogni frame.
-        int n = ARMOR_FRAMES.getOrDefault(tier, DEFAULT_ARMOR_FRAMES);
+        int n = ARMOR_FRAMES.get(tier); // copre tutti i SATier
         this.textures = new ResourceLocation[n];
         for (int i = 0; i < n; i++) this.textures[i] = SpectralAscension.id("textures/armor/" + tier.idPrefix() + "_armor_" + i + ".png");
         this.armorFrames = textures.length;
@@ -86,8 +84,14 @@ public final class SAArmorItem extends BedrockArmorItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
+        // Dike reale del set: per gli stivali il loro potenziamento, per gli altri pezzi quello degli stivali indossati.
         tooltip.add(Component.translatable("item." + SpectralAscension.MOD_ID + ".armor.tooltip.set_dike",
-                Component.literal(String.valueOf(SAArmorSet.dikeStats().max())).withStyle(ChatFormatting.GREEN)).withStyle(ChatFormatting.BLUE));
+                Component.literal(String.valueOf(SAArmorSet.tooltipSetDike(stack))).withStyle(ChatFormatting.GREEN)).withStyle(ChatFormatting.BLUE));
+        int bonus = SAArmorSet.bonus(stack);
+        if (bonus > 0) {
+            tooltip.add(Component.translatable("item." + SpectralAscension.MOD_ID + ".armor.tooltip.dike_bonus",
+                    Component.literal("+" + SAArmorSet.setIncrease(bonus)).withStyle(ChatFormatting.GREEN)).withStyle(ChatFormatting.BLUE));
+        }
         tooltip.add(Component.translatable("item." + SpectralAscension.MOD_ID + ".armor.tooltip.trinkets_disabled").withStyle(ChatFormatting.GRAY));
     }
 }

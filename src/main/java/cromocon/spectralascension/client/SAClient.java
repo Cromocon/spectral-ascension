@@ -1,6 +1,8 @@
 package cromocon.spectralascension.client;
 
 import cromocon.spectralascension.SpectralAscension;
+import cromocon.spectralascension.item.SABident;
+import cromocon.spectralascension.item.SATools;
 import cromocon.spectralascension.registry.SAItems;
 import cromocon.spectralascension.registry.SAMenus;
 import de.dafuqs.spectrum.items.tools.MalachiteCrossbowItem;
@@ -66,43 +68,19 @@ public final class SAClient {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        // Tooltip dell'armatura: Dike del set con gli stivali indossati da chi guarda (SAArmorSet.tooltipSetDike).
+        cromocon.spectralascension.item.SAArmorSet.setTooltipViewer(() -> net.minecraft.client.Minecraft.getInstance().player);
         event.enqueueWork(() -> {
-            // T6 Trichromatic
-            registerBow(SAItems.TRICHROMATIC_BOW.get());
-            registerFishingRod(SAItems.TRICHROMATIC_FISHING_ROD.get());
-            registerOversized(SAItems.TRICHROMATIC_WORKSTAFF.get());
-            registerOversized(SAItems.TRICHROMATIC_ULTRA_GREATSWORD.get());
-            registerOversized(SAItems.TRICHROMATIC_CROSSBOW.get());
-            registerCrossbow(SAItems.TRICHROMATIC_CROSSBOW.get());
-            registerOversized(SAItems.TRICHROMATIC_BIDENT.get());
-            registerBidentThrowing(SAItems.TRICHROMATIC_BIDENT.get());
-            // T7 Umbral
-            registerBow(SAItems.UMBRAL_BOW.get());
-            registerFishingRod(SAItems.UMBRAL_FISHING_ROD.get());
-            registerOversized(SAItems.UMBRAL_WORKSTAFF.get());
-            registerOversized(SAItems.UMBRAL_ULTRA_GREATSWORD.get());
-            registerOversized(SAItems.UMBRAL_CROSSBOW.get());
-            registerCrossbow(SAItems.UMBRAL_CROSSBOW.get());
-            registerOversized(SAItems.UMBRAL_BIDENT.get());
-            registerBidentThrowing(SAItems.UMBRAL_BIDENT.get());
-            // T8 Argent
-            registerBow(SAItems.ARGENT_BOW.get());
-            registerFishingRod(SAItems.ARGENT_FISHING_ROD.get());
-            registerOversized(SAItems.ARGENT_WORKSTAFF.get());
-            registerOversized(SAItems.ARGENT_ULTRA_GREATSWORD.get());
-            registerOversized(SAItems.ARGENT_CROSSBOW.get());
-            registerCrossbow(SAItems.ARGENT_CROSSBOW.get());
-            registerOversized(SAItems.ARGENT_BIDENT.get());
-            registerBidentThrowing(SAItems.ARGENT_BIDENT.get());
-            // Alloy Prismatic (T9)
-            registerBow(SAItems.PRISMATIC_BOW.get());
-            registerFishingRod(SAItems.PRISMATIC_FISHING_ROD.get());
-            registerOversized(SAItems.PRISMATIC_WORKSTAFF.get());
-            registerOversized(SAItems.PRISMATIC_ULTRA_GREATSWORD.get());
-            registerOversized(SAItems.PRISMATIC_CROSSBOW.get());
-            registerCrossbow(SAItems.PRISMATIC_CROSSBOW.get());
-            registerOversized(SAItems.PRISMATIC_BIDENT.get());
-            registerBidentThrowing(SAItems.PRISMATIC_BIDENT.get());
+            // Predicati dei modelli per tipo d'oggetto, su tutti i tier (SAItems.equipment()).
+            for (DeferredItem<? extends Item> holder : SAItems.equipment()) {
+                Item item = holder.get();
+                if (item instanceof SATools.Bow) registerBow(item);
+                if (item instanceof SATools.FishingRod) registerFishingRod(item);
+                if (item instanceof SATools.Workstaff || item instanceof SATools.UltraGreatsword
+                        || item instanceof SATools.Crossbow || item instanceof SABident) registerOversized(item);
+                if (item instanceof SATools.Crossbow) registerCrossbow(item);
+                if (item instanceof SABident) registerBidentThrowing(item);
+            }
         });
     }
 

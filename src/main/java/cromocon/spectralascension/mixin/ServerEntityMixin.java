@@ -9,10 +9,12 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.bundle.PacketAndPayloadAcceptor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -49,11 +51,34 @@ public abstract class ServerEntityMixin {
         }
     }
 
-    /** Ogni tick: dopo l'eventuale SetEntityMotion tagliato, finché la freccia resta oltre il limite. */
+    @Shadow
+    private Vec3 lastSentMovement;
+
+    /** lastSentMovement e hurtMarked all'inizio di sendChanges, per sapere se la vanilla ha mandato un SetEntityMotion. */
+    @Unique
+    private Vec3 spectral_ascension$movementBefore;
+    @Unique
+    private boolean spectral_ascension$hurtMarkedBefore;
+
+    @Inject(method = "sendChanges", at = @At("HEAD"))
+    private void spectral_ascension$rememberMotion(CallbackInfo ci) {
+        spectral_ascension$movementBefore = lastSentMovement;
+        spectral_ascension$hurtMarkedBefore = entity.hurtMarked;
+    }
+
+    /**
+     * Solo nei tick in cui la vanilla ha mandato un SetEntityMotion (tagliato): lastSentMovement riassegnato (confronto
+     * per identità: la vanilla lo cambia solo quando la velocità è cambiata davvero) o hurtMarked. Prima partiva a
+     * ogni tick finché una componente superava il limite, anche per le frecce piantate, che tengono come
+     * deltaMovement il vettore dell'impatto.
+     */
     @Inject(method = "sendChanges", at = @At("TAIL"))
     private void spectral_ascension$exactVelocityOnUpdate(CallbackInfo ci) {
-        if (ProjectileVelocityPayload.needsExactVelocity(entity)) {
+        boolean vanillaSent = lastSentMovement != spectral_ascension$movementBefore || spectral_ascension$hurtMarkedBefore;
+        spectral_ascension$movementBefore = null;
+        if (vanillaSent && ProjectileVelocityPayload.needsExactVelocity(entity)) {
             broadcast.accept(new ClientboundCustomPayloadPacket(new ProjectileVelocityPayload(entity)));
+            ProjectileVelocityPayload.onSentForTest(entity);
         }
     }
 }

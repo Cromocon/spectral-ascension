@@ -35,7 +35,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import texture_hand as H  # noqa: E402
 import texture_mix as M  # noqa: E402
 import texture_t6castone as T  # noqa: E402
-import texture_t7 as T7  # noqa: E402
 
 PROP = os.path.join(H.ROOT, "design", "texture", "proposte")
 T6OUT, T7OUT = T.OUT, T.T7
@@ -45,7 +44,8 @@ VIB = dict(zip("abcdef", ("#08202b", "#12536a", "#209187", "#3bbfa6", "#86ecc8",
 # onice: neri del T7 Umbral (METAL 3 contorno, 0 scuro, 1 medio, 5 riflesso); prima: #46526e #0c0d14 #1c1e2a #8492b4
 ONYX = {"rim": "#46526e", "dark": "#0c0d14", "mid": "#1c1e2a", "sheen": "#8492b4"}   # onice originale del T7 (texture_t7.py)
 ONYX_V1 = {"rim": "#2e3242", "dark": "#07080d", "mid": "#14161f", "sheen": "#5a6075"}   # prima versione (neri del metallo)
-METAL = T7.METAL    # corpo: la bedrock 0-6 del T6 diventa la rampa METAL del T7, cifra per cifra
+METAL = {"0": "#07080d", "1": "#14161f", "2": "#20232f", "3": "#2e3242", "4": "#414658", "5": "#5a6075",
+         "6": "#8ab4b6"}    # corpo: la bedrock 0-6 del T6 diventa la rampa METAL del T7, cifra per cifra
 ONYX_CHARS = {"rim": "qmu", "dark": "rnv", "mid": "sow", "sheen": "tpx"}
 ORANGE = {c.upper(): "#%02x%02x%02x" % T.PAL[c][:3] for c in "abcdef"}   # allthemodium T6: A..F = a..f
 # stoffa T7 v2: verde acqua scuro (petrolio) al posto del viola del T6; g..k stessa luminosita' relativa di prima

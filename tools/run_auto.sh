@@ -36,7 +36,8 @@ kill_game() {
 }
 
 run_game() {
-  python3 -I tools/reset_test_world.py >/dev/null || return 1   # crea il mondo se manca
+  # crea il mondo se manca (lo script è git-ignored: in un clone pulito non c'è)
+  if [ -f tools/reset_test_world.py ]; then python3 -I tools/reset_test_world.py >/dev/null || return 1; fi
   local rc
   if [ "$TIMEOUT" -gt 0 ]; then
     timeout --foreground "$TIMEOUT" ./gradlew runClientAuto -PsaScenario="$SCENARIO" $JEIARG >"$OUT" 2>&1; rc=$?

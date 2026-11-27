@@ -1,0 +1,44 @@
+// Scavo ad area della workstaff col client che prevede l'area (MultiPlayerGameModeMixin / WorkstaffAreaPrediction).
+// Sopravvivenza, Haste II, workstaff T8 (Argent) con area 7x7 (spectrum:aoe=3) ed Efficiency VIII: la pietra si rompe
+// all'istante. Parete di pietra 7x7 a nord del giocatore (z=797, x 797..803, y -61..-55): su una parete l'area parte
+// da un blocco sotto il blocco mirato (800,-60,797) e sale di 5. Ink: palette con White Ink + unlock_ink_use (costa 9).
+// 1) previsione accesa: subito dopo startDestroyBlock, nello STESSO tick, sul ClientLevel l'area è già tutta aria (49);
+// 2) previsione spenta (area_prediction false, solo sviluppo): nello stesso tick è sparito solo il blocco mirato (1),
+//    il resto arriva dal server dopo.
+{
+  "description": "Workstaff T8 7x7 in sopravvivenza: l'area sparisce sul client nello stesso tick del blocco mirato (con e senza previsione)",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode survival", "clear @s", "effect clear @s", "time set 6000", "weather clear",
+      "effect give @s minecraft:saturation 600 10 true", "effect give @s minecraft:haste 600 1 true",
+      "advancement grant @s only spectrum:milestones/unlock_ink_use",
+      "fill 794 -60 794 806 -50 803 minecraft:air",
+      "tp @s 800.5 -60 800.5 180 0",
+      "item replace entity @s inventory.10 with spectrum:pigment_palette[spectrum:ink_storage={max_energy_total:0L,max_per_color:100000L,stored_energy:{\"spectrum:white\":100000L}}]"
+    ]},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:argent_workstaff[spectrum:aoe=3,minecraft:enchantments={levels:{'minecraft:efficiency':8,'minecraft:fortune':8}}]"},
+
+    // ---------------------------------------------------------------- 1. con la previsione
+    {"action": "command", "commands": ["fill 797 -61 797 803 -55 797 minecraft:stone"]},
+    {"action": "wait", "ticks": 20},
+    {"action": "count_blocks", "from": [797, -61, 797], "to": [803, -55, 797], "block": "minecraft:stone", "count": 49},
+    {"action": "screenshot", "name": "parete", "frames": 1},
+    {"action": "mine", "pos": [800, -60, 797], "face": "south", "from": [797, -61, 797], "to": [803, -55, 797], "count": 49},
+    {"action": "screenshot", "name": "dopo_previsione", "frames": 1},
+    {"action": "wait", "ticks": 10},
+    {"action": "count_blocks", "side": "server", "from": [797, -61, 797], "to": [803, -55, 797], "count": 49},
+    {"action": "count_blocks", "from": [797, -61, 797], "to": [803, -55, 797], "count": 49},
+    {"action": "assert_item", "predicate": "spectrum:pigment_palette", "dump": true},
+
+    // ---------------------------------------------------------------- 2. senza la previsione (confronto)
+    {"action": "command", "commands": ["kill @e[type=item]", "fill 797 -61 797 803 -55 797 minecraft:stone"]},
+    {"action": "wait", "ticks": 20},
+    {"action": "area_prediction", "value": false},
+    {"action": "mine", "pos": [800, -60, 797], "face": "south", "from": [797, -61, 797], "to": [803, -55, 797], "count": 1},
+    {"action": "screenshot", "name": "dopo_senza_previsione", "frames": 1},
+    {"action": "wait", "ticks": 10},
+    {"action": "count_blocks", "from": [797, -61, 797], "to": [803, -55, 797], "count": 49},
+    {"action": "area_prediction", "value": true},
+    {"action": "command", "expect": "any", "commands": ["kill @e[type=item]", "fill 794 -61 794 806 -61 803 minecraft:grass_block", "effect clear @s"]}
+  ]
+}

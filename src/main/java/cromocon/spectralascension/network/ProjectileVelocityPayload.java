@@ -12,6 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import javax.annotation.Nullable;
+
+import java.util.function.Consumer;
 
 /**
  * Velocità ESATTA di un proiettile, dal server al client.
@@ -54,6 +57,15 @@ public record ProjectileVelocityPayload(int entityId, double x, double y, double
         if (weapon == null || !(weapon.getItem() instanceof SATools.Crossbow || weapon.getItem() instanceof SATools.Bow)) return false;
         Vec3 v = arrow.getDeltaMovement();
         return Math.abs(v.x) > VANILLA_LIMIT || Math.abs(v.y) > VANILLA_LIMIT || Math.abs(v.z) > VANILLA_LIMIT;
+    }
+
+    /** Solo per i GameTest: chiamato a ogni invio da sendChanges (null fuori dai test, costo un controllo). */
+    @Nullable
+    public static Consumer<Entity> testSendListener;
+
+    public static void onSentForTest(Entity entity) {
+        Consumer<Entity> listener = testSendListener;
+        if (listener != null) listener.accept(entity);
     }
 
     /** Mod bus: registra il pacchetto (solo server → client). */

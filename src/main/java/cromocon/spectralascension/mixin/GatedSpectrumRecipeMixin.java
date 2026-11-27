@@ -1,12 +1,11 @@
 package cromocon.spectralascension.mixin;
 
-import cromocon.spectralascension.SpectralAscension;
+import cromocon.spectralascension.item.SAEnchantCap;
 import cromocon.spectralascension.item.SATools;
 import cromocon.spectralascension.item.WorkstaffOption;
 import de.dafuqs.spectrum.recipe.GatedSpectrumRecipe;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -28,10 +27,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = GatedSpectrumRecipe.class, remap = false)
 public abstract class GatedSpectrumRecipeMixin {
 
-    @Inject(method = "copyComponents", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "copyComponents", at = @At("RETURN"))
     private static void spectral_ascension$keepHigherLevel(ItemStack output, ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack result = cir.getReturnValue();
-        if (!BuiltInRegistries.ITEM.getKey(result.getItem()).getNamespace().equals(SpectralAscension.MOD_ID)) {
+        if (!SAEnchantCap.isOurs(result)) {
             return;
         }
         if (result.getItem() instanceof SATools.Workstaff) {
@@ -39,7 +38,6 @@ public abstract class GatedSpectrumRecipeMixin {
                 WorkstaffOption.preserveMiningMode(input, result);
             }
             WorkstaffOption.syncDropEnchantments(null, result);
-            cir.setReturnValue(result);
         }
         ItemEnchantments.Mutable merged = new ItemEnchantments.Mutable(result.getTagEnchantments());
         boolean changed = false;
@@ -50,9 +48,9 @@ public abstract class GatedSpectrumRecipeMixin {
                 changed = true;
             }
         }
+        // Tutto in place su result, che È il valore di ritorno: niente setReturnValue.
         if (changed) {
             EnchantmentHelper.setEnchantments(result, merged.toImmutable());
-            cir.setReturnValue(result);
         }
     }
 }

@@ -1481,12 +1481,49 @@ def gen_mining_dim_ores():
         })
 
 
+ABOUT_MORE = {
+    "title_en": "Descent", "title_it": "Discesa",
+    "text_en": "Gold in the ancient cities, green in the Nether, violet in the End. I carried each one home and watched my Spectrum gear take them in as if it had been waiting all along.<br><br>The last one was different. It did not shine. It *listened*.<br><br>*Some doors only open from the far side of the bedrock.*",
+    "text_it": "Oro nelle ancient city, verde nel Nether, viola nell'End. Li ho portati a casa uno a uno e ho visto il mio equipaggiamento di Spectrum accoglierli come se non aspettasse altro.<br><br>L'ultimo era diverso. Non brillava. *Ascoltava*.<br><br>*Alcune porte si aprono solo dal lato più lontano del bedrock.*",
+    "tip_en": "*Pro tip: the built-in resource pack \"Eternal Classics\" gives the equipment a different style. Switch it on in the resource packs menu.*",
+    "tip_it": "*Consiglio: il resource pack integrato «Eternal Classics» dà all'equipaggiamento un altro stile. Accendilo dal menu dei resource pack.*",
+}
+
+
+def gen_about_entry(lang):
+    """Voce General «Addon: Spectral Ascension»: pagina 1 (about, testo nel lang) + pagina 2 (Descent) + pagina 3 (consiglio)."""
+    base = f"book.{MOD}.guidebook.{MOD}"
+    for code, sfx in (("en_us", "en"), ("it_it", "it")):
+        lang[code][f"{base}.more.title"] = ABOUT_MORE["title_" + sfx]
+        # `<br>` = a capo del lang di Spectrum: backslash + newline
+        lang[code][f"{base}.more.text"] = ABOUT_MORE["text_" + sfx].replace("<br>", "\\\n")
+        lang[code][f"{base}.more.tip.text"] = ABOUT_MORE["tip_" + sfx]
+    write_json(f"data/spectrum/modonomicon/books/guidebook/entries/general/{MOD}.json", {
+        "name": f"{base}.name",
+        "description": f"book.{MOD}.added_by",
+        "icon": {"item": f"{MOD}:trichromatic_workstaff"},
+        "category": "spectrum:general",
+        "hide_while_locked": False,
+        "background_u_index": 0,
+        "background_v_index": 4,
+        "x": -13,
+        "y": -4,
+        "read_by_default": True,
+        "pages": [
+            {"type": "modonomicon:text", "title": f"{base}.about.title", "text": f"{base}.about.text"},
+            {"type": "modonomicon:text", "title": f"{base}.more.title", "text": f"{base}.more.text"},
+            {"type": "modonomicon:text", "text": f"{base}.more.tip.text"},
+        ],
+    })
+
+
 def main():
     lang = {}
     for code in ("en_us", "it_it"):
         with open(os.path.join(RES, f"assets/{MOD}/lang/{code}.json"), encoding="utf-8") as f:
             lang[code] = json.load(f)
     drop_stale_lang(lang)
+    gen_about_entry(lang)
     gen_bedrock_mace(lang)
     for obj in OBJECTS:
         gen_object(obj, lang)
@@ -1591,6 +1628,9 @@ def main():
             lang[code][f"gui.{MOD}.workstaff_menu.{key}"] = value
     lang["en_us"][f"item.{MOD}.armor.tooltip.set_dike"] = "Full set: grants %s units of Azure Dike"
     lang["it_it"][f"item.{MOD}.armor.tooltip.set_dike"] = "Set completo: dà %s unità di Azure Dike"
+    # Stivali con lo Shieldgrasp Amulet potenziato a Ink (SAArmorSet, componente dike_bonus): %s = Dike in più del set.
+    lang["en_us"][f"item.{MOD}.armor.tooltip.dike_bonus"] = "Infused Shieldgrasp Amulet: %s Azure Dike"
+    lang["it_it"][f"item.{MOD}.armor.tooltip.dike_bonus"] = "Shieldgrasp Amulet infuso: %s Azure Dike"
     for code in ("en_us", "it_it"):  # tooltip rimosso (protezione a Ink dell'armatura eliminata)
         lang[code].pop(f"item.{MOD}.armor.tooltip.ink_protection", None)
     lang["en_us"][f"item.{MOD}.armor.tooltip.trinkets_disabled"] = \

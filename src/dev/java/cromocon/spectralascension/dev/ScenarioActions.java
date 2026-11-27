@@ -185,6 +185,12 @@ public final class ScenarioActions {
             case "buy_hint" -> buyHint(s);
             case "track_projectile" -> trackProjectile(s);
             case "fov" -> client(() -> setFov(s));
+            case "mine" -> MineActions.mine(s);
+            case "count_blocks" -> MineActions.countBlocks(s);
+            case "area_prediction" -> client(() -> {
+                cromocon.spectralascension.client.WorkstaffAreaPrediction.enabled = Scenario.bool(s, "value", true);
+                return StepResult.ok("previsione dell'area della workstaff sul client: " + (cromocon.spectralascension.client.WorkstaffAreaPrediction.enabled ? "on" : "off"));
+            });
             default -> throw new IllegalArgumentException("azione sconosciuta: " + action);
         };
     }

@@ -226,5 +226,9 @@
   "item.spectral_ascension.argent_mace": "Mazza argentea",
   "book.spectral_ascension.guidebook.t8_equipment.argent_mace.text": "Un lampo pallido dall'alto, e il vento mi rilancia su verso la luna.",
   "item.spectral_ascension.prismatic_mace": "Mazza prismatica",
-  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "Queste leghe la rendono leggera in mano e pesantissima quando colpisce. Il vento che solleva ora mi lancia più in alto di quanto oserei mai saltare."
+  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "Queste leghe la rendono leggera in mano e pesantissima quando colpisce. Il vento che solleva ora mi lancia più in alto di quanto oserei mai saltare.",
+  "item.spectral_ascension.armor.tooltip.dike_bonus": "Shieldgrasp Amulet infuso: %s Azure Dike",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.title": "Discesa",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.text": "Oro nelle ancient city, verde nel Nether, viola nell'End. Li ho portati a casa uno a uno e ho visto il mio equipaggiamento di Spectrum accoglierli come se non aspettasse altro.\\\n\\\nL'ultimo era diverso. Non brillava. *Ascoltava*.\\\n\\\n*Alcune porte si aprono solo dal lato più lontano del bedrock.*",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Consiglio: il resource pack integrato «Eternal Classics» dà all'equipaggiamento un altro stile. Accendilo dal menu dei resource pack.*"
 }

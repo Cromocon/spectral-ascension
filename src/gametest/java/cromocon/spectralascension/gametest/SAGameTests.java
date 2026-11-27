@@ -54,10 +54,13 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -522,10 +525,10 @@ public final class SAGameTests {
     }
 
     /** Mette o toglie un pezzo e avvisa i listener come farebbe il tick del giocatore. */
-    private static void equip(ServerPlayer player, EquipmentSlot slot, ItemStack stack) {
-        ItemStack from = player.getItemBySlot(slot).copy();
-        player.setItemSlot(slot, stack);
-        NeoForge.EVENT_BUS.post(new LivingEquipmentChangeEvent(player, slot, from, stack));
+    private static void equip(LivingEntity entity, EquipmentSlot slot, ItemStack stack) {
+        ItemStack from = entity.getItemBySlot(slot).copy();
+        entity.setItemSlot(slot, stack);
+        NeoForge.EVENT_BUS.post(new LivingEquipmentChangeEvent(entity, slot, from, stack));
     }
 
     /** Percorso del lucchetto di un tier, col nome del tier (2026-11-23): unlocks/tiers/trichromatic, umbral, argent, prismatic. */
@@ -664,6 +667,28 @@ public final class SAGameTests {
         } else {
             SpectralAscension.LOGGER.warn("[GameTest] slot Curios 'ring' assente: controllo degli accessori disattivati saltato");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Dike del set su un'entità senza inventario Curios (armor stand): AzureDikeAttachmentTypeMixin imposta il Dike del
+     * set e lo toglie da solo, perché lì Spectrum non lo ricalcola. Set T6 completo → 40; senza stivali → 0.
+     */
+    @GameTest(template = EMPTY)
+    public static void armor_set_dike_no_curios(GameTestHelper helper) {
+        ArmorStand stand = helper.spawn(EntityType.ARMOR_STAND, new BlockPos(1, 2, 1));
+        helper.assertFalse(cromocon.spectralascension.compat.SACurios.hasInventory(stand),
+                "l'armor stand ha un inventario Curios: il ramo senza Curios del mixin non è provato");
+        for (var holder : SAItems.armor(SATier.T6)) {
+            equip(stand, holder.get().getEquipmentSlot(), new ItemStack(holder.get()));
+        }
+        float max = stand.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+        helper.assertTrue(max == SET_DIKE, "armor stand con il set T6: Dike massimo " + max + " invece di " + SET_DIKE);
+        equip(stand, EquipmentSlot.FEET, ItemStack.EMPTY);
+        max = stand.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+        helper.assertTrue(max == 0, "armor stand senza stivali: Dike massimo " + max + " invece di 0");
+        SpectralAscension.LOGGER.info("[GameTest] Dike su armor stand (senza Curios): 40 col set T6, 0 senza stivali");
+        stand.discard();
         helper.succeed();
     }
 
@@ -1860,6 +1885,84 @@ public final class SAGameTests {
                 if (tick == 3) checkArrows(helper, crossbows, arrows, samples);
             });
         }
+    }
+
+    /**
+     * Velocità esatta solo dopo un SetEntityMotion vanilla (ServerEntityMixin): una freccia veloce della balestra T6,
+     * tirata in giù verso una lastra di pietra, riceve la correzione in volo (impulso forzato al tick 1, come quello che
+     * la vanilla manda ogni 20 tick); piantata nella pietra, con un deltaMovement oltre il limite (il vettore
+     * dell'impatto, qui forzato a 5 b/t), non riceve più pacchetti: al massimo uno quando la vanilla manda il cambio di
+     * velocità, poi più niente. Prima del 2026-11-27 partiva un pacchetto a ogni tick.
+     */
+    @GameTest(template = EMPTY, timeoutTicks = 80)
+    public static void crossbow_stuck_arrow_no_velocity_spam(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos feet = helper.absolutePos(new BlockPos(0, 80, 0));
+        BlockPos pad = feet.below(40);
+        // le entità si muovono (e ServerEntity.sendChanges gira) solo nei chunk entity-ticking: forziamo quelli intorno,
+        // ricordando quali non lo erano già (il chunk della struttura lo forza il GameTest stesso)
+        List<net.minecraft.world.level.ChunkPos> forced = new ArrayList<>();
+        var centre = new net.minecraft.world.level.ChunkPos(feet);
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                var c = new net.minecraft.world.level.ChunkPos(centre.x + dx, centre.z + dz);
+                if (!level.getForcedChunks().contains(c.toLong()) && level.setChunkForced(c.x, c.z, true)) forced.add(c);
+            }
+        }
+        for (BlockPos p : BlockPos.betweenClosed(pad.offset(-3, 0, -3), pad.offset(3, 0, 3))) {
+            level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
+        }
+        ServerPlayer player = mockPlayer(helper);
+        aim(player, feet, 0.0F, 90.0F);
+        ItemStack crossbow = new ItemStack(SAItems.TRICHROMATIC_CROSSBOW.get());
+        crossbow.set(DataComponents.CHARGED_PROJECTILES,
+                net.minecraft.world.item.component.ChargedProjectiles.of(new ItemStack(net.minecraft.world.item.Items.ARROW)));
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        crossbow.getItem().use(level, player, InteractionHand.MAIN_HAND);
+        var found = level.getEntitiesOfClass(net.minecraft.world.entity.projectile.AbstractArrow.class,
+                new AABB(feet).inflate(4), a -> a.getOwner() == player);
+        helper.assertTrue(found.size() == 1, "frecce tirate " + found.size());
+        var arrow = found.getFirst();
+        int[] sent = {0};
+        cromocon.spectralascension.network.ProjectileVelocityPayload.testSendListener = e -> {
+            if (e == arrow) sent[0]++;
+        };
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        int[] mark = new int[3];
+        helper.runAfterDelay(1, () -> arrow.hasImpulse = true);
+        helper.runAfterDelay(3, () -> {
+            report.add("in volo: " + sent[0] + " pacchetti, y " + String.format(java.util.Locale.ROOT, "%.1f", arrow.getY() - pad.getY()) + " sopra la lastra");
+            if (sent[0] < 1) problems.add("in volo nessuna velocità esatta dopo il SetEntityMotion vanilla");
+            if (arrow.getY() - pad.getY() < 5) problems.add("la freccia è già quasi a terra al tick 3, controllo in volo non valido");
+        });
+        helper.runAfterDelay(12, () -> {
+            mark[0] = sent[0];
+            mark[1] = (int) Math.round(arrow.getY() * 100);
+            // vettore dell'impatto sicuramente oltre il limite: setDeltaMovement non segna impulsi
+            arrow.setDeltaMovement(0, -5, 0);
+        });
+        helper.runAfterDelay(13, () -> {
+            if (Math.round(arrow.getY() * 100) != mark[1] || arrow.isRemoved()) problems.add("la freccia non è piantata nella pietra al tick 12");
+            if (!cromocon.spectralascension.network.ProjectileVelocityPayload.needsExactVelocity(arrow))
+                problems.add("la freccia piantata non supera il limite: il test non prova niente");
+        });
+        helper.runAfterDelay(60, () -> {
+            try {
+                int stuck = sent[0] - mark[0];
+                report.add("piantata, 48 tick: " + stuck + " pacchetti (prima del 2026-11-27 uno a tick)");
+                if (stuck > 1) problems.add("freccia piantata: " + stuck + " pacchetti in 48 tick invece di al massimo 1");
+            } finally {
+                cromocon.spectralascension.network.ProjectileVelocityPayload.testSendListener = null;
+                arrow.discard();
+                for (BlockPos p : BlockPos.betweenClosed(pad.offset(-3, 0, -3), pad.offset(3, 0, 3))) {
+                    level.setBlockAndUpdate(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+                }
+                forced.forEach(c -> level.setChunkForced(c.x, c.z, false));
+            }
+            if (!problems.isEmpty()) helper.fail(problems.size() + " problemi, il primo: " + problems.getFirst() + " | " + String.join("; ", report));
+            report.forEach(r -> SpectralAscension.LOGGER.info("[GameTest] velocità esatta: {}", r));
+            helper.succeed();
+        });
     }
 
     /**

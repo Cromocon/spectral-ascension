@@ -39,7 +39,7 @@ public record BidentModePayload(int modeIndex) implements CustomPacketPayload {
         Player player = context.player();
         if (!(player.containerMenu instanceof BidentMenu menu) || !menu.stillValid(player)
                 || !menu.select(player, payload.modeIndex())) {
-            SpectralAscension.LOGGER.warn("Modalità del bident rifiutata per {}: indice {}, menu {}",
+            SpectralAscension.LOGGER.debug("Modalità del bident rifiutata per {}: indice {}, menu {}",
                     player.getName().getString(), payload.modeIndex(), player.containerMenu.getClass().getSimpleName());
         }
     }

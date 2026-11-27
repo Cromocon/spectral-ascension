@@ -5,6 +5,7 @@ import cromocon.spectralascension.item.PrismaticTrail;
 import de.dafuqs.spectrum.api.ink.color.InkColors;
 import de.dafuqs.spectrum.particle.SpectrumParticleTypes;
 import de.dafuqs.spectrum.particle.effect.DynamicParticleEffect;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -32,7 +33,11 @@ import org.joml.Vector3f;
 @EventBusSubscriber(modid = SpectralAscension.MOD_ID, value = Dist.CLIENT) // game bus (default)
 public final class PrismaticTrailParticles {
     private static final double SPACING = 0.5;
-    private static final int MAX_PER_TICK = 12;
+    /** Tetto di particelle per tick e per freccia (con Multishot e frecce veloci se ne accumulavano ~250 vive). */
+    private static final int MAX_PER_TICK = 5;
+    /** Oltre queste distanze dalla telecamera (blocchi, al quadrato) le particelle si dimezzano / spariscono. */
+    private static final double FAR_SQR = 32.0 * 32.0;
+    private static final double CULL_SQR = 64.0 * 64.0;
     /** Spostamento minimo in un tick (al quadrato) per considerare la freccia in volo. */
     private static final double MIN_MOVE_SQR = 0.01 * 0.01;
     /** Letti al primo uso (non alla registrazione dell'evento, che avviene mentre le mod si stanno ancora costruendo). */
@@ -59,6 +64,9 @@ public final class PrismaticTrailParticles {
         }
         RandomSource random = arrow.getRandom();
         int count = Mth.clamp((int) Math.ceil(Math.sqrt(moved) / SPACING), 1, MAX_PER_TICK);
+        double camDist = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(to);
+        if (camDist > CULL_SQR) return;
+        if (camDist > FAR_SQR) count = (count + 1) / 2;
         for (int i = 0; i < count; i++) {
             Vec3 p = from.lerp(to, (i + random.nextDouble()) / count)
                     .add((random.nextDouble() - 0.5) * 0.15, (random.nextDouble() - 0.5) * 0.15, (random.nextDouble() - 0.5) * 0.15);

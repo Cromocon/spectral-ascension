@@ -51,11 +51,6 @@ public class WorkstaffMenu extends QuickNavigationGridScreenHandler {
         return hand;
     }
 
-    /** Lo stack per cui è stato aperto (sul server: lo stesso oggetto che era in mano). */
-    public ItemStack stack() {
-        return stack;
-    }
-
     /** Valido finché nella mano c'è lo STESSO stack (identità, come WorkstaffScreenHandler) ed è una workstaff T7+. */
     @Override
     public boolean stillValid(Player player) {

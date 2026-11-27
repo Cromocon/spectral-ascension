@@ -11,6 +11,13 @@ import de.dafuqs.spectrum.api.recipe.GatedRecipe;
 import de.dafuqs.spectrum.recipe.fusion_shrine.FusionShrineRecipe;
 import de.dafuqs.spectrum.registries.SpectrumToolTiers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.GrindstoneMenu;
+import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.GrindstoneEvent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -287,9 +294,11 @@ public final class SAMaceTests {
                 "argent_mace", "t8", "prismatic_mace", "t9");
         int row = 0;
         BlockPos first = SAFunctionTests.slot(helper, row++);
-        double baseline = pushOnTarget(helper, first, new ItemStack(SAItems.BEDROCK_MACE.get()));
+        // Senza incantesimi: la mazza vanilla. Le nostre hanno sempre il Wind Burst intrinseco (SATools.Mace.ensureWindBurst,
+        // rimesso anche quando la mazza entra in mano), quindi non possono fare da riferimento.
+        double baseline = pushOnTarget(helper, first, new ItemStack(Items.MACE));
         clearAround(helper, first, 5);
-        report.add(String.format(java.util.Locale.ROOT, "mazza di bedrock senza incantesimi: spinta sul bersaglio %.3f", baseline));
+        report.add(String.format(java.util.Locale.ROOT, "mazza vanilla senza incantesimi: spinta sul bersaglio %.3f", baseline));
         double last = baseline;
         for (var e : windBurstLevels().entrySet()) {
             Item mace = e.getKey();
@@ -370,5 +379,87 @@ public final class SAMaceTests {
             report.add(id(mace) + ": indistruttibile, incantabilità " + stack.getEnchantmentValue());
         }
         finish(helper, "mazze dei tier indistruttibili", problems, report);
+    }
+
+    /**
+     * Wind Burst sempre presente (2026-11-27, SATools.Mace.ensureWindBurst): uno stack da /give (ItemInput, lo stesso
+     * percorso del comando), da NBT (caricamento) o da {@code new ItemStack} ha il Wind Burst del tier, una sola voce,
+     * visibile nel tooltip. Preincantato + copia: nessun doppione. Un livello più alto resta; uno più basso sale al
+     * livello intrinseco; /give con altri incantesimi li tiene e aggiunge Wind Burst. La mazza vanilla resta senza.
+     * Mola: il risultato tiene Wind Burst intrinseco (toglie il resto) e non dà XP per quel livello. Incudine: libro
+     * Wind Burst VIII su una mazza di bedrock → mai sotto IV.
+     */
+    @GameTest(template = EMPTY)
+    public static void mace_wind_burst_always(GameTestHelper helper) throws Exception {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        var access = helper.getLevel().registryAccess();
+        Holder<Enchantment> wind = ench(helper, Enchantments.WIND_BURST), density = ench(helper, Enchantments.DENSITY);
+        ServerPlayer player = mockPlayer(helper);
+        player.experienceLevel = 1000;
+        for (var e : windBurstLevels().entrySet()) {
+            Item mace = e.getKey();
+            String id = id(mace);
+            int want = e.getValue();
+            ItemStack given = new ItemInput(mace.builtInRegistryHolder(), DataComponentPatch.EMPTY).createItemStack(1, false);
+            check(problems, id + " /give", given, wind, want);
+            ItemStack loaded = ItemStack.parseOptional(access, (net.minecraft.nbt.CompoundTag) net.minecraft.nbt.TagParser.parseTag(
+                    "{id:\"" + BuiltInRegistries.ITEM.getKey(mace) + "\",count:1}"));
+            check(problems, id + " da NBT", loaded, wind, want);
+            check(problems, id + " new ItemStack", new ItemStack(mace), wind, want);
+            check(problems, id + " preincantata + copia", enchanted(helper, mace).copy(), wind, want);
+            // Tooltip: la riga dell'incantesimo c'è.
+            String line = Enchantment.getFullname(wind, want).getString();
+            boolean shown = given.getTooltipLines(Item.TooltipContext.of(helper.getLevel()), null, TooltipFlag.NORMAL).stream()
+                    .anyMatch(c -> c.getString().equals(line));
+            if (!shown) problems.add(id + ": il tooltip non mostra «" + line + "»");
+            // /give con un altro incantesimo: resta, e Wind Burst si aggiunge.
+            ItemStack withDensity = new ItemInput(mace.builtInRegistryHolder(), DataComponentPatch.builder()
+                    .set(DataComponents.ENCHANTMENTS, new ItemEnchantments.Mutable(ItemEnchantments.EMPTY) {{ set(density, 3); }}.toImmutable())
+                    .build()).createItemStack(1, false);
+            if (withDensity.getEnchantments().getLevel(density) != 3 || withDensity.getEnchantments().getLevel(wind) != want)
+                problems.add(id + ": /give con Density III dà " + withDensity.getEnchantments());
+            // Livello più alto: resta. Più basso: sale.
+            ItemStack high = new ItemStack(mace);
+            high.enchant(wind, want + 1);
+            if (high.copy().getEnchantments().getLevel(wind) != want + 1) problems.add(id + ": Wind Burst " + (want + 1) + " abbassato dalla copia");
+            ItemStack low = new ItemStack(mace);
+            low.set(DataComponents.ENCHANTMENTS, new ItemEnchantments.Mutable(ItemEnchantments.EMPTY) {{ set(wind, 1); }}.toImmutable());
+            if (low.copy().getEnchantments().getLevel(wind) != want) problems.add(id + ": Wind Burst I non risale a " + want + " nella copia");
+            // Mola: via Density, Wind Burst resta; XP solo per Density.
+            ItemStack toGrind = new ItemStack(mace);
+            toGrind.enchant(density, 3);
+            var grind = new GrindstoneMenu(0, player.getInventory(), ContainerLevelAccess.create(helper.getLevel(), helper.absolutePos(BlockPos.ZERO)));
+            grind.getSlot(0).set(toGrind.copy());
+            ItemStack ground = grind.getSlot(2).getItem();
+            if (!ground.is(mace) || ground.getEnchantments().getLevel(wind) != want || ground.getEnchantments().getLevel(density) != 0)
+                problems.add(id + ": la mola dà " + ground + " " + ground.getEnchantments());
+            int xpBoth = grindXp(player, toGrind), xpWindOnly = grindXp(player, new ItemStack(mace));
+            int densityCost = density.value().getMinCost(3);
+            if (xpWindOnly != 0) problems.add(id + ": la mola dà " + xpWindOnly + " XP per il solo Wind Burst intrinseco");
+            if (xpBoth < Math.ceil(densityCost / 2.0) || xpBoth > densityCost) problems.add(id + ": XP della mola " + xpBoth + " fuori da Density III (" + densityCost + ")");
+            report.add(id + ": /give, NBT e copia con Wind Burst " + want + "; mola → " + ground.getEnchantments().size()
+                    + " incantesimi, XP " + xpBoth + " (solo Wind Burst: " + xpWindOnly + ")");
+        }
+        // Incudine: libro Wind Burst VIII sulla mazza di bedrock (IV). Senza Apothic l'incudine taglia a III e
+        // AnvilMenuMixin rimette IV; con Apothic (tetto VIII) sale a VIII. Mai sotto IV.
+        ItemStack book = SAEdgeCaseTests.book(wind, 8);
+        ItemStack anv = SAEdgeCaseTests.anvil(player, new ItemStack(SAItems.BEDROCK_MACE.get()), book);
+        if (anv.getEnchantments().getLevel(wind) < 4) problems.add("incudine: mazza di bedrock + libro VIII dà Wind Burst " + anv.getEnchantments().getLevel(wind));
+        report.add("incudine: mazza di bedrock + libro Wind Burst VIII → " + anv.getEnchantments().getLevel(wind));
+        // La mazza vanilla resta com'è.
+        if (new ItemStack(Items.MACE).getEnchantments().getLevel(wind) != 0) problems.add("la mazza vanilla ha Wind Burst");
+        finish(helper, "Wind Burst sempre presente", problems, report);
+    }
+
+    private static void check(List<String> problems, String what, ItemStack stack, Holder<Enchantment> wind, int want) {
+        var e = stack.getEnchantments();
+        if (e.getLevel(wind) != want || e.size() != 1) problems.add(what + ": " + e + " invece del solo Wind Burst " + want);
+    }
+
+    /** XP della mola come la consegnerebbe a chi prende il risultato (evento NeoForge, listener compresi). */
+    private static int grindXp(ServerPlayer player, ItemStack top) {
+        var event = new GrindstoneEvent.OnTakeItem(ContainerLevelAccess.NULL, player, top, ItemStack.EMPTY, 999);
+        NeoForge.EVENT_BUS.post(event);
+        return event.getXp();
     }
 }

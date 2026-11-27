@@ -615,7 +615,8 @@ public final class SAEdgeCaseTests {
     /**
      * Tetto ATM10 alla copia: ogni nostro oggetto nelle bowl, con il suo Gilded Book al centro, dà un libro i cui livelli
      * sono al massimo quelli di ATM10 (SAEnchantCap, tabella di ricerca/09). Un T9 con Sharpness XII dà Sharpness IX,
-     * mai XII; gli incantesimi sotto il tetto (T6-T8) passano com'erano.
+     * mai XII; una mazza T9 con Wind Burst XI dà Wind Burst VIII; gli incantesimi sotto il tetto (T6-T8) passano
+     * com'erano.
      */
     @GameTest(template = EMPTY, timeoutTicks = 200)
     public static void enchanter_copy_cap_ours(GameTestHelper helper) {
@@ -653,6 +654,14 @@ public final class SAEdgeCaseTests {
             if (got != Math.min(own, 9)) problems.add("spada " + tier + ": libro Sharpness " + got + " invece di " + Math.min(own, 9));
             if (tier == SATier.ALLOY && (own != 12 || got >= 12)) problems.add("spada Alloy: oggetto " + own + ", libro " + got + " (atteso 12 → 9)");
         }
+        // mazza T9 (Wind Burst XI) → libro Wind Burst VIII: l'Enchanter non toglie l'intrinseco (voluto, vedi
+        // SpectrumEnchantmentHelperMixin), il tetto ATM10 sì
+        Holder<Enchantment> wind = registry.getOrThrow(Enchantments.WIND_BURST);
+        ItemStack t9Mace = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "mace"));
+        int maceOwn = t9Mace.getEnchantments().getLevel(wind);
+        int maceBook = enchanterBook(enchanterSetup(helper, pos, new ItemStack(SpectrumItems.GILDED_BOOK.get()), t9Mace)).getLevel(wind);
+        report.add("mazza T9: Wind Burst " + maceOwn + " sull'oggetto → libro Wind Burst " + maceBook);
+        if (maceOwn != 11 || maceBook != 8) problems.add("mazza T9: oggetto Wind Burst " + maceOwn + ", libro " + maceBook + " (atteso 11 → 8)");
         // il costo in XP è quello del livello tagliato, non del XII
         ItemStack t9 = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "sword"));
         ItemStack vanillaNine = new ItemStack(Items.DIAMOND_SWORD);

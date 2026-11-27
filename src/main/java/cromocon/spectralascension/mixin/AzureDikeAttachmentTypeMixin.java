@@ -1,5 +1,6 @@
 package cromocon.spectralascension.mixin;
 
+import cromocon.spectralascension.compat.SACurios;
 import cromocon.spectralascension.item.SAArmorSet;
 import de.dafuqs.spectrum.attachment_types.AzureDikeAttachmentType;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.curios.api.CuriosApi;
 
 /**
  * Modifica il calcolo dell'Azure Dike di Spectrum, che normalmente guarda solo gli accessori negli slot Curios.
@@ -28,7 +28,7 @@ public abstract class AzureDikeAttachmentTypeMixin {
         if (SAArmorSet.isFullSetWorn(entity)) {
             SAArmorSet.applySetDike(entity);
             ci.cancel();
-        } else if (CuriosApi.getCuriosInventory(entity).isEmpty()) {
+        } else if (!SACurios.hasInventory(entity)) {
             // Senza Curios Spectrum non tocca il Dike: togliamo noi quello del set.
             SAArmorSet.clearDike(entity);
         }

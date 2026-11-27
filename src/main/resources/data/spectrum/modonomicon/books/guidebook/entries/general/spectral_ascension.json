@@ -1,7 +1,9 @@
 {
   "name": "book.spectral_ascension.guidebook.spectral_ascension.name",
   "description": "book.spectral_ascension.added_by",
-  "icon": { "item": "spectral_ascension:trichromatic_workstaff" },
+  "icon": {
+    "item": "spectral_ascension:trichromatic_workstaff"
+  },
   "category": "spectrum:general",
   "hide_while_locked": false,
   "background_u_index": 0,
@@ -14,6 +16,15 @@
       "type": "modonomicon:text",
       "title": "book.spectral_ascension.guidebook.spectral_ascension.about.title",
       "text": "book.spectral_ascension.guidebook.spectral_ascension.about.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "title": "book.spectral_ascension.guidebook.spectral_ascension.more.title",
+      "text": "book.spectral_ascension.guidebook.spectral_ascension.more.text"
+    },
+    {
+      "type": "modonomicon:text",
+      "text": "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text"
     }
   ]
 }

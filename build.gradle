@@ -19,7 +19,18 @@ sourceSets {
         runtimeClasspath += sourceSets.main.output
     }
 }
+// Source set "gametest": i GameTest (src/gametest/java), SOLO per runGameTestServer. Fa parte della stessa mod
+// (spectral_ascension, vedi neoForge.mods) così vede anche le classi package-private; non entra nel jar di rilascio.
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
 configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestCompileOnly.extendsFrom compileOnly
+    gametestRuntimeOnly.extendsFrom runtimeOnly
     devImplementation.extendsFrom implementation
     devCompileOnly.extendsFrom compileOnly
     devRuntimeOnly.extendsFrom runtimeOnly
@@ -42,7 +53,7 @@ neoForge {
         minecraftVersion = project.parchment_minecraft_version
     }
     mods {
-        "${mod_id}" { sourceSet(sourceSets.main) }
+        "${mod_id}" { sourceSet(sourceSets.main); sourceSet(sourceSets.gametest) }
         spectral_ascension_dev { sourceSet(sourceSets.dev) }   // solo sviluppo, vedi sourceSets.dev
     }
     runs {
@@ -74,6 +85,7 @@ neoForge {
         // Uso: ./gradlew runGameTestServer  (poi: python3 -I tools/check_log.py)
         gameTestServer {
             type = 'gameTestServer'
+            sourceSet = sourceSets.gametest   // classpath con i GameTest (src/gametest)
             gameDirectory = project.file('run/gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             loadedMods = [mods.spectral_ascension]
@@ -86,6 +98,7 @@ neoForge {
 }
 
 neoForge.addModdingDependenciesTo(sourceSets.dev)
+neoForge.addModdingDependenciesTo(sourceSets.gametest)
 
 dependencies {
     // Spectrum 1.12.9: solo su Modrinth (il maven di DaFuqs si ferma a 1.12.5). Il POM Modrinth è vuoto,
@@ -165,6 +178,7 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
             mod_description             : mod_description,
             spectrum_version_range      : spectrum_version_range,
             allthemodium_version_range  : allthemodium_version_range,
+            curios_version_range        : curios_version_range,
     ]
     inputs.properties replaceProperties
     expand replaceProperties

@@ -8,19 +8,8 @@ tools/texture_hand.py; qui ci sono le versioni ritoccate a mano per le varianti 
 
 Uso:  python3 tools/texture_mix.py              # tutto (scrive SOLO in design/texture/proposte/t6-mix/)
       python3 tools/texture_mix.py confronto DIR  # confronti x12 con la bedrock di Spectrum
-      python3 -I tools/texture_mix.py install     # installa nella mod il set approvato (vedi sotto)
 
-INSTALLAZIONE NELLA MOD (comando `install`). È l'unica strada con cui le texture T6 entrano nella mod; non
-copiarle a mano. Copia i file GIÀ GENERATI e approvati in design/texture/proposte/t6-mix/ (non li rigenera:
-per cambiare il disegno prima si rilancia lo script senza argomenti, si controlla stili.html, poi `install`):
-  set/t6_<pezzo>_anim.png(.mcmeta) -> src/main/resources/assets/spectral_ascension/textures/item/
-                                       trichromatic_<pezzo>.png(.mcmeta)   (striscia 16x192, 12 x 5 tick)
-  armatura/t6_armor.png            -> textures/armor/trichromatic_armor.png    (statica, la usa gen_data.py)
-  armatura/t6_armor_<i>.png        -> textures/armor/trichromatic_armor_<i>.png  (i = 0..11)
-Toglie i fotogrammi dell'armatura oltre l'ultimo (residui del vecchio set a 21) e non tocca le texture degli
-oggetti speciali (workstaff, ultra greatsword, crossbow, bident). Il numero di fotogrammi (FRAMES) e i tick per
-fotogramma (FRAMETIME) devono restare uguali a ARMOR_FRAMES/ARMOR_FRAME_TICKS di SAArmorItem.java;
-tools/validate.py controlla che i file della mod coincidano byte per byte con quelli di design/.
+Per installare le texture nella mod c'è solo tools/install_textures.py (questo script scrive SOLO in design/).
 """
 import base64
 import io
@@ -2176,52 +2165,7 @@ def html(path, anims, tex, worn_gif, tex_old):
         fh.write("".join(parts))
 
 
-MOD_TEX = os.path.join(ROOT, "src", "main", "resources", "assets", "spectral_ascension", "textures")
-# I 15 pezzi del set T6 che hanno una texture inventario/in mano (gli stati di arco e canna compresi).
-INSTALL_ICONS = ["sword", "axe", "shovel", "hoe", "shears", "bow", "bow_pulling_0", "bow_pulling_1",
-                 "bow_pulling_2", "fishing_rod", "fishing_rod_cast", "helmet", "chestplate", "leggings", "boots"]
-
-
-def install_pairs():
-    """(sorgente in design/, destinazione nella mod) per ogni file installato."""
-    sdir, adir = os.path.join(OUT, "set"), os.path.join(OUT, "armatura")
-    pairs = []
-    for n in INSTALL_ICONS:
-        for ext in (".png", ".png.mcmeta"):
-            pairs.append((os.path.join(sdir, f"t6_{n}_anim{ext}"),
-                          os.path.join(MOD_TEX, "item", f"trichromatic_{n}{ext}")))
-    pairs.append((os.path.join(adir, "t6_armor.png"), os.path.join(MOD_TEX, "armor", "trichromatic_armor.png")))
-    for i in range(FRAMES):
-        pairs.append((os.path.join(adir, f"t6_armor_{i}.png"),
-                      os.path.join(MOD_TEX, "armor", f"trichromatic_armor_{i}.png")))
-    return pairs
-
-
-def install():
-    import re
-    import shutil
-    pairs = install_pairs()
-    missing = [s for s, _ in pairs if not os.path.exists(s)]
-    if missing:
-        sys.exit("mancano i sorgenti (rilancia prima lo script senza argomenti):\n  " + "\n  ".join(missing))
-    for src, dst in pairs:
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copyfile(src, dst)
-    adir = os.path.join(MOD_TEX, "armor")
-    removed = []
-    for fn in sorted(os.listdir(adir)):
-        m = re.fullmatch(r"trichromatic_armor_(\d+)\.png", fn)
-        if m and int(m.group(1)) >= FRAMES:
-            os.remove(os.path.join(adir, fn))
-            removed.append(fn)
-    print(f"installati {len(pairs)} file in {MOD_TEX}"
-          + (f"; rimossi {len(removed)} fotogrammi vecchi: {', '.join(removed)}" if removed else ""))
-
-
 def main():
-    if sys.argv[1:2] == ["install"]:
-        install()
-        return
     if sys.argv[1:2] == ["confronto"]:
         os.makedirs(sys.argv[2], exist_ok=True)
         confronto(sys.argv[2])

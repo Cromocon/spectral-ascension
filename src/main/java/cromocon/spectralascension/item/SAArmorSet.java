@@ -1,19 +1,24 @@
 package cromocon.spectralascension.item;
 
+import cromocon.spectralascension.registry.SAComponents;
 import de.dafuqs.spectrum.api.item.AzureDikeItem;
 import de.dafuqs.spectrum.attachment_types.AzureDikeAttachmentType;
 import de.dafuqs.spectrum.items.trinkets.AzureDikeAmuletItem;
 import de.dafuqs.spectrum.registries.SpectrumItems;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Il bonus del set completo: con i 4 pezzi Spectral Ascension indossati il giocatore ha l'Azure Dike di tutti
- * gli accessori Dike di Spectrum non potenziati, e gli accessori Dike negli slot Curios si disattivano.
+ * gli accessori Dike di Spectrum, e gli accessori Dike negli slot Curios si disattivano. Lo Shieldgrasp Amulet conta al
+ * minimo (2) più il potenziamento a Ink che aveva quando è stato fuso negli stivali T6 (componente
+ * spectral_ascension:dike_bonus, 2026-11-27): set da 40 a 60, letto dagli stivali indossati da ogni giocatore.
  * <p>
  * Spectrum calcola il Dike solo dagli slot Curios ({@link AzureDikeAttachmentType#recalculate}). Il nostro mixin
  * (mixin/AzureDikeAttachmentTypeMixin) intercetta quel calcolo: se il set è indossato usa {@link #applySetDike}
@@ -32,9 +37,27 @@ public final class SAArmorSet {
     public record DikeStats(int max, int ticksPerCharge, int rechargeDelayAfterDamage) {
     }
 
-    private static volatile DikeStats stats;
+    /**
+     * Parte fissa del set, letta una volta dagli accessori di Spectrum: somma dei Dike (amuleto al minimo), moltiplicatore
+     * del Core e ricarica. Sono costanti degli oggetti: il potenziamento a Ink, che cambia da giocatore a giocatore,
+     * NON è qui ma sugli stivali indossati ({@link #dikeStats(LivingEntity)}).
+     */
+    private record Base(int dikeSum, float multiplier, int ticksPerCharge, int rechargeDelayAfterDamage) {
+    }
+
+    private static volatile Base base;
+
+    /**
+     * Chi guarda il tooltip (il giocatore del client): lo installa SAClient. Sul server resta null, così questa classe
+     * non tocca mai classi solo client.
+     */
+    private static volatile Supplier<Player> tooltipViewer = () -> null;
 
     private SAArmorSet() {
+    }
+
+    public static void setTooltipViewer(Supplier<Player> viewer) {
+        tooltipViewer = viewer;
     }
 
     /** Vero se i 4 slot dell'armatura contengono pezzi Spectral Ascension (di qualsiasi tier). */
@@ -53,8 +76,8 @@ public final class SAArmorSet {
      * Azure Dike Belt 8 + Shieldgrasp Amulet al minimo 2 = 20, × 2 dell'Azuresque Dike Core = 40.
      * Ricarica: Ring 2,0 e Core 1,5 sulla velocità; Belt 2,5 e Core 1,5 sull'attesa dopo un colpo.
      */
-    public static DikeStats dikeStats() {
-        DikeStats cached = stats;
+    private static Base base() {
+        Base cached = base;
         if (cached != null) {
             return cached;
         }
@@ -76,17 +99,77 @@ public final class SAArmorSet {
             rechargeDelayAfterDamageModifier += item.rechargeDelayAfterDamageModifier(stack) - 1;
             maxAzureDikeMultiplier += item.maxAzureDikeMultiplier(stack) - 1;
         }
-        cached = new DikeStats(
-                Math.round(maxAzureDike * maxAzureDikeMultiplier),
+        cached = new Base(maxAzureDike, maxAzureDikeMultiplier,
                 (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS / rechargeSpeedModifier),
                 (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS_AFTER_DAMAGE / rechargeDelayAfterDamageModifier));
-        stats = cached;
+        base = cached;
         return cached;
     }
 
-    /** Imposta il Dike del set (solo lato server) e lo manda ai client. La carica attuale resta, fino al nuovo massimo. */
+    /** Dike del set senza potenziamento (amuleto al minimo): 40. */
+    public static DikeStats dikeStats() {
+        return dikeStats(0);
+    }
+
+    /**
+     * Dike del set con il potenziamento a Ink dell'amuleto ({@code bonus} = Dike dell'amuleto sopra il minimo, 0-10):
+     * (4 + 6 + 8 + 2 + bonus) × 2 del Core, quindi 40..60. Ricarica invariata.
+     */
+    public static DikeStats dikeStats(int bonus) {
+        Base b = base();
+        return new DikeStats(Math.round((b.dikeSum() + Math.max(0, bonus)) * b.multiplier()), b.ticksPerCharge(), b.rechargeDelayAfterDamage());
+    }
+
+    /** Dike del set per chi lo indossa: il potenziamento si legge dagli stivali nello slot FEET (nessuna cache). */
+    public static DikeStats dikeStats(LivingEntity entity) {
+        return dikeStats(wornBonus(entity));
+    }
+
+    /** Potenziamento degli stivali indossati (0 se non sono nostri o non ne hanno). */
+    public static int wornBonus(LivingEntity entity) {
+        ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
+        return boots.getItem() instanceof SAArmorItem ? bonus(boots) : 0;
+    }
+
+    /** Potenziamento salvato su un pezzo (componente spectral_ascension:dike_bonus; assente = 0). */
+    public static int bonus(ItemStack stack) {
+        return Math.max(0, stack.getOrDefault(SAComponents.DIKE_BONUS.get(), 0));
+    }
+
+    /**
+     * Potenziamento di uno Shieldgrasp Amulet: il suo Dike con l'Ink che contiene (AzureDikeAmuletItem.maxAzureDike:
+     * 2, 4, ... 12) meno il minimo 2 già contato nel set. Amuleto vuoto o svuotato (sotto 100 Ink = 0 Dike) → 0.
+     */
+    public static int amuletBonus(ItemStack amulet) {
+        if (!(amulet.getItem() instanceof AzureDikeAmuletItem item)) return 0;
+        int min = item.getDike(SHIELDGRASP_MIN_INK);
+        return Math.max(0, item.maxAzureDike(amulet) - min);
+    }
+
+    /**
+     * Dike del set da mostrare nel tooltip di un pezzo: per gli stivali il loro potenziamento; per gli altri pezzi quello
+     * degli stivali indossati da chi guarda (client), altrimenti la base.
+     */
+    public static int tooltipSetDike(ItemStack piece) {
+        if (piece.getItem() instanceof SAArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.FEET) {
+            return dikeStats(bonus(piece)).max();
+        }
+        Player viewer = tooltipViewer.get();
+        return dikeStats(viewer == null ? 0 : wornBonus(viewer)).max();
+    }
+
+    /** Dike in più che il potenziamento degli stivali dà al set (bonus × moltiplicatore del Core). */
+    public static int setIncrease(int bonus) {
+        return dikeStats(bonus).max() - dikeStats(0).max();
+    }
+
+    /**
+     * Imposta il Dike del set (solo lato server) e lo manda ai client. La carica attuale resta, fino al nuovo massimo.
+     * Calcolato ogni volta dagli stivali indossati: cambiare stivali (anche con un potenziamento diverso) fa scattare
+     * {@link #onEquipmentChange}, che ricalcola e sincronizza.
+     */
     public static void applySetDike(LivingEntity entity) {
-        DikeStats s = dikeStats();
+        DikeStats s = dikeStats(entity);
         AzureDikeAttachmentType attachment = entity.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE);
         if (attachment.getMaxCharges() == s.max()
                 && attachment.getTicksToReplenishCharge() == s.ticksPerCharge()

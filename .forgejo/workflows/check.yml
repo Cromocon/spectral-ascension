@@ -1,0 +1,71 @@
+name: Check
+
+# Runs on every push to a branch and on pull requests (NOT on tags: v* tags are handled by release.yml).
+# Steps: build, tools/validate.py, tools/gen_data.py (committed data must be up to date), GameTest server.
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+jobs:
+  check:
+    # "docker" is the light runner on atlas (capacity 1); the heavy runner has only the heavy/quick labels.
+    runs-on: docker
+    timeout-minutes: 60
+    # A newer push to the same branch cancels the older run, so runs do not queue on the single light slot.
+    concurrency:
+      group: check-${{ github.ref }}
+      cancel-in-progress: true
+    env:
+      # Caps every JVM (mainly the forked GameTest server, which would otherwise take 1/4 of the host RAM).
+      # The Gradle build JVM keeps -Xmx3G from gradle.properties.
+      JAVA_TOOL_OPTIONS: -Xmx3g
+    container:
+      image: eclipse-temurin:21-jdk
+    steps:
+      - name: Install tools
+        run: |
+          apt-get update -qq
+          # The tools/ scripts used here (validate, gen_data, check_log) need only the Python standard library:
+          # Pillow is for the texture_*.py scripts, which CI does not run. nodejs is needed by the checkout action.
+          apt-get install -y -qq --no-install-recommends python3 git ca-certificates nodejs
+
+      - name: Check out
+        uses: https://data.forgejo.org/actions/checkout@v4
+
+      - name: Build
+        run: sh ./gradlew build --no-daemon --console=plain
+
+      # Looks for the Spectrum/Allthemodium jars in $GRADLE_USER_HOME (or ~/.gradle), filled by the build above.
+      # design/ is not in the repo: the comparison with the approved texture sets is skipped with a warning.
+      # validate.py exits with 1 if it finds errors.
+      - name: Validate data
+        run: python3 -I tools/validate.py
+
+      - name: Generated data is up to date
+        run: |
+          python3 -I tools/gen_data.py
+          if [ -n "$(git status --porcelain -- src/)" ]; then
+            echo "::error::tools/gen_data.py changed files under src/: the committed data is not aligned with the generator. Run 'python3 -I tools/gen_data.py' locally and commit the result."
+            git status --short -- src/ | head -50
+            git diff --stat -- src/ | tail -20
+            exit 1
+          fi
+
+      # tools/reset_test_world.py is not in the repo and build.gradle skips it (onlyIf), so the world is created fresh.
+      - name: GameTest
+        run: |
+          rc=0
+          sh ./gradlew runGameTestServer --no-daemon --console=plain || rc=$?
+          log=run/gametest/logs/latest.log
+          if [ ! -f "$log" ]; then
+            echo "::error::GameTest log $log not found (gradle exit code $rc)"; exit 1
+          fi
+          # check_log.py exits with 1 on errors that mention the mod or on failed tests. It does not exit with
+          # non-zero for the generic ERROR lines (spawn placement, RuntimeDistCleaner Screen), which are only printed.
+          python3 -I tools/check_log.py "$log" || { echo "::error::tools/check_log.py found problems"; exit 1; }
+          # check_log.py would also pass if no test ran at all: the "All N required tests passed" line is required.
+          grep -E 'All [1-9][0-9]* required tests passed' "$log" || { echo "::error::Line 'All N required tests passed' (N >= 1) not found in the GameTest log: no test ran or none passed"; exit 1; }
+          [ "$rc" = 0 ] || { echo "::error::runGameTestServer failed (exit code $rc)"; exit 1; }

@@ -37,7 +37,7 @@ public record WorkstaffOptionPayload(int optionIndex) implements CustomPacketPay
     private static void handle(WorkstaffOptionPayload payload, IPayloadContext context) {
         Player player = context.player();
         if (!(player.containerMenu instanceof WorkstaffMenu menu) || !menu.select(player, payload.optionIndex())) {
-            SpectralAscension.LOGGER.warn("Voce del menu della workstaff rifiutata per {}: indice {}, menu {}",
+            SpectralAscension.LOGGER.debug("Voce del menu della workstaff rifiutata per {}: indice {}, menu {}",
                     player.getName().getString(), payload.optionIndex(), player.containerMenu.getClass().getSimpleName());
         }
     }

@@ -2,6 +2,11 @@ package cromocon.spectralascension.item;
 
 import de.dafuqs.spectrum.api.ink.InkPowered;
 import de.dafuqs.spectrum.api.item.Preenchanted;
+import de.dafuqs.spectrum.api.ink.color.InkColor;
+import de.dafuqs.spectrum.helpers.AoEHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import java.util.function.Predicate;
 import cromocon.spectralascension.menu.WorkstaffMenu;
 import de.dafuqs.spectrum.items.tools.BedrockAxeItem;
 import de.dafuqs.spectrum.items.tools.BedrockBowItem;
@@ -15,6 +20,13 @@ import de.dafuqs.spectrum.items.tools.GlassCrestGreatswordItem;
 import de.dafuqs.spectrum.items.tools.GlassCrestWorkstaffItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -119,6 +131,10 @@ public final class SATools {
             return super.use(level, user, hand);
         }
 
+        /** Colore e base del costo in Ink dell'area (WorkstaffItem.BASE_COST_PER_AOE_MINING_RANGE_INCREMENT: 3 White Ink). */
+        public static final InkColor AOE_INK_COLOR = BASE_COST_PER_AOE_MINING_RANGE_INCREMENT.color();
+        public static final long AOE_INK_BASE = BASE_COST_PER_AOE_MINING_RANGE_INCREMENT.amount();
+
         /** L'area di questo tier è gratis (SATier.freeAoE: solo Alloy). */
         public boolean hasFreeAoE() {
             Boolean override = freeAoEOverrideForTests;
@@ -134,7 +150,7 @@ public final class SATools {
         /**
          * Scavo ad area. Spectrum lo chiama da SpectrumEventListeners.onBlockBreak (BlockEvent.BreakEvent) per ogni
          * blocco rotto con la workstaff in mano, e AoEHelper rompe i blocchi dell'area con gameMode.destroyBlock, che
-         * lancia di nuovo BreakEvent per OGNUNO di essi. Il secondo giro non scava (AoEHelper ha una guardia), ma
+         * lancia di nuovo BreakEvent per OGNUNO di essi. Con la guardia di AoEHelper il secondo giro non scava, ma
          * WorkstaffItem.canUseAoE nel frattempo ha già tolto l'inchiostro: in sopravvivenza un colpo 3×3 costava
          * 3 + 8×3 = 27 White Ink invece di 3, un 5×5 9 + 24×9 = 225 invece di 9 (in creativo l'inchiostro è gratis e
          * non si vedeva). Qui i blocchi rotti dall'area stessa non passano più da canUseAoE.
@@ -146,7 +162,17 @@ public final class SATools {
             }
             breakingArea = true;
             try {
-                super.afterBreakingBlock(level, pos, player, stack);
+                // Come AoEBreakingTool.afterBreakingBlock + AoEHelper.doAoEBlockBreaking di Spectrum, ma con l'area di
+                // WorkstaffArea, la stessa che il client usa per prevedere lo scavo (MultiPlayerGameModeMixin).
+                // Prima il blocco mirato (WorkstaffArea.targetedSide), poi canUseAoE: un blocco rotto da un'altra mod
+                // (FTB Ultimine) non fa l'area e non paga Ink.
+                Direction side = level.isClientSide() ? null : WorkstaffArea.targetedSide(player, pos);
+                if (side != null && canUseAoE(player, stack)) {
+                    Predicate<BlockState> filter = WorkstaffArea.minableFilter(stack);
+                    for (BlockPos p : WorkstaffArea.positions(pos, side, getAoERange(stack))) {
+                        AoEHelper.breakBlockWithDrops(player, stack, level, p, filter);
+                    }
+                }
             } finally {
                 breakingArea = false;
             }
@@ -336,6 +362,54 @@ public final class SATools {
         @Override
         public Map<ResourceKey<Enchantment>, Integer> getDefaultEnchantments() {
             return enchantments;
+        }
+
+        /** Il Wind Burst intrinseco della mazza: IV bedrock, V/VI/VII T6-T8, XI T9 (0 se non ne ha). */
+        public int intrinsicWindBurst() {
+            return enchantments.getOrDefault(Enchantments.WIND_BURST, 0);
+        }
+
+        /**
+         * <b>Wind Burst sempre presente</b> (2026-11-27): la ricetta e il creativo lo mettono con {@link Preenchanted}, ma
+         * uno stack da /give, /item, loot o comandi nascerebbe senza. Qui lo si aggiunge se manca (o se il livello è sotto
+         * quello intrinseco: in quel caso si alza al livello intrinseco). Mai duplicati: minecraft:enchantments è una
+         * mappa incantesimo → livello, e un livello più alto (libro all'incudine, fusione) resta com'è. Ritorna se ha
+         * cambiato lo stack.
+         */
+        public boolean ensureWindBurst(ItemStack stack, HolderLookup.Provider lookup) {
+            int want = intrinsicWindBurst();
+            if (want <= 0 || stack.isEmpty() || stack.getItem() != this) return false;
+            ItemEnchantments current = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+            for (var e : current.entrySet()) {
+                if (e.getKey().is(Enchantments.WIND_BURST) && e.getIntValue() >= want) return false;
+            }
+            var wind = lookup.lookup(Registries.ENCHANTMENT).flatMap(r -> r.get(Enchantments.WIND_BURST));
+            if (wind.isEmpty()) return false;
+            ItemEnchantments.Mutable fixed = new ItemEnchantments.Mutable(current);
+            fixed.set(wind.get(), want);
+            stack.set(DataComponents.ENCHANTMENTS, fixed.toImmutable());
+            return true;
+        }
+
+        /**
+         * Chiamato dal costruttore di ogni ItemStack (anche /give, copie, caricamento da disco) e dopo
+         * applyComponents. Solo sul thread del server e con i registri del server: così l'incantesimo nasce già nello
+         * stack che il comando consegna e il tooltip lo mostra subito. Sugli altri thread (rete, client) non si tocca
+         * niente, per non mescolare i Holder di due registri (singleplayer: client e server hanno registri distinti);
+         * il client riceve lo stack già corretto dal server.
+         */
+        @Override
+        public void verifyComponentsAfterLoad(ItemStack stack) {
+            super.verifyComponentsAfterLoad(stack);
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if (server != null && server.isSameThread()) ensureWindBurst(stack, server.registryAccess());
+        }
+
+        /** Rete di sicurezza: uno stack arrivato da un altro thread si sistema al primo tick nell'inventario. */
+        @Override
+        public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
+            super.inventoryTick(stack, level, entity, slot, selected);
+            if (!level.isClientSide) ensureWindBurst(stack, level.registryAccess());
         }
 
         /** La vanilla restituisce 15: qui l'incantabilità del tier. */

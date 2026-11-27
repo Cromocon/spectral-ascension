@@ -14,7 +14,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -346,6 +348,78 @@ public final class SACraftTests {
         return out.toString();
     }
 
+    /** Shieldgrasp Amulet con questa quantità di Blue Ink (0 = vuoto). */
+    private static ItemStack amulet(long ink) {
+        ItemStack stack = new ItemStack(SpectrumItems.SHIELDGRASP_AMULET.get());
+        if (ink > 0) {
+            var item = (de.dafuqs.spectrum.items.trinkets.InkDrainCurioItem) stack.getItem();
+            item.setEnergyStorage(stack, new de.dafuqs.spectrum.api.ink.storage.FixedSingleInkStorage(
+                    de.dafuqs.spectrum.items.trinkets.InkDrainCurioItem.MAX_INK, de.dafuqs.spectrum.api.ink.color.InkColors.BLUE, ink));
+        }
+        return stack;
+    }
+
+    /**
+     * Potenziamento a Ink dello Shieldgrasp Amulet ereditato dagli stivali (2026-11-27). Craft veri alla Fusion Shrine
+     * degli stivali T6 con un amuleto pieno (12 Dike → bonus 10), con 800 Ink (4 → bonus 2) e vuoto (bonus 0, nessun
+     * componente): la Shrine accetta l'amuleto con Ink. Gli stivali T6 col bonus 10 → T7 (copy_components): il bonus
+     * resta. Dike del set = (4 + 6 + 8 + 2 + bonus) × 2, letto dagli stivali indossati; cambiare stivali lo aggiorna.
+     * Tooltip: Dike reale del set e riga del potenziamento sugli stivali.
+     */
+    @GameTest(template = EMPTY, timeoutTicks = 200)
+    public static void boots_amulet_ink_bonus(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        var manager = helper.getLevel().getServer().getRecipeManager();
+        var t6 = (FusionShrineRecipe) manager.byKey(SpectralAscension.id("fusion_shrine/t6/trichromatic_boots")).orElseThrow().value();
+        var t7 = (FusionShrineRecipe) manager.byKey(SpectralAscension.id("fusion_shrine/t7/umbral_boots")).orElseThrow().value();
+        var bonusType = cromocon.spectralascension.registry.SAComponents.DIKE_BONUS.get();
+        record Case(String name, long ink, int bonus) {
+        }
+        Map<Integer, ItemStack> boots = new HashMap<>();
+        int row = 0;
+        for (Case c : List.of(new Case("amuleto pieno", de.dafuqs.spectrum.items.trinkets.InkDrainCurioItem.MAX_INK, 10),
+                new Case("amuleto con 800 Ink", 800, 2), new Case("amuleto vuoto", 0, 0))) {
+            ItemStack amulet = amulet(c.ink());
+            int amuletDike = ((de.dafuqs.spectrum.items.trinkets.AzureDikeAmuletItem) amulet.getItem()).maxAzureDike(amulet);
+            ItemStack out = fusionCraft(helper, t6, ItemStack.EMPTY, SAFunctionTests.slot(helper, row++), problems, "trichromatic_boots (" + c.name() + ")",
+                    s -> s.is(SpectrumItems.SHIELDGRASP_AMULET.get()) ? amulet.copy() : s);
+            if (out.isEmpty()) continue;
+            Integer got = out.get(bonusType);
+            if (c.bonus() == 0 ? got != null : (got == null || got != c.bonus()))
+                problems.add(c.name() + " (" + amuletDike + " Dike): stivali con dike_bonus " + got + " invece di " + (c.bonus() == 0 ? "assente" : c.bonus()));
+            boots.put(c.bonus(), out);
+            report.add(c.name() + ": amuleto " + amuletDike + " Dike → stivali T6 dike_bonus " + got);
+        }
+        // T6 → T7: il bonus passa con copy_components.
+        ItemStack t7Boots = boots.containsKey(10) ? fusionCraft(helper, t7, boots.get(10), SAFunctionTests.slot(helper, row++), problems, "umbral_boots (bonus 10)") : ItemStack.EMPTY;
+        int t7Bonus = t7Boots.getOrDefault(bonusType, 0);
+        if (t7Bonus != 10) problems.add("stivali T7 da T6 con bonus 10: dike_bonus " + t7Bonus);
+        report.add("stivali T6 bonus 10 → T7 dike_bonus " + t7Bonus);
+
+        // Dike del set per giocatore, dagli stivali indossati.
+        ServerPlayer player = mockPlayer(helper);
+        for (var piece : SAItems.armor(SATier.T6)) equip(player, piece.get().getEquipmentSlot(), new ItemStack(piece.get()));
+        record Worn(String name, ItemStack boots, int want) {
+        }
+        List<Worn> worn = new ArrayList<>();
+        worn.add(new Worn("stivali T6 senza bonus (/give)", new ItemStack(SAItems.TRICHROMATIC_BOOTS.get()), 40));
+        for (var e : boots.entrySet()) worn.add(new Worn("stivali T6 bonus " + e.getKey(), e.getValue(), (4 + 6 + 8 + 2 + e.getKey()) * 2));
+        if (!t7Boots.isEmpty()) worn.add(new Worn("stivali T7 bonus 10", t7Boots, 60));
+        worn.add(new Worn("di nuovo senza bonus", new ItemStack(SAItems.TRICHROMATIC_BOOTS.get()), 40));
+        for (Worn w : worn) {
+            equip(player, EquipmentSlot.FEET, w.boots().copy());
+            float max = player.getData(de.dafuqs.spectrum.attachment_types.AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+            if (max != w.want()) problems.add(w.name() + ": Dike del set " + max + " invece di " + w.want());
+            int shown = cromocon.spectralascension.item.SAArmorSet.tooltipSetDike(w.boots());
+            if (shown != w.want()) problems.add(w.name() + ": il tooltip degli stivali dice " + shown + " invece di " + w.want());
+            boolean line = w.boots().getTooltipLines(Item.TooltipContext.of(helper.getLevel()), null, net.minecraft.world.item.TooltipFlag.NORMAL).stream()
+                    .anyMatch(cmp -> cmp.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t && t.getKey().endsWith("armor.tooltip.dike_bonus"));
+            if (line != (cromocon.spectralascension.item.SAArmorSet.bonus(w.boots()) > 0)) problems.add(w.name() + ": riga del potenziamento nel tooltip " + (line ? "presente" : "assente"));
+            report.add(w.name() + ": Dike del set " + max);
+        }
+        finish(helper, "potenziamento a Ink dello Shieldgrasp Amulet", problems, report);
+    }
+
     /** La base di una ricetta: l'oggetto craftato prima o, al T6, quello di Spectrum con un incantesimo extra. */
     private static ItemStack baseStack(GameTestHelper helper, Item baseItem, ItemStack previous) {
         if (!previous.isEmpty() && previous.is(baseItem)) return previous.copy();
@@ -370,6 +444,12 @@ public final class SACraftTests {
 
     static ItemStack fusionCraft(GameTestHelper helper, FusionShrineRecipe recipe, ItemStack previous, BlockPos pos,
                                          List<String> problems, String id) {
+        return fusionCraft(helper, recipe, previous, pos, problems, id, java.util.function.UnaryOperator.identity());
+    }
+
+    /** Come sopra, ma ogni ingrediente dopo il primo passa da {@code extra} (es. uno Shieldgrasp Amulet con Ink). */
+    static ItemStack fusionCraft(GameTestHelper helper, FusionShrineRecipe recipe, ItemStack previous, BlockPos pos,
+                                         List<String> problems, String id, java.util.function.UnaryOperator<ItemStack> extra) {
         var level = helper.getLevel();
         level.setBlockAndUpdate(pos, SpectrumBlocks.FUSION_SHRINE_BASALT.get().defaultBlockState());
         var shrine = (FusionShrineBlockEntity) level.getBlockEntity(pos);
@@ -381,6 +461,7 @@ public final class SACraftTests {
             ItemStack first = ing.getItems().findFirst().orElse(ItemStack.EMPTY);
             ItemStack put = i == 0 ? baseStack(helper, first.getItem(), previous) : first.copyWithCount(ing.getCount());
             if (i == 1 && first.is(SpectrumItems.FRACTAL_GLASS_CREST_BIDENT.get())) put = new ItemStack(first.getItem());
+            if (i > 0) put = extra.apply(put);
             shrine.setItem(i, put);
         }
         ItemStack result = ItemStack.EMPTY;

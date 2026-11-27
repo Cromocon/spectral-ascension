@@ -2,6 +2,7 @@ package cromocon.spectralascension;
 
 import com.mojang.logging.LogUtils;
 import cromocon.spectralascension.item.SAArmorSet;
+import cromocon.spectralascension.item.MaceWindBurst;
 import cromocon.spectralascension.item.SAEnchantCap;
 import cromocon.spectralascension.item.PrismaticTrail;
 import cromocon.spectralascension.network.BidentModePayload;
@@ -50,6 +51,7 @@ public final class SpectralAscension {
         NeoForge.EVENT_BUS.addListener(SAArmorSet::onEquipmentChange); // game bus: Dike del set quando cambia l'armatura
         // game bus, LOWEST = dopo Apothic: libro estratto all'incudine da un nostro oggetto tagliato al tetto ATM10
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, SAEnchantCap::onAnvilUpdate);
+        NeoForge.EVENT_BUS.addListener(MaceWindBurst::onGrindstoneTake); // game bus: XP della mola senza il Wind Burst intrinseco
         modBus.addListener(SpectralAscension::commonSetup);             // mod bus: comportamenti dei dispenser
     }
 

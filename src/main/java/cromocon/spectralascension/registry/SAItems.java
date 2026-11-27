@@ -12,9 +12,11 @@ import de.dafuqs.spectrum.registries.SpectrumToolTiers;
 import de.dafuqs.fractal.api.CreativeSubTabEvent;
 import de.dafuqs.spectrum.api.item.Preenchanted;
 import de.dafuqs.spectrum.api.item_group.ItemGroupIDs;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
@@ -32,6 +34,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +51,9 @@ public final class SAItems {
 
     /** Ordine in cui compaiono nella sotto-tab Equipment di Spectrum. */
     private static final List<DeferredItem<? extends Item>> EQUIPMENT_TAB = new ArrayList<>();
+
+    /** I pezzi d'armatura per tier, nell'ordine di registrazione (elmo, corazza, gambali, stivali): li legge {@link #armor(SATier)}. */
+    private static final Map<SATier, List<DeferredItem<SAArmorItem>>> ARMOR = new EnumMap<>(SATier.class);
 
     // ---------- Mazze (2026-11-25) ----------
     // Danno e velocità della mazza con lo stesso criterio di spade e spadoni rispetto al loro oggetto bedrock/glass crest:
@@ -85,7 +91,7 @@ public final class SAItems {
     /**
      * Workstaff = il piccone del tier (upgrade alla Fusion Shrine della workstaff glass crest). Danno e velocità
      * d'attacco come la glass crest in SpectrumItems (1, -2,8F), sommati al bonus del nostro tier.
-     * Fortune V (selezione di default del menu) ed Efficiency V.
+     * Fortune VI (selezione di default del menu) ed Efficiency V.
      */
     public static final DeferredItem<SATools.Workstaff> TRICHROMATIC_WORKSTAFF = tab(ITEMS.register("trichromatic_workstaff",
             () -> new SATools.Workstaff(SATier.T6, 1, -2.8F, tool(SATier.T6),
@@ -135,7 +141,7 @@ public final class SAItems {
                     Map.of(Enchantments.SWEEPING_EDGE, 6))));
 
     /**
-     * Balestra: Quick Charge IV e Piercing V (Spectrum: Piercing V). Velocità 2,0, tempo di carica 1,6 e divergenza 0,63 PROVVISORI
+     * Balestra: Quick Charge III e Piercing V (Spectrum: Piercing V). Velocità 2,0, tempo di carica 1,6 e divergenza 0,63 PROVVISORI
      * (glass crest 1,5 / 2,0 / 0,75), vedi SATools.Crossbow.
      */
     public static final DeferredItem<SATools.Crossbow> TRICHROMATIC_CROSSBOW = tab(ITEMS.register("trichromatic_crossbow",
@@ -150,24 +156,13 @@ public final class SAItems {
             () -> new SABident(SATier.T6, tool(SATier.T6).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
                     -2.2, 15, 0.36F, 0.36F, Map.of(Enchantments.IMPALING, 6))));
 
-    // Armatura: incantesimo caratteristico della bedrock (livello 5 in Spectrum) al tetto T6.
+    // Armatura: incantesimo caratteristico della bedrock per pezzo (livello 5 in Spectrum, vedi armorPiece) al tetto T6.
     // Il Dike del set completo è in SAArmorSet; statistiche in SAArmorMaterials.
 
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_HELMET = tab(ITEMS.register("trichromatic_helmet",
-            () -> new SAArmorItem(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.HELMET, tool(SATier.T6),
-                    Map.of(Enchantments.PROJECTILE_PROTECTION, 6))));
-
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_CHESTPLATE = tab(ITEMS.register("trichromatic_chestplate",
-            () -> new SAArmorItem(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.CHESTPLATE, tool(SATier.T6),
-                    Map.of(Enchantments.PROTECTION, 6))));
-
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_LEGGINGS = tab(ITEMS.register("trichromatic_leggings",
-            () -> new SAArmorItem(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.LEGGINGS, tool(SATier.T6),
-                    Map.of(Enchantments.BLAST_PROTECTION, 6))));
-
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_BOOTS = tab(ITEMS.register("trichromatic_boots",
-            () -> new SAArmorItem(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.BOOTS, tool(SATier.T6),
-                    Map.of(Enchantments.FIRE_PROTECTION, 6))));
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_HELMET = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.HELMET, 6);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_CHESTPLATE = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.CHESTPLATE, 6);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_LEGGINGS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.LEGGINGS, 6);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_BOOTS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.BOOTS, 6);
 
     // ---------- T7 · Umbrale (Umbral) ----------
     // Un tier sopra il T6: ogni pezzo si fa dal pezzo T6 (tools/gen_data.py). Gli attrezzi hanno gli stessi parametri
@@ -175,7 +170,7 @@ public final class SAItems {
     // scavo 17 invece di 16, bonus danno 19 invece di 14: +25% rispetto al T6, vedi SATier; incantabilità 105 invece di 90). Gli oggetti speciali hanno
     // anche valori propri, scalati come il T6 li scala rispetto alla glass crest. Valori PROVVISORI.
     // Incantesimi: stesso tetto del T6 (massimo ATM10, decisione di design).
-    // Danni T7 (+25%, regola in SATier): spada 24, ascia 25, spadone 25, workstaff 20 (base 0), pala 20 (base 0), zappa 21 (base 1), bident 21 (17 × 1,25), balestra
+    // Danni T7 (+25%, regola in SATier): spada 24, ascia 25, spadone 25, workstaff 20 (base 0), pala 20 (base 0), zappa 21 (base 1), bident 18 (parametro, tooltip 19: fuori dal +25%, vedi SATier), balestra
     // velocità 2,5 (2,0 × 1,25). Arco: nessun parametro di danno (solo incantesimi), uguale al T6.
     // Workstaff T7: menu nostro (SATools.Workstaff.use → WorkstaffMenu) con Foundry e area 7×7 (2026-11-19).
 
@@ -236,21 +231,10 @@ public final class SAItems {
             () -> new SABident(SATier.T7, tool(SATier.T7).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
                     -2.2, 18, 0.39F, 0.39F, Map.of(Enchantments.IMPALING, 7))));
 
-    public static final DeferredItem<SAArmorItem> UMBRAL_HELMET = tab(ITEMS.register("umbral_helmet",
-            () -> new SAArmorItem(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.HELMET, tool(SATier.T7),
-                    Map.of(Enchantments.PROJECTILE_PROTECTION, 7))));
-
-    public static final DeferredItem<SAArmorItem> UMBRAL_CHESTPLATE = tab(ITEMS.register("umbral_chestplate",
-            () -> new SAArmorItem(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.CHESTPLATE, tool(SATier.T7),
-                    Map.of(Enchantments.PROTECTION, 7))));
-
-    public static final DeferredItem<SAArmorItem> UMBRAL_LEGGINGS = tab(ITEMS.register("umbral_leggings",
-            () -> new SAArmorItem(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.LEGGINGS, tool(SATier.T7),
-                    Map.of(Enchantments.BLAST_PROTECTION, 7))));
-
-    public static final DeferredItem<SAArmorItem> UMBRAL_BOOTS = tab(ITEMS.register("umbral_boots",
-            () -> new SAArmorItem(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.BOOTS, tool(SATier.T7),
-                    Map.of(Enchantments.FIRE_PROTECTION, 7))));
+    public static final DeferredItem<SAArmorItem> UMBRAL_HELMET = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.HELMET, 7);
+    public static final DeferredItem<SAArmorItem> UMBRAL_CHESTPLATE = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.CHESTPLATE, 7);
+    public static final DeferredItem<SAArmorItem> UMBRAL_LEGGINGS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.LEGGINGS, 7);
+    public static final DeferredItem<SAArmorItem> UMBRAL_BOOTS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.BOOTS, 7);
 
     // ---------- T8 · Argenteo (Argent) ----------
     // Un tier sopra il T7, come il T7 sul T6: ogni pezzo si fa dal pezzo T7 (tools/gen_data.py). Stessi parametri di
@@ -259,7 +243,7 @@ public final class SAItems {
     // Incantesimi: decisi dall'utente il 2026-11-19 insieme alle ricette alla Fusion Shrine con Dragonrot (T8_SPEC in
     // tools/gen_data.py). Il T9 (Alloy) NON cambia: tiene i suoi livelli (T9_ENCHANTMENTS).
     // Danni T8 (+25%, regola in SATier): spada 30, ascia 31, spadone 31, workstaff 25 (base -1), pala 25 (base -1),
-    // zappa 27 (base 1), bident 27 (round(17 × 1,25²)), balestra velocità 3,1 (tabella di SATier). Arco come T6/T7.
+    // zappa 27 (base 1), bident 21 (parametro, tooltip 22: fuori dal +25%, vedi SATier), balestra velocità 3,1 (tabella di SATier). Arco come T6/T7.
     // Workstaff T8: come il T7, più Inventory Insertion nel menu (2026-11-19).
 
     /**
@@ -325,21 +309,10 @@ public final class SAItems {
             () -> new SABident(SATier.T8, tool(SATier.T8).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
                     -2.2, 21, 0.42F, 0.42F, Map.of(Enchantments.IMPALING, 8))));
 
-    public static final DeferredItem<SAArmorItem> ARGENT_HELMET = tab(ITEMS.register("argent_helmet",
-            () -> new SAArmorItem(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.HELMET, tool(SATier.T8),
-                    Map.of(Enchantments.PROJECTILE_PROTECTION, 8))));
-
-    public static final DeferredItem<SAArmorItem> ARGENT_CHESTPLATE = tab(ITEMS.register("argent_chestplate",
-            () -> new SAArmorItem(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.CHESTPLATE, tool(SATier.T8),
-                    Map.of(Enchantments.PROTECTION, 8))));
-
-    public static final DeferredItem<SAArmorItem> ARGENT_LEGGINGS = tab(ITEMS.register("argent_leggings",
-            () -> new SAArmorItem(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.LEGGINGS, tool(SATier.T8),
-                    Map.of(Enchantments.BLAST_PROTECTION, 8))));
-
-    public static final DeferredItem<SAArmorItem> ARGENT_BOOTS = tab(ITEMS.register("argent_boots",
-            () -> new SAArmorItem(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.BOOTS, tool(SATier.T8),
-                    Map.of(Enchantments.FIRE_PROTECTION, 8))));
+    public static final DeferredItem<SAArmorItem> ARGENT_HELMET = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.HELMET, 8);
+    public static final DeferredItem<SAArmorItem> ARGENT_CHESTPLATE = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.CHESTPLATE, 8);
+    public static final DeferredItem<SAArmorItem> ARGENT_LEGGINGS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.LEGGINGS, 8);
+    public static final DeferredItem<SAArmorItem> ARGENT_BOOTS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.BOOTS, 8);
 
     // ---------- Alloy (T9) · Prismatico (Prismatic) ----------
     // Un tier sopra il T8, come il T8 sul T7: ogni pezzo si fa dal pezzo T8 con 1 lingotto di ciascuna delle 3 leghe di
@@ -349,7 +322,7 @@ public final class SAItems {
     // cioè gli stessi del T8 di prima del 2026-11-19 + 3 livelli (congelati: non seguono il nuovo T8). Tetto ATM10 (SAEnchantCap, 2026-11-19): copia all'Enchanter tagliata per tutti gli
     // stack, libro estratto all'incudine da un nostro oggetto tagliato, Bedrock Anvil che non abbassa mai (mixin).
     // Danni (+25%, regola in SATier): spada 37, ascia 39 (base 6), spadone 39 (base 6), workstaff 31 (base -2),
-    // pala 31 (base -2), zappa 33 (base 0), bident 33 (round(17 × 1,25³)), balestra velocità 3,9. Arco come gli altri.
+    // pala 31 (base -2), zappa 33 (base 0), bident 24 (parametro, tooltip 25: fuori dal +25%, vedi SATier), balestra velocità 3,9. Arco come gli altri.
     // PROVVISORI come nel T8: carica e divergenza della balestra, perforazione del bident (portata dello spadone decisa il 2026-11-24).
     // Menu della workstaff Alloy: come il T8 più l'area 9×9, gratis (2026-11-19).
 
@@ -419,27 +392,35 @@ public final class SAItems {
             () -> new SABident(SATier.ALLOY, tool(SATier.ALLOY).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
                     -2.2, 24, 0.45F, 0.45F, Map.of(Enchantments.IMPALING, 10))));
 
-    public static final DeferredItem<SAArmorItem> PRISMATIC_HELMET = tab(ITEMS.register("prismatic_helmet",
-            () -> new SAArmorItem(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.HELMET, tool(SATier.ALLOY),
-                    Map.of(Enchantments.PROJECTILE_PROTECTION, 14))));
-
-    public static final DeferredItem<SAArmorItem> PRISMATIC_CHESTPLATE = tab(ITEMS.register("prismatic_chestplate",
-            () -> new SAArmorItem(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.CHESTPLATE, tool(SATier.ALLOY),
-                    Map.of(Enchantments.PROTECTION, 11))));
-
-    public static final DeferredItem<SAArmorItem> PRISMATIC_LEGGINGS = tab(ITEMS.register("prismatic_leggings",
-            () -> new SAArmorItem(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.LEGGINGS, tool(SATier.ALLOY),
-                    Map.of(Enchantments.BLAST_PROTECTION, 12))));
-
-    public static final DeferredItem<SAArmorItem> PRISMATIC_BOOTS = tab(ITEMS.register("prismatic_boots",
-            () -> new SAArmorItem(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.BOOTS, tool(SATier.ALLOY),
-                    Map.of(Enchantments.FIRE_PROTECTION, 12))));
+    public static final DeferredItem<SAArmorItem> PRISMATIC_HELMET = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.HELMET, 14);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_CHESTPLATE = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.CHESTPLATE, 11);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_LEGGINGS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.LEGGINGS, 12);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_BOOTS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.BOOTS, 12);
 
     private SAItems() {
     }
 
     private static <T extends Item> DeferredItem<T> tab(DeferredItem<T> item) {
         EQUIPMENT_TAB.add(item);
+        return item;
+    }
+
+    /**
+     * Un pezzo d'armatura del tier: id «&lt;tier&gt;_&lt;pezzo&gt;» (es. trichromatic_boots), nel creativo e in {@link #armor(SATier)}.
+     * Incantesimo caratteristico per pezzo (quello della bedrock di Spectrum), al livello dato: elmo Projectile Protection,
+     * corazza Protection, gambali Blast Protection, stivali Fire Protection.
+     */
+    private static DeferredItem<SAArmorItem> armorPiece(SATier tier, Holder<ArmorMaterial> material, ArmorItem.Type type, int level) {
+        ResourceKey<Enchantment> enchantment = switch (type) {
+            case HELMET -> Enchantments.PROJECTILE_PROTECTION;
+            case CHESTPLATE -> Enchantments.PROTECTION;
+            case LEGGINGS -> Enchantments.BLAST_PROTECTION;
+            case BOOTS -> Enchantments.FIRE_PROTECTION;
+            case BODY -> throw new IllegalArgumentException("armatura per cavalli/lupi: non è dei tier");
+        };
+        DeferredItem<SAArmorItem> item = tab(ITEMS.register(tier.idPrefix() + "_" + type.getName(),
+                () -> new SAArmorItem(tier, material, type, tool(tier), Map.of(enchantment, level))));
+        ARMOR.computeIfAbsent(tier, t -> new ArrayList<>()).add(item);
         return item;
     }
 
@@ -492,14 +473,9 @@ public final class SAItems {
         return List.copyOf(all);
     }
 
-    /** I pezzi d'armatura di un tier, nell'ordine elmo, corazza, gambali, stivali (vuoto per i tier non ancora fatti). */
+    /** I pezzi d'armatura di un tier, nell'ordine elmo, corazza, gambali, stivali (registrati da {@link #armorPiece}). */
     public static List<DeferredItem<SAArmorItem>> armor(SATier tier) {
-        return switch (tier) {
-            case T6 -> List.of(TRICHROMATIC_HELMET, TRICHROMATIC_CHESTPLATE, TRICHROMATIC_LEGGINGS, TRICHROMATIC_BOOTS);
-            case T7 -> List.of(UMBRAL_HELMET, UMBRAL_CHESTPLATE, UMBRAL_LEGGINGS, UMBRAL_BOOTS);
-            case T8 -> List.of(ARGENT_HELMET, ARGENT_CHESTPLATE, ARGENT_LEGGINGS, ARGENT_BOOTS);
-            case ALLOY -> List.of(PRISMATIC_HELMET, PRISMATIC_CHESTPLATE, PRISMATIC_LEGGINGS, PRISMATIC_BOOTS);
-        };
+        return List.copyOf(ARMOR.getOrDefault(tier, List.of()));
     }
 
     /** Tutti i pezzi d'armatura di tutti i tier. */

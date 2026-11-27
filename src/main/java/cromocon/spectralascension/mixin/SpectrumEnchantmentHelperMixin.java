@@ -16,6 +16,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * livelli dei 42 incantesimi della tabella di {@link SAEnchantCap} sono tagliati al massimo ATM10: un libro Sharpness
  * XII dà Sharpness IX, un oggetto T9 con Sharpness XII pure. Gli incantesimi fuori tabella (Spectrum, altre mod) non
  * sono toccati. Il costo in XP segue i livelli tagliati (stessa strada).
+ * <p>
+ * shortcut: qui il Wind Burst intrinseco delle nostre mazze NON è tolto (niente {@code MaceWindBurst.extractable}), di
+ * proposito: i Gilded Book non si craftano, si trovano soltanto, e il tetto ATM10 tiene il libro a Wind Burst VIII,
+ * mai XI (decisione utente 2026-11-27).
  */
 @Mixin(value = SpectrumEnchantmentHelper.class, remap = false)
 public abstract class SpectrumEnchantmentHelperMixin {

@@ -226,5 +226,9 @@
   "item.spectral_ascension.argent_mace": "Argent Mace",
   "book.spectral_ascension.guidebook.t8_equipment.argent_mace.text": "A pale flash from above, and the wind throws me back up toward the moon.",
   "item.spectral_ascension.prismatic_mace": "Prismatic Mace",
-  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "These alloys make it light in my hand and terribly heavy when it lands. The wind it raises now throws me higher than I would ever dare to jump."
+  "book.spectral_ascension.guidebook.t9_equipment.prismatic_mace.text": "These alloys make it light in my hand and terribly heavy when it lands. The wind it raises now throws me higher than I would ever dare to jump.",
+  "item.spectral_ascension.armor.tooltip.dike_bonus": "Infused Shieldgrasp Amulet: %s Azure Dike",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.title": "Descent",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.text": "Gold in the ancient cities, green in the Nether, violet in the End. I carried each one home and watched my Spectrum gear take them in as if it had been waiting all along.\\\n\\\nThe last one was different. It did not shine. It *listened*.\\\n\\\n*Some doors only open from the far side of the bedrock.*",
+  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Pro tip: the built-in resource pack \"Eternal Classics\" gives the equipment a different style. Switch it on in the resource packs menu.*"
 }

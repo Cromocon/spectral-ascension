@@ -29,4 +29,4 @@ __pycache__/
 # Script locale dell'autore (mondo di test), fuori dalla repo per scelta
 tools/reset_test_world.py
 # Risultati dei test ciechi sulle texture (output generato)
-tools/test_cieco/risultati/
+tools/test_cieco/

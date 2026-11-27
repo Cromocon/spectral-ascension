@@ -8,6 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * Modalità del bident tricromatico, salvata nello stack (componente spectral_ascension:bident_mode).
@@ -23,9 +24,9 @@ public enum BidentMode implements StringRepresentable {
 
     /** Formato su disco (nome in minuscolo, es. "ferocious"). */
     public static final Codec<BidentMode> CODEC = StringRepresentable.fromEnum(BidentMode::values);
-    /** Formato in rete (client ↔ server): l'indice nell'enum. */
+    /** Formato in rete (client ↔ server): l'indice nell'enum; un indice non valido diventa OFF invece di un'eccezione. */
     public static final StreamCodec<ByteBuf, BidentMode> STREAM_CODEC =
-            ByteBufCodecs.idMapper(i -> values()[i], BidentMode::ordinal);
+            ByteBufCodecs.idMapper(i -> Objects.requireNonNullElse(byIndex(i), OFF), BidentMode::ordinal);
 
     private final String name;
     private final ChatFormatting color;

@@ -40,3 +40,11 @@ type = "required"
 versionRange = "${allthemodium_version_range}"
 ordering = "AFTER"
 side = "BOTH"
+
+# Spectrum stesso richiede Curios (stessa versione minima): c'è sempre. Il mixin AzureDikeAttachmentTypeMixin usa CuriosApi.
+[[dependencies.${mod_id}]]
+modId = "curios"
+type = "required"
+versionRange = "${curios_version_range}"
+ordering = "AFTER"
+side = "BOTH"

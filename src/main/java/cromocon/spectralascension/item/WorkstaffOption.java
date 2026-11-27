@@ -66,11 +66,6 @@ public enum WorkstaffOption {
         this.minTier = minTier;
     }
 
-    /** Il tier minimo della workstaff per questa voce. */
-    public SATier minTier() {
-        return minTier;
-    }
-
     /** La voce è permessa alla workstaff di questo tier (stesso controllo della schermata e del server). */
     public boolean allowedFor(SATier tier) {
         return tier.ordinal() >= minTier.ordinal();

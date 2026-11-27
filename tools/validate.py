@@ -83,6 +83,10 @@ for r, _, fs in os.walk(JAVA):
         if f.endswith(".java"):
             java += open(os.path.join(r, f), encoding="utf-8").read()
 ITEMS = set(re.findall(r'ITEMS\.register\("([a-z0-9_/]+)"', java))
+# Armatura: SAItems.armorPiece(SATier.X, materiale, ArmorItem.Type.Y, livello) registra «<prefisso del tier>_<pezzo>».
+_tier_prefix = dict(re.findall(r'^\s*(\w+)\("(\w+)"', open(os.path.join(JAVA, "cromocon", "spectralascension", "item", "SATier.java"), encoding="utf-8").read(), re.M))
+ITEMS |= {f"{_tier_prefix[t]}_{piece.lower()}"
+          for t, piece in re.findall(r'armorPiece\(SATier\.(\w+),[^,]+,\s*ArmorItem\.Type\.(\w+)', java)}
 if not ITEMS:
     err("nessun item trovato in SAItems")
 
@@ -463,7 +467,6 @@ for fn in sorted(os.listdir(TEX_ARMOR)):
 # Texture installate da tools/install_textures.py: devono coincidere byte per byte con i set approvati in design/
 # (per T6-T8, statici dal 2026-11-26, con le icone ritagliate al fotogramma 0)
 # (T6 = t6-castone, T7 = t7-v2-puntini-fuori, T8 = t8-argent, T9 = t9-m3). Protegge da sovrascritture a mano, da placeholder di gen_data.py e da vecchi script
-# (tools/texture_mix.py install rimetterebbe il vecchio set scuro t6-mix sul T6).
 import importlib.util
 _spec = importlib.util.spec_from_file_location("install_textures", os.path.join(ROOT, "tools", "install_textures.py"))
 _inst = importlib.util.module_from_spec(_spec)

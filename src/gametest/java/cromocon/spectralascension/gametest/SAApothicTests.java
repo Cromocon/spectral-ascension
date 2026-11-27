@@ -59,7 +59,8 @@ public final class SAApothicTests {
                 test("apothic_prismatic_web", SAApothicTests::prismaticWeb),
                 test("apothic_vanilla_anvil", SAApothicTests::vanillaAnvil),
                 test("apothic_enchanter_extracted_book", SAApothicTests::enchanterExtractedBook),
-                test("apothic_overenchanting", SAApothicTests::overenchanting));
+                test("apothic_overenchanting", SAApothicTests::overenchanting),
+                test("apothic_mace_wind_burst_extraction", SAApothicTests::maceWindBurstExtraction));
     }
 
     private static TestFunction test(String name, Consumer<GameTestHelper> body) {
@@ -263,5 +264,38 @@ public final class SAApothicTests {
             if (done != b.unlocks()) problems.add("libro " + b.name() + ": overenchanting " + (done ? "sbloccato" : "non sbloccato"));
         }
         finish(helper, "Apothic: overenchanting", problems, report);
+    }
+
+    /**
+     * Extraction Tome su una nostra mazza (2026-11-27, MaceWindBurst.extractable): il Wind Burst intrinseco non finisce
+     * nel libro (la mazza lo riavrebbe subito: libri infiniti). Mazza T6 con Density III → libro con la sola Density III;
+     * mazza T6 con il solo Wind Burst → nessun risultato; mazza di bedrock portata a Wind Burst VI → libro VI.
+     */
+    private static void maceWindBurstExtraction(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        ServerPlayer player = mockPlayer(helper);
+        Holder<Enchantment> wind = ench(helper, Enchantments.WIND_BURST), density = ench(helper, Enchantments.DENSITY);
+        ItemStack t6 = new ItemStack(cromocon.spectralascension.registry.SAItems.TRICHROMATIC_MACE.get());
+        t6.enchant(density, 3);
+        ItemEnchantments book = stored(SAEdgeCaseTests.anvil(player, t6, extractionTome()));
+        if (book.getLevel(wind) != 0 || book.getLevel(density) != 3) problems.add("mazza T6 + Density III → libro " + book);
+        report.add("mazza T6 (Wind Burst V, Density III) → libro " + book.size() + " incantesimi, Wind Burst " + book.getLevel(wind));
+        ItemStack only = SAEdgeCaseTests.anvil(player, new ItemStack(cromocon.spectralascension.registry.SAItems.TRICHROMATIC_MACE.get()), extractionTome());
+        if (!only.isEmpty()) problems.add("mazza T6 col solo Wind Burst intrinseco → " + only + " invece di nessun risultato");
+        ItemStack strong = new ItemStack(cromocon.spectralascension.registry.SAItems.BEDROCK_MACE.get());
+        strong.enchant(wind, 6);
+        int six = stored(SAEdgeCaseTests.anvil(player, strong, extractionTome())).getLevel(wind);
+        if (six != 6) problems.add("mazza di bedrock con Wind Burst VI → libro Wind Burst " + six + " invece di 6");
+        report.add("mazza di bedrock Wind Burst VI → libro Wind Burst " + six);
+        ItemStack t6Six = new ItemStack(cromocon.spectralascension.registry.SAItems.TRICHROMATIC_MACE.get());
+        t6Six.enchant(wind, 6);
+        ItemStack climb = SAEdgeCaseTests.anvil(player, t6Six, extractionTome());
+        if (!climb.isEmpty()) problems.add("mazza T6 con Wind Burst VI (intrinseco V + 1) → " + climb + " invece di nessun risultato");
+        ItemStack bedrockFive = new ItemStack(cromocon.spectralascension.registry.SAItems.BEDROCK_MACE.get());
+        bedrockFive.enchant(wind, 5);
+        ItemStack climbBedrock = SAEdgeCaseTests.anvil(player, bedrockFive, extractionTome());
+        if (!climbBedrock.isEmpty()) problems.add("mazza di bedrock con Wind Burst V (intrinseco IV + 1) → " + climbBedrock + " invece di nessun risultato");
+        report.add("intrinseco + 1 (T6 VI, bedrock V) → nessun libro");
+        finish(helper, "Apothic: Extraction Tome sulle mazze", problems, report);
     }
 }

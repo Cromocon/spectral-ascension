@@ -36,6 +36,7 @@ Per default il dev carica EMI + JEI, senza SpectrumJEI e senza Apothic. Due vari
   - `open_screen` con `screen: jei` + `item`: apre JEI sulla ricetta Fusion Shrine che produce l'oggetto;
   - scenari `jei_bloccate` (giocatore vergine: ricette attese nascoste) e `jei_ricette` (da lanciare dopo `sblocchi`: conteggio e
     uno screenshot per tier): `tools/run_auto.sh --jei --scenario jei_bloccate,sblocchi,jei_ricette`.
+- **Dove stanno i GameTest**: `src/gametest/java` (source set `gametest`, stessa mod `spectral_ascension`), NON nel jar di rilascio. Package invariato (`cromocon.spectralascension.gametest`).
 - **Apothic Enchanting vero**: `./gradlew runGameTestServer -Papothic` (vale anche per `runClient`/`runClientAuto`, non provato sul client).
   Carica Apothic Enchanting 1.6.4 + Placebo 9.9.4 + Apothic Attributes 2.11.0 (scaricati da Gradle da Modrinth, gli stessi dell'istanza ATM10) e copia
   `src/gametest-config/apotheosis/*.cfg` (config dell'istanza, tutta ai valori di default) in `run/gametest/config/apotheosis` e
@@ -118,6 +119,9 @@ Le coordinate sono `[x, y, z]` assolute. Il mondo `sa_test` è superflat: il ter
 | `assert_revealed` | `item` o `block`, `revealed` (true) | Revelationary, lato client: l'oggetto o il blocco è ancora "mascherato"? |
 | `assert_log` | `regex`, `present` (true), `within` (40 tick di attesa) | Cerca nelle righe di log registrate dall'inizio dello scenario, tenute in memoria. Le righe `[SA-SCENARIO]` sono escluse |
 | `track_projectile` | `ticks` (8), `max_angle` (gradi, facoltativo), `from` (1) | Spara con l'oggetto in mano (clic destro, come `use_item`: per esempio una balestra carica) e segue per `ticks` tick la freccia appena comparsa, sul client e sul server integrato (stessa entità). Per ogni tick scrive nei dettagli posizione e velocità dei due lati e l'angolo fra le velocità. Con `max_angle` fallisce se l'angolo supera il limite dal tick `from` in poi |
+| `mine` | `pos`, `face` (`north`); `look` (true); `from` + `to` + `block` (`minecraft:air`), `count` | Clic sinistro vero: con `look` gira il giocatore verso il centro della faccia e aspetta 3 tick (il server rifà il raycast per l'area della workstaff), poi `MultiPlayerGameMode.startDestroyBlock`. Con `from`/`to` conta, **nello stesso tick e sul ClientLevel**, i blocchi `block` della zona; `count` = numero esatto atteso. Scavo istantaneo solo se `getDestroyProgress` ≥ 1 (in sopravvivenza: Efficiency, Haste) |
+| `count_blocks` | `from`, `to`, `block` (id o `#tag`, default `minecraft:air`), `side`: `client` (default, ClientLevel, subito) o `server`; `count` (esatto) oppure `min`/`max` | Conta i blocchi di una zona |
+| `area_prediction` | `value` (true) | Solo sviluppo: accende o spegne la previsione sul client dello scavo ad area della workstaff (`WorkstaffAreaPrediction.enabled`), per il confronto. A fine scenario torna accesa. Scenario: `workstaff_area` |
 | `log` | `text` | Annota il report |
 
 ### Ricette bloccate: come decide Spectrum

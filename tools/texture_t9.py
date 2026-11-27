@@ -23,6 +23,9 @@ USCITE  design/texture/proposte/t9-m3/{set,speciali,armatura}/ con i nomi del T8
   t9_armor_anim.png 128x5120 (+ .mcmeta) per Blockbench, manichino.png, manichino_animato.gif; vetrina_t9.png.
 
 Uso:  python3 -I tools/texture_t9.py
+
+NOTA 2026-11-26: le balestre T9 «in mano» (oversized) sono ritoccate dall'utente (gemma al calcio in (27,27), corda c1b5e4);
+il generatore le riproduce identiche per il default; i ritocchi a mano dell'EC NON hanno generatore.
 """
 import os
 import sys
@@ -40,7 +43,7 @@ import texture_t9_giro3 as G3  # noqa: E402
 import texture_t9_giro4 as G4  # noqa: E402
 import texture_t9_m3 as M3  # noqa: E402
 
-OUT = os.path.join(P.PROP, "t9-m3")
+OUT = os.environ.get("SA_T9_OUT") or os.path.join(P.PROP, "t9-m3")   # SA_T9_OUT: cartella di prova
 M3DIR = os.path.join(M3.OUT, "M3-lenta")
 T8 = P.T8DIR
 FRAMES, FRAMETIME = M3.FRAMES, M3.FRAMETIME
@@ -50,6 +53,7 @@ MCMETA = '{\n  "animation": {\n    "frametime": %d,\n    "interpolate": false\n 
 assert MCMETA == G3.MCMETA
 
 STRING = P.rgb("#d9ccff")      # corda / filo: lilla perla, fisso nelle due fasi
+STRING_HAND = P.rgb("#c1b5e4")  # corda delle balestre «in mano» (oversized): ritoccata a mano il 2026-11-26
 ARROW = P.rgb("#f3eeff")       # punta e fusto della freccia dell'arco in carica: fisso
 GEM_FALLBACK = {"t": "e", "s": "d", "r": "c", "q": "a"}   # moonstone del T8 fuori dal castone -> cristallo
 DOT = dict(zip("ABCDEF", "123456"))
@@ -100,7 +104,10 @@ CASTONI = {
                                            ".qsrq.",
                                            "H.qq.H"]),
     "bident_oversized": (20, 8, QUAD),
-    "crossbow_oversized": (14, 18, QUAD),               # corpo, a sinistra del canale delle munizioni
+    "crossbow_oversized": (27, 27, [".qqG",             # calcio in basso a destra (ritocco utente 2026-11-26; prima (14,18, QUAD)).
+                                    "qtsq",             # l'angolo (27,27) resta com'e': e' munizione/corda in alcuni stati
+                                    "qsrq",
+                                    "HqqH"]),
 }
 CASTONI["fishing_rod_cast"] = CASTONI["fishing_rod"]
 for _b in ("bow_pulling_0", "bow_pulling_1", "bow_pulling_2"):
@@ -201,15 +208,15 @@ def derive_keep_m(rows):
 # ======================================================================================================================
 # RENDER
 # ======================================================================================================================
-def color(ch, x, y, f, s):
+def color(ch, x, y, f, s, string=STRING):
     if ch == "z":
-        return STRING
+        return string
     if ch == "y":
         return ARROW
     return M3.color_m3(ch, x, y, f, s, False)
 
 
-def render(grid, f, sfun, mun=None):
+def render(grid, f, sfun, mun=None, string=STRING):
     h, w = len(grid), len(grid[0])
     im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     px = im.load()
@@ -217,7 +224,7 @@ def render(grid, f, sfun, mun=None):
         for x, ch in enumerate(row):
             if ch == ".":
                 continue
-            px[x, y] = mun[x, y] if ch == "m" else color(ch, x, y, f, sfun(x, y)) + (255,)
+            px[x, y] = mun[x, y] if ch == "m" else color(ch, x, y, f, sfun(x, y), string) + (255,)
     return im
 
 
@@ -241,7 +248,7 @@ def write_piece(d, n, frames):
     G3.gif(frames, os.path.join(d, f"t9_{n}.gif"), 8, G3.SLOT, ms=GIF_MS)
 
 
-def check_piece(d, n, frames, grid, t8png, t8anim, key):
+def check_piece(d, n, frames, grid, t8png, t8anim, key, string=STRING):
     """40 fotogrammi, f0 = icona, alpha = T8 (icona e ogni fotogramma della striscia T8), castone unico con 5 gemme x 8,
     ciclo f39 -> f0 senza salti."""
     w = frames[0].width
@@ -268,7 +275,7 @@ def check_piece(d, n, frames, grid, t8png, t8anim, key):
     zc = [(x, y) for y, r in enumerate(grid) for x, ch in enumerate(r) if ch == "z"]
     for f in range(FRAMES):
         for p in zc:
-            assert frames[f].getpixel(p)[:3] == STRING
+            assert frames[f].getpixel(p)[:3] == string
     return jump, adj, len(gem)
 
 
@@ -307,11 +314,12 @@ def build_speciali():
         k = 0.5 if over else 1.0
         t8i = Image.open(os.path.join(T8, "speciali", f"t8_{name}.png")).convert("RGBA")
         mun = t8i.load()
-        frames = [render(g, f, lambda x, y: k * (dx * x + dy * y), mun) for f in range(FRAMES)]
+        string = STRING_HAND if (over and kind == "crossbow") else STRING
+        frames = [render(g, f, lambda x, y: k * (dx * x + dy * y), mun, string) for f in range(FRAMES)]
         write_piece(d, name, frames)
         key = ("crossbow_oversized" if over else "crossbow") if kind == "crossbow" else name
         jump, adj, ng = check_piece(d, name, frames, g, os.path.join(T8, "speciali", f"t8_{name}.png"),
-                                    os.path.join(T8, "speciali", f"t8_{name}_anim.png"), key)
+                                    os.path.join(T8, "speciali", f"t8_{name}_anim.png"), key, string)
         # munizioni identiche al T8 (icona e ogni fotogramma della striscia T8)
         s8 = Image.open(os.path.join(T8, "speciali", f"t8_{name}_anim.png")).convert("RGBA")
         w = t8i.width

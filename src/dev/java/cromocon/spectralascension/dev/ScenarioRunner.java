@@ -409,6 +409,7 @@ public final class ScenarioRunner {
         hudHidden = false;
         mc.options.setCameraType(CameraType.FIRST_PERSON);
         ScenarioActions.resetFov();
+        cromocon.spectralascension.client.WorkstaffAreaPrediction.enabled = true; // area_prediction vale solo per lo scenario
     }
 
     /** Cancella gli screenshot della corsa precedente dello stesso scenario (screenshots/scenari/&lt;nome&gt;/). */

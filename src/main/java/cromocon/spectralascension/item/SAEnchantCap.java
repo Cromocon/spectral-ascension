@@ -105,7 +105,13 @@ public final class SAEnchantCap {
         if (output.isEmpty() || !isOurs(event.getLeft())) return;
         ItemEnchantments stored = output.get(DataComponents.STORED_ENCHANTMENTS);
         if (stored == null) return;
-        ItemEnchantments clamped = clamp(stored);
+        // Wind Burst intrinseco delle mazze: non si estrae (la mazza lo riavrebbe subito), vedi MaceWindBurst.
+        ItemEnchantments extractable = MaceWindBurst.extractable(event.getLeft(), stored);
+        ItemEnchantments clamped = clamp(extractable);
+        if (extractable != stored && clamped.isEmpty()) {
+            event.setCanceled(true);
+            return;
+        }
         if (clamped != stored) {
             ItemStack copy = output.copy();
             copy.set(DataComponents.STORED_ENCHANTMENTS, clamped);
