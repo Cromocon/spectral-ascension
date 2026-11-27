@@ -43,7 +43,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:luck_of_the_sea": 11,
+          "minecraft:luck_of_the_sea": 10,
           "minecraft:lure": 5
         }
       }

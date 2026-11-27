@@ -47,7 +47,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:wind_burst": 11
+          "minecraft:wind_burst": 10
         }
       }
     }

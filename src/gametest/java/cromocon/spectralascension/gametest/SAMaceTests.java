@@ -73,10 +73,10 @@ public final class SAMaceTests {
     private static Map<Item, Integer> windBurstLevels() {
         Map<Item, Integer> out = new LinkedHashMap<>();
         out.put(SAItems.BEDROCK_MACE.get(), 4);
-        out.put(SAItems.TRICHROMATIC_MACE.get(), 5);
-        out.put(SAItems.UMBRAL_MACE.get(), 6);
-        out.put(SAItems.ARGENT_MACE.get(), 7);
-        out.put(SAItems.PRISMATIC_MACE.get(), 11);
+        out.put(SAItems.TRICHROMATIC_MACE.get(), 6);
+        out.put(SAItems.UMBRAL_MACE.get(), 7);
+        out.put(SAItems.ARGENT_MACE.get(), 8);
+        out.put(SAItems.PRISMATIC_MACE.get(), 10);
         return out;
     }
 

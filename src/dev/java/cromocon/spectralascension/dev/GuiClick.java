@@ -3,6 +3,7 @@ package cromocon.spectralascension.dev;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.Window;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.Screen;
@@ -68,6 +69,36 @@ final class GuiClick {
             @Override
             public int expectedTicks() {
                 return within;
+            }
+        };
+    }
+
+    /**
+     * gui_key: preme sulla schermata aperta il tasto di {@code key} (left, right, up, down, drop, inventory: i tasti
+     * del gioco, come li legge QuickNavigationGridScreen), chiamando keyPressed come fa il gioco.
+     */
+    static Exec key(JsonObject s) {
+        String name = Scenario.req(s, "key");
+        return new Exec() {
+            @Override
+            public StepResult poll(ScenarioRunner runner) {
+                Minecraft mc = Minecraft.getInstance();
+                Screen screen = mc.screen;
+                if (screen == null) return StepResult.fail("nessuna schermata aperta");
+                KeyMapping k = switch (name) {
+                    case "left" -> mc.options.keyLeft;
+                    case "right" -> mc.options.keyRight;
+                    case "up" -> mc.options.keyUp;
+                    case "down" -> mc.options.keyDown;
+                    case "drop" -> mc.options.keyDrop;
+                    case "inventory" -> mc.options.keyInventory;
+                    default -> null;
+                };
+                if (k == null) return StepResult.fail("tasto sconosciuto: " + name);
+                boolean handled = screen.keyPressed(k.getKey().getValue(), 0, 0);
+                Screen after = mc.screen;
+                return StepResult.ok("tasto " + name + " su " + screen.getClass().getSimpleName() + (handled ? "" : " (non gestito)")
+                        + ", dopo: " + (after == null ? "nessuna schermata" : after.getClass().getSimpleName()));
             }
         };
     }

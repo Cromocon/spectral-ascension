@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Tetto ATM10 degli incantesimi (ricerca/03, PASSAGGIO «Da fare» n. 4). I nostri oggetti escono già oltre il massimo
- * (T9: ATM10 + 3, es. Sharpness XII): senza tetto si potrebbero estrarre libri Sharpness XII, applicabili ovunque.
+ * (T9: ATM10 + 2, es. Sharpness XI): senza tetto si potrebbero estrarre libri Sharpness XII, applicabili ovunque.
  *
  * <p>Fonte del tetto: «max effettivo ATM10» di ricerca/09, sezioni A e B (i 42 incantesimi vanilla), cioè il valore
  * {@code Max Level} di {@code config/apotheosis/enchantments.cfg} di Apothic Enchanting nell'istanza ATM10 (default di

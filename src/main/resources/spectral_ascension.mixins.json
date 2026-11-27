@@ -4,7 +4,7 @@
   "package": "cromocon.spectralascension.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AnvilMenuMixin", "AzureDikeAttachmentTypeMixin", "BedrockAnvilScreenHandlerMixin", "EnchanterBlockEntityMixin", "EnchantmentUpgradeRecipeMixin", "FusionShrineRecipeMixin", "GatedSpectrumRecipeMixin", "GrindstoneMenuMixin", "ServerEntityMixin", "ServerPlayerGameModeMixin", "ShootingStarVariantMixin", "SpectrumEnchantmentHelperMixin"
+    "AnvilMenuMixin", "AzureDikeAttachmentTypeMixin", "BedrockAnvilScreenHandlerMixin", "EnchanterBlockEntityMixin", "EnchantmentUpgradeRecipeMixin", "FusionShrineRecipeMixin", "GatedSpectrumRecipeMixin", "GrindstoneMenuMixin", "ServerEntityMixin", "ServerLevelMixin", "ServerPlayerGameModeMixin", "ShootingStarVariantMixin", "SpectrumEnchantmentHelperMixin"
   ],
   "client": [
     "client.ClientLevelAccessor", "client.MultiPlayerGameModeMixin"

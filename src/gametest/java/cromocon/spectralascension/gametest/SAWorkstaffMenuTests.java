@@ -1,6 +1,7 @@
 package cromocon.spectralascension.gametest;
 
 import cromocon.spectralascension.SpectralAscension;
+import cromocon.spectralascension.client.WorkstaffMenuLayout;
 import cromocon.spectralascension.item.SATier;
 import cromocon.spectralascension.item.SATools;
 import cromocon.spectralascension.item.WorkstaffDrops;
@@ -626,5 +627,43 @@ public final class SAWorkstaffMenuTests {
         ItemStack reloaded = ItemStack.CODEC.parse(ops, ItemStack.CODEC.encodeStart(ops, t8).getOrThrow()).getOrThrow();
         expect(problems, Arrays.asList(WorkstaffOption.drops(reloaded).foundry()).equals(List.of(false)), "componente perso al salvataggio");
         finish(helper, "ricette e Fusion Shrine della workstaff", problems, report);
+    }
+
+    /**
+     * Geometria del menu (WorkstaffMenuLayout, senza client): vertici di 1-5 voci, tasti di movimento (angolo più
+     * piccolo sotto i 90°, pari merito = fermo) e raggio scelto senza sovrapposizioni.
+     */
+    @GameTest(template = EMPTY)
+    public static void workstaff_menu_layout(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>();
+        List<String> report = new ArrayList<>();
+        String[] want = {"[[0, -60]]", "[[-60, 0], [60, 0]]", "[[0, -60], [52, 30], [-52, 30]]",
+                "[[0, -60], [60, 0], [0, 60], [-60, 0]]", "[[0, -60], [57, -19], [35, 49], [-35, 49], [-57, -19]]"};
+        int[][] dirs = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}}; // su, destra, giù, sinistra
+        String[] wantPick = {"[0, -1, -1, -1]", "[-1, 1, -1, 0]", "[0, 1, -1, 2]", "[0, 1, 2, 3]", "[0, 1, -1, 4]"};
+        for (int n = 1; n <= 5; n++) {
+            int[][] v = WorkstaffMenuLayout.vertices(n, 60);
+            String got = Arrays.deepToString(v);
+            int[] picks = new int[4];
+            for (int d = 0; d < 4; d++) picks[d] = WorkstaffMenuLayout.pick(v, dirs[d][0], dirs[d][1]);
+            report.add(n + " voci: " + got + ", tasti su/destra/giù/sinistra " + Arrays.toString(picks));
+            expect(problems, got.equals(want[n - 1]), n + " voci: vertici " + got + " invece di " + want[n - 1]);
+            expect(problems, Arrays.toString(picks).equals(wantPick[n - 1]), n + " voci: tasti " + Arrays.toString(picks) + " invece di " + wantPick[n - 1]);
+        }
+        int[] bounds = {-240, -135, 239, 113}; // 1920×1080 a GUI 4 (480×270), come in layout()
+        for (int n = 1; n <= 5; n++) { // 6 voci da 112 px non stanno in 480×270: nessun menu ne ha 6
+            int[] labels = new int[n];
+            Arrays.fill(labels, 112); // "Select 3x3 mining mode"
+            int r = WorkstaffMenuLayout.radius(labels, 41, bounds); // "Indietro"
+            report.add(n + " voci da 112 px: raggio " + r);
+            if (r < 0) {
+                problems.add(n + " voci: nessun raggio sta in 480×270");
+                continue;
+            }
+            expect(problems, !WorkstaffMenuLayout.overlap(WorkstaffMenuLayout.rects(r, labels, 41)), n + " voci: sovrapposte al raggio " + r);
+            expect(problems, r == WorkstaffMenuLayout.MIN_RADIUS || WorkstaffMenuLayout.overlap(WorkstaffMenuLayout.rects(r - 1, labels, 41)),
+                    n + " voci: il raggio " + r + " non è il più piccolo");
+        }
+        finish(helper, "workstaff_menu_layout", problems, report);
     }
 }

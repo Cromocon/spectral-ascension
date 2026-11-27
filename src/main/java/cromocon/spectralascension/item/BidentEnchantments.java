@@ -20,7 +20,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
  * <p>
  * Il componente minecraft:enchantments contiene sempre gli incantesimi <b>attivi</b>; qui c'è il resto:
  * <ul>
- *   <li>{@code base}: gli incantesimi dello stato spento (di partenza Impaling X), attivi in tutte le modalità.
+ *   <li>{@code base}: gli incantesimi dello stato spento (di partenza l'Impaling del tier), attivi in tutte le modalità.
  *       Da spento la base è proprio minecraft:enchantments, quindi qui è vuota.</li>
  *   <li>{@code ferocious}, {@code fractal}: il set completo di ogni modalità, sempre memorizzato. Entrando in una
  *       modalità si applica sopra la base (stesso incantesimo: vince il livello più alto); un incantesimo in conflitto
@@ -28,7 +28,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
  *   <li>{@code applied}: gli incantesimi scritti entrando nella modalità attuale (vuoto da spento). Uscendo si
  *       confrontano con quelli attuali per capire cosa ha fatto il giocatore nel frattempo.</li>
  * </ul>
- * Componente assente = base dell'oggetto (Impaling X), set vuoti, applicati = base: come un bident appena creato.
+ * Componente assente = base dell'oggetto (Impaling del tier), set vuoti, applicati = base: come un bident appena creato.
  */
 public record BidentEnchantments(ItemEnchantments base, ItemEnchantments ferocious, ItemEnchantments fractal,
                                  ItemEnchantments applied) {
@@ -86,7 +86,7 @@ public record BidentEnchantments(ItemEnchantments base, ItemEnchantments ferocio
 
     // ---------- Lettura e scrittura sullo stack ----------
 
-    /** I dati dello stack; se il componente manca, la base (e gli applicati) sono quelli dell'oggetto (Impaling X). */
+    /** I dati dello stack; se il componente manca, la base (e gli applicati) sono quelli dell'oggetto (Impaling del tier). */
     public static BidentEnchantments get(ItemStack stack, HolderLookup.Provider lookup) {
         BidentEnchantments data = stack.get(SAComponents.BIDENT_ENCHANTMENTS.get());
         if (data != null) {
@@ -96,7 +96,7 @@ public record BidentEnchantments(ItemEnchantments base, ItemEnchantments ferocio
         return new BidentEnchantments(base, ItemEnchantments.EMPTY, ItemEnchantments.EMPTY, base);
     }
 
-    /** Gli incantesimi di base dell'oggetto (Preenchanted.getDefaultEnchantments: Impaling X per il T6). */
+    /** Gli incantesimi di base dell'oggetto (Preenchanted.getDefaultEnchantments: Impaling VIII per il T6). */
     public static ItemEnchantments defaultBase(ItemStack stack, HolderLookup.Provider lookup) {
         if (!(stack.getItem() instanceof SABident bident)) {
             return ItemEnchantments.EMPTY;
@@ -207,7 +207,7 @@ public record BidentEnchantments(ItemEnchantments base, ItemEnchantments ferocio
 
     /**
      * Incantesimi del bident uscito dalla Fusion Shrine (lo chiama FusionShrineRecipeMixin, solo per il nostro
-     * bident): base dell'oggetto (Impaling X), set Ferocious dal primo ingrediente (attivo: il bident esce in modalità
+     * bident): base dell'oggetto (Impaling del tier), set Ferocious dal primo ingrediente (attivo: il bident esce in modalità
      * Ferocious), set Fractal dal secondo (memorizzato). Come copy_components di Spectrum, un incantesimo entra solo
      * se il bident lo accetta, è migliore della base e non è in conflitto con la base e il resto del suo set; i
      * conflitti sono ammessi se il proprietario della Fusion Shrine ha l'advancement APPLY_CONFLICTING_ENCHANTMENTS.

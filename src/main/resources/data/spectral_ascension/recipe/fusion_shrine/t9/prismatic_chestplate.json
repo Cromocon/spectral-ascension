@@ -47,7 +47,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:protection": 11
+          "minecraft:protection": 10
         }
       }
     }

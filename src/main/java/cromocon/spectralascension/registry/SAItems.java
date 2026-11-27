@@ -43,7 +43,9 @@ import java.util.Map;
  * NeoForge li crea al momento giusto dell'avvio.
  * <p>
  * Incantesimi preimpostati: lo stesso incantesimo caratteristico della versione bedrock di Spectrum,
- * portato al tetto del tier (T6 = massimo ATM10, da config/apotheosis/enchantments.cfg).
+ * al livello della regola del tetto ATM10 ({@link cromocon.spectralascension.item.SAEnchantCap}, 2026-11-27):
+ * T6 tetto - 2, T7 tetto - 1, T8 tetto, T9 tetto + 2. Gli incantesimi secondari (Quick Charge, Sniping, Lure,
+ * Foundry, Inventory Insertion) hanno livelli propri.
  * DEVONO coincidere con quelli delle ricette (tools/gen_data.py): lo verificano i GameTest.
  */
 public final class SAItems {
@@ -86,16 +88,16 @@ public final class SAItems {
 
     // ---------- T6 · Tricromatico (Trichromatic) ----------
     // Incantesimi del T6 decisi dall'utente il 2026-11-18 insieme alle ricette alla Fusion Shrine con Dragonrot
-    // (tools/gen_data.py): sotto il tetto ATM10.
+    // (tools/gen_data.py); livelli dal 2026-11-27: tetto ATM10 - 2.
 
     /**
      * Workstaff = il piccone del tier (upgrade alla Fusion Shrine della workstaff glass crest). Danno e velocità
      * d'attacco come la glass crest in SpectrumItems (1, -2,8F), sommati al bonus del nostro tier.
-     * Fortune VI (selezione di default del menu) ed Efficiency V.
+     * Fortune VI (selezione di default del menu) ed Efficiency VII.
      */
     public static final DeferredItem<SATools.Workstaff> TRICHROMATIC_WORKSTAFF = tab(ITEMS.register("trichromatic_workstaff",
             () -> new SATools.Workstaff(SATier.T6, 1, -2.8F, tool(SATier.T6),
-                    Map.of(Enchantments.FORTUNE, 6, Enchantments.EFFICIENCY, 5))));
+                    Map.of(Enchantments.FORTUNE, 6, Enchantments.EFFICIENCY, 7))));
 
     public static final DeferredItem<SATools.Axe> TRICHROMATIC_AXE = tab(ITEMS.register("trichromatic_axe",
             () -> new SATools.Axe(SATier.T6, tool(SATier.T6).attributes(AxeItem.createAttributes(SATier.T6, 5.0F, -3.0F)),
@@ -123,14 +125,14 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T6, tool(SATier.T6).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 7))));
 
-    /** Mazza T6: upgrade della mazza di bedrock. Danno totale 20, velocità 0,6 (vedi «Mazze»), Wind Burst V. */
+    /** Mazza T6: upgrade della mazza di bedrock. Danno totale 20, velocità 0,6 (vedi «Mazze»), Wind Burst VI. */
     public static final DeferredItem<SATools.Mace> TRICHROMATIC_MACE = tab(ITEMS.register("trichromatic_mace",
             () -> new SATools.Mace(SATier.T6.getEnchantmentValue(),
                     mace(tool(SATier.T6), SATools.Mace.VANILLA_DAMAGE + SATier.T6.getAttackDamageBonus()),
-                    Map.of(Enchantments.WIND_BURST, 5))));
+                    Map.of(Enchantments.WIND_BURST, 6))));
 
     // Oggetti speciali: upgrade alla Fusion Shrine delle versioni glass crest, con il loro incantesimo caratteristico
-    // (quello della versione malachite, che le glass crest ereditano) al tetto T6.
+    // (quello della versione malachite, che le glass crest ereditano) al livello del T6 (tetto ATM10 - 2).
 
     /**
      * Ultra greatsword: Sweeping Edge VI (Spectrum IV), che è anche la forza del ground slam. Danno extra e velocità
@@ -141,46 +143,46 @@ public final class SAItems {
                     Map.of(Enchantments.SWEEPING_EDGE, 6))));
 
     /**
-     * Balestra: Quick Charge III e Piercing V (Spectrum: Piercing V). Velocità 2,0, tempo di carica 1,6 e divergenza 0,63 PROVVISORI
+     * Balestra: Quick Charge III e Piercing VI (Spectrum: Piercing V). Velocità 2,0, tempo di carica 1,6 e divergenza 0,63 PROVVISORI
      * (glass crest 1,5 / 2,0 / 0,75), vedi SATools.Crossbow.
      */
     public static final DeferredItem<SATools.Crossbow> TRICHROMATIC_CROSSBOW = tab(ITEMS.register("trichromatic_crossbow",
-            () -> new SATools.Crossbow(SATier.T6, 2.0F, 1.6F, 0.63F, tool(SATier.T6), Map.of(Enchantments.QUICK_CHARGE, 3, Enchantments.PIERCING, 5))));
+            () -> new SATools.Crossbow(SATier.T6, 2.0F, 1.6F, 0.63F, tool(SATier.T6), Map.of(Enchantments.QUICK_CHARGE, 3, Enchantments.PIERCING, 6))));
 
     /**
-     * Bident: fonde Ferocious e Fractal (modalità in SABident). Impaling VI (come i due glass crest di Spectrum).
+     * Bident: fonde Ferocious e Fractal (modalità in SABident). Impaling VIII (i due glass crest di Spectrum: VI).
      * Valori PROVVISORI sopra il Ferocious (-2,2 / 13 / 33% / 33%): velocità -2,2, danno 15, perforazione armatura e
      * protezione 36%. Parte in modalità Ferocious, come i glass crest che escono già attivi.
      */
     public static final DeferredItem<SABident> TRICHROMATIC_BIDENT = tab(ITEMS.register("trichromatic_bident",
             () -> new SABident(SATier.T6, tool(SATier.T6).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
-                    -2.2, 15, 0.36F, 0.36F, Map.of(Enchantments.IMPALING, 6))));
+                    -2.2, 15, 0.36F, 0.36F, Map.of(Enchantments.IMPALING, 8))));
 
-    // Armatura: incantesimo caratteristico della bedrock per pezzo (livello 5 in Spectrum, vedi armorPiece) al tetto T6.
+    // Armatura: incantesimo caratteristico della bedrock per pezzo (livello 5 in Spectrum, vedi armorPiece) al livello T6 (tetto ATM10 - 2).
     // Il Dike del set completo è in SAArmorSet; statistiche in SAArmorMaterials.
 
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_HELMET = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.HELMET, 6);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_HELMET = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.HELMET, 9);
     public static final DeferredItem<SAArmorItem> TRICHROMATIC_CHESTPLATE = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.CHESTPLATE, 6);
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_LEGGINGS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.LEGGINGS, 6);
-    public static final DeferredItem<SAArmorItem> TRICHROMATIC_BOOTS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.BOOTS, 6);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_LEGGINGS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.LEGGINGS, 7);
+    public static final DeferredItem<SAArmorItem> TRICHROMATIC_BOOTS = armorPiece(SATier.T6, SAArmorMaterials.TRICHROMATIC, ArmorItem.Type.BOOTS, 7);
 
     // ---------- T7 · Umbrale (Umbral) ----------
     // Un tier sopra il T6: ogni pezzo si fa dal pezzo T6 (tools/gen_data.py). Gli attrezzi hanno gli stessi parametri
     // del T6 (presi dalla versione bedrock o glass crest di Spectrum): la crescita viene da SATier.T7 (velocità di
     // scavo 17 invece di 16, bonus danno 19 invece di 14: +25% rispetto al T6, vedi SATier; incantabilità 105 invece di 90). Gli oggetti speciali hanno
     // anche valori propri, scalati come il T6 li scala rispetto alla glass crest. Valori PROVVISORI.
-    // Incantesimi: stesso tetto del T6 (massimo ATM10, decisione di design).
+    // Incantesimi: tetto ATM10 - 1 (regola 2026-11-27).
     // Danni T7 (+25%, regola in SATier): spada 24, ascia 25, spadone 25, workstaff 20 (base 0), pala 20 (base 0), zappa 21 (base 1), bident 18 (parametro, tooltip 19: fuori dal +25%, vedi SATier), balestra
     // velocità 2,5 (2,0 × 1,25). Arco: nessun parametro di danno (solo incantesimi), uguale al T6.
     // Workstaff T7: menu nostro (SATools.Workstaff.use → WorkstaffMenu) con Foundry e area 7×7 (2026-11-19).
 
     /**
      * Workstaff T7: danno base 0 invece di 1 (+25% totale, vedi SATier), velocità come la T6 (-2,8F), Fortune VII,
-     * Efficiency VII e Foundry (accesa di default, componente workstaff_drops; si spegne o si sospende dal menu).
+     * Efficiency VIII e Foundry (accesa di default, componente workstaff_drops; si spegne o si sospende dal menu).
      */
     public static final DeferredItem<SATools.Workstaff> UMBRAL_WORKSTAFF = tab(ITEMS.register("umbral_workstaff",
             () -> new SATools.Workstaff(SATier.T7, 0, -2.8F, workstaffMenu(tool(SATier.T7)),
-                    Map.of(Enchantments.FORTUNE, 7, Enchantments.EFFICIENCY, 7, SpectrumEnchantmentKeys.FOUNDRY, 1))));
+                    Map.of(Enchantments.FORTUNE, 7, Enchantments.EFFICIENCY, 8, SpectrumEnchantmentKeys.FOUNDRY, 1))));
 
     public static final DeferredItem<SATools.Axe> UMBRAL_AXE = tab(ITEMS.register("umbral_axe",
             () -> new SATools.Axe(SATier.T7, tool(SATier.T7).attributes(AxeItem.createAttributes(SATier.T7, 5.0F, -3.0F)),
@@ -208,11 +210,11 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T7, tool(SATier.T7).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 8))));
 
-    /** Mazza T7: danno totale 25, velocità 0,6, Wind Burst VI. */
+    /** Mazza T7: danno totale 25, velocità 0,6, Wind Burst VII. */
     public static final DeferredItem<SATools.Mace> UMBRAL_MACE = tab(ITEMS.register("umbral_mace",
             () -> new SATools.Mace(SATier.T7.getEnchantmentValue(),
                     mace(tool(SATier.T7), SATools.Mace.VANILLA_DAMAGE + SATier.T7.getAttackDamageBonus()),
-                    Map.of(Enchantments.WIND_BURST, 6))));
+                    Map.of(Enchantments.WIND_BURST, 7))));
 
     /** Ultra greatsword T7: portata extra 1,5 (glass crest 1,0, T6 1,25). */
     public static final DeferredItem<SATools.UltraGreatsword> UMBRAL_ULTRA_GREATSWORD = tab(ITEMS.register("umbral_ultra_greatsword",
@@ -221,7 +223,7 @@ public final class SAItems {
 
     /** Balestra T7: velocità 2,5, tempo di carica 1,25, divergenza 0,53 (T6 2,0 / 1,6 / 0,63). PROVVISORI. */
     public static final DeferredItem<SATools.Crossbow> UMBRAL_CROSSBOW = tab(ITEMS.register("umbral_crossbow",
-            () -> new SATools.Crossbow(SATier.T7, 2.5F, 1.25F, 0.53F, tool(SATier.T7), Map.of(Enchantments.PIERCING, 6, Enchantments.QUICK_CHARGE, 4))));
+            () -> new SATools.Crossbow(SATier.T7, 2.5F, 1.25F, 0.53F, tool(SATier.T7), Map.of(Enchantments.PIERCING, 7, Enchantments.QUICK_CHARGE, 4))));
 
     /**
      * Bident T7: velocità -2,2, danno 18, perforazione armatura e protezione 39% (T6 -2,2 / 15 / 36% / 36%, Ferocious
@@ -229,12 +231,12 @@ public final class SAItems {
      */
     public static final DeferredItem<SABident> UMBRAL_BIDENT = tab(ITEMS.register("umbral_bident",
             () -> new SABident(SATier.T7, tool(SATier.T7).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
-                    -2.2, 18, 0.39F, 0.39F, Map.of(Enchantments.IMPALING, 7))));
+                    -2.2, 18, 0.39F, 0.39F, Map.of(Enchantments.IMPALING, 9))));
 
-    public static final DeferredItem<SAArmorItem> UMBRAL_HELMET = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.HELMET, 7);
+    public static final DeferredItem<SAArmorItem> UMBRAL_HELMET = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.HELMET, 10);
     public static final DeferredItem<SAArmorItem> UMBRAL_CHESTPLATE = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.CHESTPLATE, 7);
-    public static final DeferredItem<SAArmorItem> UMBRAL_LEGGINGS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.LEGGINGS, 7);
-    public static final DeferredItem<SAArmorItem> UMBRAL_BOOTS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.BOOTS, 7);
+    public static final DeferredItem<SAArmorItem> UMBRAL_LEGGINGS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.LEGGINGS, 8);
+    public static final DeferredItem<SAArmorItem> UMBRAL_BOOTS = armorPiece(SATier.T7, SAArmorMaterials.UMBRAL, ArmorItem.Type.BOOTS, 8);
 
     // ---------- T8 · Argenteo (Argent) ----------
     // Un tier sopra il T7, come il T7 sul T6: ogni pezzo si fa dal pezzo T7 (tools/gen_data.py). Stessi parametri di
@@ -247,12 +249,12 @@ public final class SAItems {
     // Workstaff T8: come il T7, più Inventory Insertion nel menu (2026-11-19).
 
     /**
-     * Workstaff T8: danno base -1 (totale 25 = 16 × 1,25², vedi SATier), velocità -2,8F, Fortune VIII, Efficiency VIII,
+     * Workstaff T8: danno base -1 (totale 25 = 16 × 1,25², vedi SATier), velocità -2,8F, Fortune VIII, Efficiency IX,
      * Foundry e Inventory Insertion (accese di default; interruttori nel menu).
      */
     public static final DeferredItem<SATools.Workstaff> ARGENT_WORKSTAFF = tab(ITEMS.register("argent_workstaff",
             () -> new SATools.Workstaff(SATier.T8, -1, -2.8F, workstaffMenu(tool(SATier.T8)),
-                    Map.of(Enchantments.FORTUNE, 8, Enchantments.EFFICIENCY, 8, SpectrumEnchantmentKeys.FOUNDRY, 1,
+                    Map.of(Enchantments.FORTUNE, 8, Enchantments.EFFICIENCY, 9, SpectrumEnchantmentKeys.FOUNDRY, 1,
                             SpectrumEnchantmentKeys.INVENTORY_INSERTION, 1))));
 
     public static final DeferredItem<SATools.Axe> ARGENT_AXE = tab(ITEMS.register("argent_axe",
@@ -281,11 +283,11 @@ public final class SAItems {
             () -> new SATools.Shears(SATier.T8, tool(SATier.T8).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
                     Map.of(Enchantments.EFFICIENCY, 9))));
 
-    /** Mazza T8: danno totale 31, velocità 0,6, Wind Burst VII (sotto il tetto ATM10 VIII). */
+    /** Mazza T8: danno totale 31, velocità 0,6, Wind Burst VIII (= tetto ATM10). */
     public static final DeferredItem<SATools.Mace> ARGENT_MACE = tab(ITEMS.register("argent_mace",
             () -> new SATools.Mace(SATier.T8.getEnchantmentValue(),
                     mace(tool(SATier.T8), SATools.Mace.VANILLA_DAMAGE + SATier.T8.getAttackDamageBonus()),
-                    Map.of(Enchantments.WIND_BURST, 7))));
+                    Map.of(Enchantments.WIND_BURST, 8))));
 
     /** Ultra greatsword T8: portata extra 1,75 (T6 1,25, T7 1,5). */
     public static final DeferredItem<SATools.UltraGreatsword> ARGENT_ULTRA_GREATSWORD = tab(ITEMS.register("argent_ultra_greatsword",
@@ -294,12 +296,12 @@ public final class SAItems {
 
     /**
      * Balestra T8: velocità 3,1 (tabella di SATier), tempo di carica 1,0, divergenza 0,45 (T7 2,5 / 1,25 / 0,53).
-     * Carica e divergenza PROVVISORIE (estrapolate dalla progressione glass crest → T6 → T7). Piercing VII, Quick Charge IV
+     * Carica e divergenza PROVVISORIE (estrapolate dalla progressione glass crest → T6 → T7). Piercing VIII, Quick Charge IV
      * e Sniping I (2026-11-20: con Quick Charge V la carica era istantanea e il moltiplicatore di carica non contava).
      */
     public static final DeferredItem<SATools.Crossbow> ARGENT_CROSSBOW = tab(ITEMS.register("argent_crossbow",
             () -> new SATools.Crossbow(SATier.T8, 3.1F, 1.0F, 0.45F, tool(SATier.T8),
-                    Map.of(Enchantments.PIERCING, 7, Enchantments.QUICK_CHARGE, 4, SpectrumEnchantmentKeys.SNIPING, 1))));
+                    Map.of(Enchantments.PIERCING, 8, Enchantments.QUICK_CHARGE, 4, SpectrumEnchantmentKeys.SNIPING, 1))));
 
     /**
      * Bident T8: velocità -2,2, danno 21, perforazione armatura e protezione 42% (+3 punti per
@@ -307,19 +309,18 @@ public final class SAItems {
      */
     public static final DeferredItem<SABident> ARGENT_BIDENT = tab(ITEMS.register("argent_bident",
             () -> new SABident(SATier.T8, tool(SATier.T8).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
-                    -2.2, 21, 0.42F, 0.42F, Map.of(Enchantments.IMPALING, 8))));
+                    -2.2, 21, 0.42F, 0.42F, Map.of(Enchantments.IMPALING, 10))));
 
-    public static final DeferredItem<SAArmorItem> ARGENT_HELMET = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.HELMET, 8);
+    public static final DeferredItem<SAArmorItem> ARGENT_HELMET = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.HELMET, 11);
     public static final DeferredItem<SAArmorItem> ARGENT_CHESTPLATE = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.CHESTPLATE, 8);
-    public static final DeferredItem<SAArmorItem> ARGENT_LEGGINGS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.LEGGINGS, 8);
-    public static final DeferredItem<SAArmorItem> ARGENT_BOOTS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.BOOTS, 8);
+    public static final DeferredItem<SAArmorItem> ARGENT_LEGGINGS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.LEGGINGS, 9);
+    public static final DeferredItem<SAArmorItem> ARGENT_BOOTS = armorPiece(SATier.T8, SAArmorMaterials.ARGENT, ArmorItem.Type.BOOTS, 9);
 
     // ---------- Alloy (T9) · Prismatico (Prismatic) ----------
     // Un tier sopra il T8, come il T8 sul T7: ogni pezzo si fa dal pezzo T8 con 1 lingotto di ciascuna delle 3 leghe di
     // Allthemodium (tools/gen_data.py, ricerca/14). Crescita da SATier.ALLOY (velocità di scavo 36, bonus danno 32: +25%
     // sul T8, vedi SATier; incantabilità 200). Area della workstaff gratis (SATier.ALLOY.freeAoE).
-    // Incantesimi: tetto ATM10 + 3 (ricerca/README.md, «Tetto incantesimi»: Alloy = massimo ATM10 + 3, es. Sharpness XII),
-    // cioè gli stessi del T8 di prima del 2026-11-19 + 3 livelli (congelati: non seguono il nuovo T8). Tetto ATM10 (SAEnchantCap, 2026-11-19): copia all'Enchanter tagliata per tutti gli
+    // Incantesimi: tetto ATM10 + 2 (regola 2026-11-27, es. Sharpness XI). Tetto ATM10 (SAEnchantCap, 2026-11-19): copia all'Enchanter tagliata per tutti gli
     // stack, libro estratto all'incudine da un nostro oggetto tagliato, Bedrock Anvil che non abbassa mai (mixin).
     // Danni (+25%, regola in SATier): spada 37, ascia 39 (base 6), spadone 39 (base 6), workstaff 31 (base -2),
     // pala 31 (base -2), zappa 33 (base 0), bident 24 (parametro, tooltip 25: fuori dal +25%, vedi SATier), balestra velocità 3,9. Arco come gli altri.
@@ -327,62 +328,62 @@ public final class SAItems {
     // Menu della workstaff Alloy: come il T8 più l'area 9×9, gratis (2026-11-19).
 
     /**
-     * Workstaff Alloy: danno base -2 (totale 31 = 16 × 1,25³, vedi SATier), velocità -2,8F, Fortune XI, Efficiency XII,
+     * Workstaff Alloy: danno base -2 (totale 31 = 16 × 1,25³, vedi SATier), velocità -2,8F, Fortune X, Efficiency XI,
      * Foundry e Inventory Insertion (accese di default). Area fino a 9×9, gratis.
      */
     public static final DeferredItem<SATools.Workstaff> PRISMATIC_WORKSTAFF = tab(ITEMS.register("prismatic_workstaff",
             () -> new SATools.Workstaff(SATier.ALLOY, -2, -2.8F, workstaffMenu(tool(SATier.ALLOY)),
-                    Map.of(Enchantments.FORTUNE, 11, Enchantments.EFFICIENCY, 12, SpectrumEnchantmentKeys.FOUNDRY, 1,
+                    Map.of(Enchantments.FORTUNE, 10, Enchantments.EFFICIENCY, 11, SpectrumEnchantmentKeys.FOUNDRY, 1,
                             SpectrumEnchantmentKeys.INVENTORY_INSERTION, 1))));
 
     public static final DeferredItem<SATools.Axe> PRISMATIC_AXE = tab(ITEMS.register("prismatic_axe",
             () -> new SATools.Axe(SATier.ALLOY, tool(SATier.ALLOY).attributes(AxeItem.createAttributes(SATier.ALLOY, 6.0F, -3.0F)),
-                    Map.of(Enchantments.EFFICIENCY, 12))));
+                    Map.of(Enchantments.EFFICIENCY, 11))));
 
     public static final DeferredItem<SATools.Shovel> PRISMATIC_SHOVEL = tab(ITEMS.register("prismatic_shovel",
             () -> new SATools.Shovel(SATier.ALLOY, tool(SATier.ALLOY).attributes(ShovelItem.createAttributes(SATier.ALLOY, -2.0F, -3.0F)),
-                    Map.of(Enchantments.EFFICIENCY, 12))));
+                    Map.of(Enchantments.EFFICIENCY, 11))));
 
     public static final DeferredItem<SATools.Hoe> PRISMATIC_HOE = tab(ITEMS.register("prismatic_hoe",
             () -> new SATools.Hoe(SATier.ALLOY, tool(SATier.ALLOY).attributes(HoeItem.createAttributes(SATier.ALLOY, 0.0F, 0.0F)),
-                    Map.of(Enchantments.FORTUNE, 11))));
+                    Map.of(Enchantments.FORTUNE, 10))));
 
     public static final DeferredItem<SATools.Sword> PRISMATIC_SWORD = tab(ITEMS.register("prismatic_sword",
             () -> new SATools.Sword(SATier.ALLOY, tool(SATier.ALLOY).attributes(SwordItem.createAttributes(SATier.ALLOY, 4, -2.4F)),
-                    Map.of(Enchantments.SHARPNESS, 12))));
+                    Map.of(Enchantments.SHARPNESS, 11))));
 
     public static final DeferredItem<SATools.Bow> PRISMATIC_BOW = tab(ITEMS.register("prismatic_bow",
-            () -> new SATools.Bow(SATier.ALLOY, tool(SATier.ALLOY), Map.of(Enchantments.POWER, 12))));
+            () -> new SATools.Bow(SATier.ALLOY, tool(SATier.ALLOY), Map.of(Enchantments.POWER, 11))));
 
     public static final DeferredItem<SATools.FishingRod> PRISMATIC_FISHING_ROD = tab(ITEMS.register("prismatic_fishing_rod",
-            () -> new SATools.FishingRod(SATier.ALLOY, tool(SATier.ALLOY), Map.of(Enchantments.LUCK_OF_THE_SEA, 11, Enchantments.LURE, 5))));
+            () -> new SATools.FishingRod(SATier.ALLOY, tool(SATier.ALLOY), Map.of(Enchantments.LUCK_OF_THE_SEA, 10, Enchantments.LURE, 5))));
 
     public static final DeferredItem<SATools.Shears> PRISMATIC_SHEARS = tab(ITEMS.register("prismatic_shears",
             () -> new SATools.Shears(SATier.ALLOY, tool(SATier.ALLOY).component(DataComponents.TOOL, ShearsItem.createToolProperties()),
-                    Map.of(Enchantments.EFFICIENCY, 12))));
+                    Map.of(Enchantments.EFFICIENCY, 11))));
 
     /**
-     * Mazza Alloy: danno base 6 (totale 39, come lo spadone Alloy), velocità 0,6, Wind Burst XI (tetto ATM10 VIII + 3,
+     * Mazza Alloy: danno base 6 (totale 39, come lo spadone Alloy), velocità 0,6, Wind Burst X (tetto ATM10 VIII + 2,
      * DEVE coincidere con T9_ENCHANTMENTS["mace"] di tools/gen_data.py).
      */
     public static final DeferredItem<SATools.Mace> PRISMATIC_MACE = tab(ITEMS.register("prismatic_mace",
             () -> new SATools.Mace(SATier.ALLOY.getEnchantmentValue(),
                     mace(tool(SATier.ALLOY), SATools.Mace.VANILLA_DAMAGE + 1 + SATier.ALLOY.getAttackDamageBonus()),
-                    Map.of(Enchantments.WIND_BURST, 11))));
+                    Map.of(Enchantments.WIND_BURST, 10))));
 
     /** Ultra greatsword Alloy: danno base 6 (totale 39), portata extra 2,0 (T6 1,25, T7 1,5, T8 1,75). */
     public static final DeferredItem<SATools.UltraGreatsword> PRISMATIC_ULTRA_GREATSWORD = tab(ITEMS.register("prismatic_ultra_greatsword",
             () -> new SATools.UltraGreatsword(SATier.ALLOY, 6, -2.8F, 2.0F, tool(SATier.ALLOY),
-                    Map.of(Enchantments.SWEEPING_EDGE, 11))));
+                    Map.of(Enchantments.SWEEPING_EDGE, 10))));
 
     /**
      * Balestra Alloy: velocità 3,9 (tabella di SATier), tempo di carica 0,8, divergenza 0,375 (T8 3,1 / 1,0 / 0,45).
-     * Carica e divergenza PROVVISORIE (estrapolate dalla progressione glass crest → T6 → T7 → T8). Piercing XI, Quick
+     * Carica e divergenza PROVVISORIE (estrapolate dalla progressione glass crest → T6 → T7 → T8). Piercing X, Quick
      * Charge IV e Sniping II (2026-11-20, come il T8).
      */
     public static final DeferredItem<SATools.Crossbow> PRISMATIC_CROSSBOW = tab(ITEMS.register("prismatic_crossbow",
             () -> new SATools.Crossbow(SATier.ALLOY, 3.9F, 0.8F, 0.375F, tool(SATier.ALLOY),
-                    Map.of(Enchantments.PIERCING, 11, Enchantments.QUICK_CHARGE, 4, SpectrumEnchantmentKeys.SNIPING, 2))));
+                    Map.of(Enchantments.PIERCING, 10, Enchantments.QUICK_CHARGE, 4, SpectrumEnchantmentKeys.SNIPING, 2))));
 
     /**
      * Bident Alloy: velocità -2,2, danno 24, perforazione armatura e protezione 45% (+3 punti per
@@ -390,12 +391,12 @@ public final class SAItems {
      */
     public static final DeferredItem<SABident> PRISMATIC_BIDENT = tab(ITEMS.register("prismatic_bident",
             () -> new SABident(SATier.ALLOY, tool(SATier.ALLOY).component(SAComponents.BIDENT_MODE.get(), BidentMode.FEROCIOUS),
-                    -2.2, 24, 0.45F, 0.45F, Map.of(Enchantments.IMPALING, 10))));
+                    -2.2, 24, 0.45F, 0.45F, Map.of(Enchantments.IMPALING, 12))));
 
-    public static final DeferredItem<SAArmorItem> PRISMATIC_HELMET = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.HELMET, 14);
-    public static final DeferredItem<SAArmorItem> PRISMATIC_CHESTPLATE = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.CHESTPLATE, 11);
-    public static final DeferredItem<SAArmorItem> PRISMATIC_LEGGINGS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.LEGGINGS, 12);
-    public static final DeferredItem<SAArmorItem> PRISMATIC_BOOTS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.BOOTS, 12);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_HELMET = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.HELMET, 13);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_CHESTPLATE = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.CHESTPLATE, 10);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_LEGGINGS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.LEGGINGS, 11);
+    public static final DeferredItem<SAArmorItem> PRISMATIC_BOOTS = armorPiece(SATier.ALLOY, SAArmorMaterials.PRISMATIC, ArmorItem.Type.BOOTS, 11);
 
     private SAItems() {
     }

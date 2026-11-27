@@ -44,7 +44,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:projectile_protection": 6
+          "minecraft:projectile_protection": 9
         }
       }
     }

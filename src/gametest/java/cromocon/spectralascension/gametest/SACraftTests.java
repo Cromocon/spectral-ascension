@@ -112,7 +112,7 @@ public final class SACraftTests {
     }
 
     private static final Map<String, T7Spec> T7_SPEC = Map.ofEntries(
-            Map.entry("workstaff", new T7Spec(8, 64, 2000, 48f, Map.of("fortune", 7, "efficiency", 7, "foundry", 1))),
+            Map.entry("workstaff", new T7Spec(8, 64, 2000, 48f, Map.of("fortune", 7, "efficiency", 8, "foundry", 1))),
             Map.entry("axe", new T7Spec(8, 64, 1600, 24f, Map.of("efficiency", 8))),
             Map.entry("shovel", new T7Spec(4, 32, 1600, 24f, Map.of("efficiency", 8))),
             Map.entry("hoe", new T7Spec(4, 32, 1600, 24f, Map.of("fortune", 7))),
@@ -120,21 +120,21 @@ public final class SACraftTests {
             Map.entry("bow", new T7Spec(6, 48, 1600, 24f, Map.of("power", 8))),
             Map.entry("fishing_rod", new T7Spec(4, 32, 1600, 24f, Map.of("luck_of_the_sea", 7, "lure", 4))),
             Map.entry("shears", new T7Spec(2, 16, 1600, 24f, Map.of("efficiency", 8))),
-            Map.entry("mace", new T7Spec(8, 64, 2000, 48f, Map.of("wind_burst", 6))),
+            Map.entry("mace", new T7Spec(8, 64, 2000, 48f, Map.of("wind_burst", 7))),
             Map.entry("ultra_greatsword", new T7Spec(8, 64, 2000, 48f, Map.of("sweeping_edge", 7))),
-            Map.entry("crossbow", new T7Spec(6, 48, 2000, 48f, Map.of("piercing", 6, "quick_charge", 4))),
-            Map.entry("bident", new T7Spec(8, 64, 2000, 48f, Map.of("impaling", 7))),
-            Map.entry("helmet", new T7Spec(5, 32, 1600, 24f, Map.of("projectile_protection", 7))),
+            Map.entry("crossbow", new T7Spec(6, 48, 2000, 48f, Map.of("piercing", 7, "quick_charge", 4))),
+            Map.entry("bident", new T7Spec(8, 64, 2000, 48f, Map.of("impaling", 9))),
+            Map.entry("helmet", new T7Spec(5, 32, 1600, 24f, Map.of("projectile_protection", 10))),
             Map.entry("chestplate", new T7Spec(8, 64, 1600, 24f, Map.of("protection", 7))),
-            Map.entry("leggings", new T7Spec(7, 64, 1600, 24f, Map.of("blast_protection", 7))),
-            Map.entry("boots", new T7Spec(4, 32, 1600, 24f, Map.of("fire_protection", 7))));
+            Map.entry("leggings", new T7Spec(7, 64, 1600, 24f, Map.of("blast_protection", 8))),
+            Map.entry("boots", new T7Spec(4, 32, 1600, 24f, Map.of("fire_protection", 8))));
 
     /** Spec T8 (decisione dell'utente 2026-11-19): unobtainium, polvere di moonstone, tick, xp, incantesimi del risultato. */
     private record T8Spec(int unobtainium, int moonstone, int time, float xp, Map<String, Integer> enchantments) {
     }
 
     private static final Map<String, T8Spec> T8_SPEC = Map.ofEntries(
-            Map.entry("workstaff", new T8Spec(8, 64, 2400, 64f, Map.of("fortune", 8, "efficiency", 8, "foundry", 1, "inventory_insertion", 1))),
+            Map.entry("workstaff", new T8Spec(8, 64, 2400, 64f, Map.of("fortune", 8, "efficiency", 9, "foundry", 1, "inventory_insertion", 1))),
             Map.entry("axe", new T8Spec(8, 64, 2000, 48f, Map.of("efficiency", 9))),
             Map.entry("shovel", new T8Spec(4, 32, 2000, 48f, Map.of("efficiency", 9))),
             Map.entry("hoe", new T8Spec(4, 32, 2000, 48f, Map.of("fortune", 8))),
@@ -142,14 +142,14 @@ public final class SACraftTests {
             Map.entry("bow", new T8Spec(6, 48, 2000, 48f, Map.of("power", 9))),
             Map.entry("fishing_rod", new T8Spec(4, 32, 2000, 48f, Map.of("luck_of_the_sea", 8, "lure", 5))),
             Map.entry("shears", new T8Spec(2, 16, 2000, 48f, Map.of("efficiency", 9))),
-            Map.entry("mace", new T8Spec(8, 64, 2400, 64f, Map.of("wind_burst", 7))),
+            Map.entry("mace", new T8Spec(8, 64, 2400, 64f, Map.of("wind_burst", 8))),
             Map.entry("ultra_greatsword", new T8Spec(8, 64, 2400, 64f, Map.of("sweeping_edge", 8))),
-            Map.entry("crossbow", new T8Spec(6, 48, 2400, 64f, Map.of("piercing", 7, "quick_charge", 4, "sniping", 1))),
-            Map.entry("bident", new T8Spec(8, 64, 2400, 64f, Map.of("impaling", 8))),
-            Map.entry("helmet", new T8Spec(5, 32, 2000, 48f, Map.of("projectile_protection", 8))),
+            Map.entry("crossbow", new T8Spec(6, 48, 2400, 64f, Map.of("piercing", 8, "quick_charge", 4, "sniping", 1))),
+            Map.entry("bident", new T8Spec(8, 64, 2400, 64f, Map.of("impaling", 10))),
+            Map.entry("helmet", new T8Spec(5, 32, 2000, 48f, Map.of("projectile_protection", 11))),
             Map.entry("chestplate", new T8Spec(8, 64, 2000, 48f, Map.of("protection", 8))),
-            Map.entry("leggings", new T8Spec(7, 64, 2000, 48f, Map.of("blast_protection", 8))),
-            Map.entry("boots", new T8Spec(4, 32, 2000, 48f, Map.of("fire_protection", 8))));
+            Map.entry("leggings", new T8Spec(7, 64, 2000, 48f, Map.of("blast_protection", 9))),
+            Map.entry("boots", new T8Spec(4, 32, 2000, 48f, Map.of("fire_protection", 9))));
 
     /**
      * Spec T9 (decisione dell'utente 2026-11-19): Colorful Shooting Star, Stardust, tick, xp. Gli incantesimi sono quelli
@@ -159,26 +159,26 @@ public final class SACraftTests {
     }
 
     private static final Map<String, T9Spec> T9_SPEC = Map.ofEntries(
-            Map.entry("workstaff", new T9Spec(2, 32, 2400, 64f, Map.of("fortune", 11, "efficiency", 12, "foundry", 1, "inventory_insertion", 1))),
-            Map.entry("ultra_greatsword", new T9Spec(2, 32, 2400, 64f, Map.of("sweeping_edge", 11))),
-            Map.entry("bident", new T9Spec(2, 32, 2400, 64f, Map.of("impaling", 10))),
-            Map.entry("crossbow", new T9Spec(1, 24, 2400, 64f, Map.of("piercing", 11, "quick_charge", 4, "sniping", 2))),
-            Map.entry("axe", new T9Spec(1, 32, 2000, 48f, Map.of("efficiency", 12))),
-            Map.entry("shovel", new T9Spec(1, 16, 2000, 48f, Map.of("efficiency", 12))),
-            Map.entry("hoe", new T9Spec(1, 16, 2000, 48f, Map.of("fortune", 11))),
-            Map.entry("sword", new T9Spec(1, 24, 2000, 48f, Map.of("sharpness", 12))),
-            Map.entry("bow", new T9Spec(1, 24, 2000, 48f, Map.of("power", 12))),
-            Map.entry("fishing_rod", new T9Spec(1, 16, 2000, 48f, Map.of("luck_of_the_sea", 11, "lure", 5))),
-            Map.entry("shears", new T9Spec(1, 8, 2000, 48f, Map.of("efficiency", 12))),
-            Map.entry("mace", new T9Spec(2, 32, 2400, 64f, Map.of("wind_burst", 11))),
-            Map.entry("helmet", new T9Spec(1, 20, 2000, 48f, Map.of("projectile_protection", 14))),
-            Map.entry("chestplate", new T9Spec(2, 32, 2000, 48f, Map.of("protection", 11))),
-            Map.entry("leggings", new T9Spec(2, 28, 2000, 48f, Map.of("blast_protection", 12))),
-            Map.entry("boots", new T9Spec(1, 16, 2000, 48f, Map.of("fire_protection", 12))));
+            Map.entry("workstaff", new T9Spec(2, 32, 2400, 64f, Map.of("fortune", 10, "efficiency", 11, "foundry", 1, "inventory_insertion", 1))),
+            Map.entry("ultra_greatsword", new T9Spec(2, 32, 2400, 64f, Map.of("sweeping_edge", 10))),
+            Map.entry("bident", new T9Spec(2, 32, 2400, 64f, Map.of("impaling", 12))),
+            Map.entry("crossbow", new T9Spec(1, 24, 2400, 64f, Map.of("piercing", 10, "quick_charge", 4, "sniping", 2))),
+            Map.entry("axe", new T9Spec(1, 32, 2000, 48f, Map.of("efficiency", 11))),
+            Map.entry("shovel", new T9Spec(1, 16, 2000, 48f, Map.of("efficiency", 11))),
+            Map.entry("hoe", new T9Spec(1, 16, 2000, 48f, Map.of("fortune", 10))),
+            Map.entry("sword", new T9Spec(1, 24, 2000, 48f, Map.of("sharpness", 11))),
+            Map.entry("bow", new T9Spec(1, 24, 2000, 48f, Map.of("power", 11))),
+            Map.entry("fishing_rod", new T9Spec(1, 16, 2000, 48f, Map.of("luck_of_the_sea", 10, "lure", 5))),
+            Map.entry("shears", new T9Spec(1, 8, 2000, 48f, Map.of("efficiency", 11))),
+            Map.entry("mace", new T9Spec(2, 32, 2400, 64f, Map.of("wind_burst", 10))),
+            Map.entry("helmet", new T9Spec(1, 20, 2000, 48f, Map.of("projectile_protection", 13))),
+            Map.entry("chestplate", new T9Spec(2, 32, 2000, 48f, Map.of("protection", 10))),
+            Map.entry("leggings", new T9Spec(2, 28, 2000, 48f, Map.of("blast_protection", 11))),
+            Map.entry("boots", new T9Spec(1, 16, 2000, 48f, Map.of("fire_protection", 11))));
 
     private static final Map<String, Map<String, Integer>> T6_FIXED = Map.of(
-            "workstaff", Map.of("fortune", 6, "efficiency", 5), "hoe", Map.of("fortune", 6),
-            "crossbow", Map.of("quick_charge", 3, "piercing", 5), "bident", Map.of("impaling", 6));
+            "workstaff", Map.of("fortune", 6, "efficiency", 7), "hoe", Map.of("fortune", 6),
+            "crossbow", Map.of("quick_charge", 3, "piercing", 6), "bident", Map.of("impaling", 8));
 
     private static Map<String, Integer> enchMap(ItemStack stack) {
         Map<String, Integer> out = new HashMap<>();

@@ -1,6 +1,7 @@
 package cromocon.spectralascension.gametest;
 
 import cromocon.spectralascension.SpectralAscension;
+import cromocon.spectralascension.item.WorkstaffArea;
 import cromocon.spectralascension.item.WorkstaffUltimine;
 import cromocon.spectralascension.registry.SAItems;
 import de.dafuqs.spectrum.api.ink.color.InkColors;
@@ -171,6 +172,33 @@ public final class SAWorkstaffTargetTests {
         expect(problems, hasModifier == ultimine, "modificatore di Ultimine " + (hasModifier ? "presente" : "assente") + " con Ultimine " + (ultimine ? "caricato" : "assente"));
         report.add("budget Ultimine " + java.util.Arrays.toString(expected) + ", modificatore sull'oggetto: " + hasModifier);
         finish(helper, "workstaff_area_ultimine_nested", problems, report);
+    }
+
+    /**
+     * Alloy 9×9 (gratis): l'area rompe 80 blocchi + il mirato, ma gli eventi 2001 (particelle + suono) che passano da
+     * ServerLevel.levelEvent sono al più 8 per l'area (WorkstaffArea.sendBreakEffects) + 1 del blocco mirato, non 81.
+     */
+    @GameTest(template = EMPTY)
+    public static void workstaff_area_capped_effects(GameTestHelper helper) {
+        List<String> problems = new ArrayList<>(), report = new ArrayList<>();
+        BlockPos feet = helper.absolutePos(new BlockPos(0, WALL_Y + 20, 0));
+        BlockPos center = feet.offset(0, 1, 2);
+        List<BlockPos> wall = new ArrayList<>();
+        for (int dx = -4; dx <= 4; dx++)
+            for (int dy = -1; dy <= 7; dy++) wall.add(center.offset(dx, dy, 0));
+        wall.forEach(p -> helper.getLevel().setBlockAndUpdate(p, Blocks.STONE.defaultBlockState()));
+        ServerPlayer player = mockPlayer(helper);
+        aim(player, feet, 0.0F, 0.0F);
+        player.setItemInHand(InteractionHand.MAIN_HAND, staff(helper, SAItems.PRISMATIC_WORKSTAFF.get(), 4));
+
+        int before = WorkstaffArea.destroyEventsForTests;
+        player.gameMode.destroyBlock(center);
+        int events = WorkstaffArea.destroyEventsForTests - before;
+        report.add("9×9: rimasti " + left(helper, wall) + "/81, eventi 2001 " + events);
+        expect(problems, left(helper, wall) == 0, "9×9: rimasti " + left(helper, wall) + " blocchi invece di 0");
+        expect(problems, events == WorkstaffArea.MAX_BREAK_EFFECTS + 1, "9×9: " + events + " eventi 2001 invece di 9");
+        clearAround(helper, center, 16);
+        finish(helper, "workstaff_area_capped_effects", problems, report);
     }
 
     private static void expect(List<String> problems, boolean ok, String what) {

@@ -139,7 +139,7 @@ OBJECTS = [
     # Fortune è la selezione di default del menu, come la workstaff di Spectrum che esce con Fortune IV.
     {"tier": "t6", "kind": "workstaff", "machine": "fusion", "base": "spectrum:glass_crest_workstaff",
      "copy_components": True, "allthemodium": 6, "bedrock_dust": 6,
-     "enchantments": {"minecraft:efficiency": 5, "minecraft:fortune": 6},
+     "enchantments": {"minecraft:efficiency": 7, "minecraft:fortune": 6},
      "en": "Workstaff", "it": "Workstaff",
      "guide_en": "My Glass Crest Workstaff went into the fusion and came out as the pickaxe of this metal, "
                  "without losing anything I had given it. Every vein I open gives me more than before.",
@@ -156,7 +156,7 @@ OBJECTS = [
                  "e il suo schianto a terra respinge tutto quello che ho intorno più forte di prima."},
     {"tier": "t6", "kind": "crossbow", "machine": "fusion", "base": "spectrum:glass_crest_crossbow",
      "copy_components": True, "allthemodium": 6, "bedrock_dust": 6,
-     "enchantments": {"minecraft:quick_charge": 3, "minecraft:piercing": 5},
+     "enchantments": {"minecraft:quick_charge": 3, "minecraft:piercing": 6},
      "en": "Crossbow", "it": "Balestra",
      "guide_en": "The Glass Crest Crossbow came out of the fusion more willing in my hands: it loads faster, "
                  "and its bolts fly faster and straighter.",
@@ -167,7 +167,7 @@ OBJECTS = [
     {"tier": "t6", "kind": "bident", "machine": "fusion", "base": "spectrum:ferocious_glass_crest_bident",
      "fusion_extras": ["spectrum:fractal_glass_crest_bident"],
      "copy_components": True, "allthemodium": 8, "bedrock_dust": 8,
-     "enchantments": {"minecraft:impaling": 6},
+     "enchantments": {"minecraft:impaling": 8},
      "en": "Bident", "it": "Bidente",
      "guide_en": "I fused a Ferocious and a Fractal Bident into one, and now I am the one who chooses the power "
                  "I need in the moment.",
@@ -222,11 +222,11 @@ OBJECTS = [
      "guide_it": "Lana, foglie, ragnatele: tagliano tutto come se non fossero lì."},
     # Mazza (2026-11-25, 16° oggetto del tier): upgrade della NOSTRA mazza di bedrock (BEDROCK_MACE qui sotto: Spectrum
     # non ne ha una). Oggetto pesante: tempo/xp della classe "heavy" e quantità come lo spadone e il bident (8 + 8).
-    # Wind Burst +1 a tier: bedrock IV, T6 V, T7 VI, T8 VII, T9 XI (tetto ATM10 VIII + 3). TESTI: BOZZE da far
+    # Wind Burst: bedrock IV, poi la regola del tetto ATM10 VIII (2026-11-27): T6 VI, T7 VII, T8 VIII, T9 X. TESTI: BOZZE da far
     # rivedere all'utente (design/testi_mace.md).
     {"tier": "t6", "kind": "mace", "machine": "fusion", "base": "spectral_ascension:bedrock_mace",
      "copy_components": True, "allthemodium": 8, "bedrock_dust": 8,
-     "enchantments": {"minecraft:wind_burst": 5},
+     "enchantments": {"minecraft:wind_burst": 6},
      "en": "Mace", "it": "Mazza",
      "guide_en": "My Bedrock Mace drank in the three pigments too. It falls heavier than before, and the wind it "
                  "raises lifts me higher.",
@@ -235,7 +235,7 @@ OBJECTS = [
     # Armatura: gli accessori Azure Dike della ricetta tornano come Dike del set completo (SAArmorSet).
     {"tier": "t6", "kind": "helmet", "machine": "fusion", "base": "spectrum:bedrock_helmet",
      "fusion_extras": ["spectrum:puff_circlet"], "allthemodium": 5, "bedrock_dust": 5,
-     "enchantments": {"minecraft:projectile_protection": 6},
+     "enchantments": {"minecraft:projectile_protection": 9},
      "en": "Helmet", "it": "Elmo",
      "guide_en": "I set a Puff Circlet into the Bedrock Helmet. Together with the rest of the armor, the trinkets "
                  "inside seem to work again.",
@@ -252,7 +252,7 @@ OBJECTS = [
                  "ancora il mantello di bedrock. Sembra che insieme al resto dell'armatura riprendano a funzionare."},
     {"tier": "t6", "kind": "leggings", "machine": "fusion", "base": "spectrum:bedrock_leggings",
      "fusion_extras": ["spectrum:azure_dike_belt"], "allthemodium": 7, "bedrock_dust": 7,
-     "enchantments": {"minecraft:blast_protection": 6},
+     "enchantments": {"minecraft:blast_protection": 7},
      "en": "Leggings", "it": "Gambali",
      "guide_en": "With an Azure Dike Belt inside, explosions have lost almost all their bite against me.\\\n"
                  "Together with the rest of the armor, the trinkets inside seem to work again.",
@@ -261,7 +261,7 @@ OBJECTS = [
     # Stivali: niente Shattered Bedrock, al suo posto lo Shieldgrasp Amulet e l'Azuresque Dike Core (1 + 2 + 1 + 3 = 7).
     {"tier": "t6", "kind": "boots", "machine": "fusion", "base": "spectrum:bedrock_boots",
      "fusion_extras": ["spectrum:shieldgrasp_amulet", "spectrum:azuresque_dike_core"], "allthemodium": 4, "bedrock_dust": 0,
-     "enchantments": {"minecraft:fire_protection": 6},
+     "enchantments": {"minecraft:fire_protection": 7},
      "en": "Boots", "it": "Stivali",
      "guide_en": "A Shieldgrasp Amulet and an Azuresque Dike Core went into these. Fire and lava hardly frighten "
                  "me anymore.\\\nTogether with the rest of the armor, the trinkets inside seem to work again.",
@@ -269,15 +269,16 @@ OBJECTS = [
                  "quasi più paura.\\\nSembra che insieme al resto dell'armatura riprendano a funzionare."},
 ]
 
-# Prima della riscrittura del T6 (2026-11-18) il T7 e il T8 copiavano incantesimi dal T6: restano com'erano (vecchio tetto del T6).
+# Incantesimo principale di ogni oggetto (2026-11-27, regola utente): T6 tetto ATM10 - 2, T7 tetto - 1, T8 tetto, T9 tetto + 2
+# (tetto = SAEnchantCap.ATM10_MAX; workstaff: fortune ed efficiency entrambi principali). Secondari invariati.
 # T7 (2026-11-19): TUTTI e 15 alla Fusion Shrine con Dragonrot (pezzo T6 + vibranium + polvere di onice).
 # T8 (2026-11-19): idem, con pezzo T7 + unobtainium + polvere di moonstone (T8_SPEC).
 # T9 (2026-11-19): idem, con pezzo T8 + un lingotto per lega + Colorful Shooting Star + Stardust (T9_SPEC). Gli
-# incantesimi del T9 (T9_ENCHANTMENTS) restano congelati ai valori che aveva quando derivava dal vecchio T8.
+# incantesimi del T9 sono in T9_ENCHANTMENTS.
 # kind: (lingotti di vibranium, polvere di onice, incantesimi). Tempo e xp: FUSION_TIME_XP. Quantità decise dall'utente.
 T7_SPEC = {
     # Workstaff: + Foundry dal T7 (menu nostro, SATools.Workstaff / WorkstaffOption; 2026-11-19).
-    "workstaff": (8, 64, {"minecraft:fortune": 7, "minecraft:efficiency": 7, "spectrum:foundry": 1}),
+    "workstaff": (8, 64, {"minecraft:fortune": 7, "minecraft:efficiency": 8, "spectrum:foundry": 1}),
     "axe": (8, 64, {"minecraft:efficiency": 8}),
     "shovel": (4, 32, {"minecraft:efficiency": 8}),
     "hoe": (4, 32, {"minecraft:fortune": 7}),
@@ -285,19 +286,19 @@ T7_SPEC = {
     "bow": (6, 48, {"minecraft:power": 8}),
     "fishing_rod": (4, 32, {"minecraft:luck_of_the_sea": 7, "minecraft:lure": 4}),
     "shears": (2, 16, {"minecraft:efficiency": 8}),
-    "mace": (8, 64, {"minecraft:wind_burst": 6}),
+    "mace": (8, 64, {"minecraft:wind_burst": 7}),
     "ultra_greatsword": (8, 64, {"minecraft:sweeping_edge": 7}),
-    "crossbow": (6, 48, {"minecraft:piercing": 6, "minecraft:quick_charge": 4}),
-    "bident": (8, 64, {"minecraft:impaling": 7}),
-    "helmet": (5, 32, {"minecraft:projectile_protection": 7}),
+    "crossbow": (6, 48, {"minecraft:piercing": 7, "minecraft:quick_charge": 4}),
+    "bident": (8, 64, {"minecraft:impaling": 9}),
+    "helmet": (5, 32, {"minecraft:projectile_protection": 10}),
     "chestplate": (8, 64, {"minecraft:protection": 7}),
-    "leggings": (7, 64, {"minecraft:blast_protection": 7}),
-    "boots": (4, 32, {"minecraft:fire_protection": 7}),
+    "leggings": (7, 64, {"minecraft:blast_protection": 8}),
+    "boots": (4, 32, {"minecraft:fire_protection": 8}),
 }
 # kind: (lingotti di unobtainium, polvere di moonstone, incantesimi). Tempo e xp: FUSION_TIME_XP. Quantità decise dall'utente.
 T8_SPEC = {
     # Workstaff: Foundry + Inventory Insertion dal T8 (2026-11-19).
-    "workstaff": (8, 64, {"minecraft:fortune": 8, "minecraft:efficiency": 8, "spectrum:foundry": 1,
+    "workstaff": (8, 64, {"minecraft:fortune": 8, "minecraft:efficiency": 9, "spectrum:foundry": 1,
                           "spectrum:inventory_insertion": 1}),
     "axe": (8, 64, {"minecraft:efficiency": 9}),
     "shovel": (4, 32, {"minecraft:efficiency": 9}),
@@ -306,15 +307,15 @@ T8_SPEC = {
     "bow": (6, 48, {"minecraft:power": 9}),
     "fishing_rod": (4, 32, {"minecraft:luck_of_the_sea": 8, "minecraft:lure": 5}),
     "shears": (2, 16, {"minecraft:efficiency": 9}),
-    "mace": (8, 64, {"minecraft:wind_burst": 7}),
+    "mace": (8, 64, {"minecraft:wind_burst": 8}),
     "ultra_greatsword": (8, 64, {"minecraft:sweeping_edge": 8}),
     # Balestra: Quick Charge IV (con V la carica era istantanea) + Sniping I di Spectrum (2026-11-20).
-    "crossbow": (6, 48, {"minecraft:piercing": 7, "minecraft:quick_charge": 4, "spectrum:sniping": 1}),
-    "bident": (8, 64, {"minecraft:impaling": 8}),
-    "helmet": (5, 32, {"minecraft:projectile_protection": 8}),
+    "crossbow": (6, 48, {"minecraft:piercing": 8, "minecraft:quick_charge": 4, "spectrum:sniping": 1}),
+    "bident": (8, 64, {"minecraft:impaling": 10}),
+    "helmet": (5, 32, {"minecraft:projectile_protection": 11}),
     "chestplate": (8, 64, {"minecraft:protection": 8}),
-    "leggings": (7, 64, {"minecraft:blast_protection": 8}),
-    "boots": (4, 32, {"minecraft:fire_protection": 8}),
+    "leggings": (7, 64, {"minecraft:blast_protection": 9}),
+    "boots": (4, 32, {"minecraft:fire_protection": 9}),
 }
 # kind: (Colorful Shooting Star, Stardust). Tempo e xp: FUSION_TIME_XP. Quantità decise dall'utente; gli incantesimi sono T9_ENCHANTMENTS.
 T9_SPEC = {
@@ -335,29 +336,29 @@ T9_SPEC = {
     "leggings": (2, 28),
     "boots": (1, 16),
 }
-# Incantesimi del T9 (Alloy), CONGELATI: erano «T8 di prima + 3» (tetto ATM10 + 3). Il T9 non cambia col nuovo T8.
-# DEVONO coincidere con SAItems.PRISMATIC_*.
+# Incantesimi del T9 (Alloy): incantesimo principale = tetto ATM10 + 2 (regola utente 2026-11-27, per tutti gli
+# oggetti: T6 tetto - 2, T7 tetto - 1, T8 tetto, T9 tetto + 2; tetto = SAEnchantCap.ATM10_MAX). Gli incantesimi
+# secondari (Quick Charge, Sniping, Lure, Foundry, Inventory Insertion) restano come prima. DEVONO coincidere con SAItems.PRISMATIC_*.
 T9_ENCHANTMENTS = {
-    # Workstaff: + Foundry e Inventory Insertion come il T8 (2026-11-19; gli altri livelli restano congelati).
-    "workstaff": {"minecraft:fortune": 11, "minecraft:efficiency": 12, "spectrum:foundry": 1,
+    # Workstaff: fortune ed efficiency contano entrambi come principali; + Foundry e Inventory Insertion come il T8.
+    "workstaff": {"minecraft:fortune": 10, "minecraft:efficiency": 11, "spectrum:foundry": 1,
                   "spectrum:inventory_insertion": 1},
-    "ultra_greatsword": {"minecraft:sweeping_edge": 11},
+    "ultra_greatsword": {"minecraft:sweeping_edge": 10},
     # Balestra: Quick Charge IV + Sniping II di Spectrum (2026-11-20).
-    "crossbow": {"minecraft:piercing": 11, "minecraft:quick_charge": 4, "spectrum:sniping": 2},
-    "bident": {"minecraft:impaling": 10},
-    "axe": {"minecraft:efficiency": 12},
-    "shovel": {"minecraft:efficiency": 12},
-    "hoe": {"minecraft:fortune": 11},
-    "sword": {"minecraft:sharpness": 12},
-    "bow": {"minecraft:power": 12},
-    "fishing_rod": {"minecraft:luck_of_the_sea": 11, "minecraft:lure": 5},
-    "shears": {"minecraft:efficiency": 12},
-    # Mazza (2026-11-25): Wind Burst XI = tetto ATM10 VIII + 3 (DEVE coincidere con SAItems.PRISMATIC_MACE).
-    "mace": {"minecraft:wind_burst": 11},
-    "helmet": {"minecraft:projectile_protection": 14},
-    "chestplate": {"minecraft:protection": 11},
-    "leggings": {"minecraft:blast_protection": 12},
-    "boots": {"minecraft:fire_protection": 12},
+    "crossbow": {"minecraft:piercing": 10, "minecraft:quick_charge": 4, "spectrum:sniping": 2},
+    "bident": {"minecraft:impaling": 12},
+    "axe": {"minecraft:efficiency": 11},
+    "shovel": {"minecraft:efficiency": 11},
+    "hoe": {"minecraft:fortune": 10},
+    "sword": {"minecraft:sharpness": 11},
+    "bow": {"minecraft:power": 11},
+    "fishing_rod": {"minecraft:luck_of_the_sea": 10, "minecraft:lure": 5},
+    "shears": {"minecraft:efficiency": 11},
+    "mace": {"minecraft:wind_burst": 10},
+    "helmet": {"minecraft:projectile_protection": 13},
+    "chestplate": {"minecraft:protection": 10},
+    "leggings": {"minecraft:blast_protection": 11},
+    "boots": {"minecraft:fire_protection": 11},
 }
 
 # ---------- T7 Umbral ----------
@@ -365,7 +366,7 @@ T9_ENCHANTMENTS = {
 # ingrediente alla Fusion Shrine) e i lingotti di vibranium. Gli accessori Dike
 # dell'armatura T6 non tornano: sono già nel pezzo T6. Alla Fusion Shrine copy_components porta con sé incantesimi, area di scavo e, per il
 # bident, modalità e set di incantesimi (FusionShrineRecipeMixin non interviene: il primo ingrediente è già un bident
-# nostro). Incantesimi = stesso tetto del T6 (massimo ATM10, decisione di design).
+# nostro). Incantesimi: regola del tetto ATM10 (tetto - 1, vedi sopra T7_SPEC).
 # TODO Alloy (Prismatic): quando si crea il tier, SATier.ALLOY ha già freeAoE = true (area della workstaff senza Ink,
 # SATools.Workstaff.hasFreeAoE) e il bonus danno +25% per tier (vedi SATier): scrivere nel testo del libro dell'Alloy che
 # l'area è gratis (chiave lang item.<mod>.workstaff.aoe_free già presente). T6, T7 e T8 restano a pagamento.
@@ -474,9 +475,7 @@ OBJECTS += [_t8_row(o) for o in list(OBJECTS) if o["tier"] == "t7"]
 # Come il T8, un tier sopra: un pezzo per ogni pezzo T8, TUTTI alla Fusion Shrine con Dragonrot (dal 2026-11-19), con
 # il pezzo T8 come base (primo ingrediente), 1 lingotto per ciascuna delle 3 leghe (TIERS["t9"]["alloys"]), Colorful
 # Shooting Star e Stardust (T9_SPEC, decisioni dell'utente). Niente polveri di gemma.
-# Incantesimi = tetto ATM10 + 3 (ricerca/README.md «Tetto incantesimi»): quelli del vecchio T8 + 3 livelli, congelati in
-# T9_ENCHANTMENTS (il T9 non dipende dal T8 attuale) (DEVONO coincidere
-# con SAItems.PRISMATIC_*). Area della workstaff gratis (SATier.ALLOY.freeAoE).
+# Incantesimi = tetto ATM10 + 2 (regola 2026-11-27), in T9_ENCHANTMENTS (DEVONO coincidere con SAItems.PRISMATIC_*). Area della workstaff gratis (SATier.ALLOY.freeAoE).
 # Menu della workstaff (9x9 gratis): fatto il 2026-11-19.
 T9_GUIDE = {
     "workstaff": ("This version I discovered seems to need no White Ink at all: the alloys carry the light themselves.",
@@ -576,20 +575,23 @@ ARMOR_SET_PAGES = {
         "title_en": "The Full Set", "title_it": "Il set completo",
         "text_en": "The Dike trinkets I fused into the armor did not vanish: wearing all four pieces surrounds me with an "
                    "**Azure Dike** as strong as all of them together, and it recharges just as quickly.\\\n\\\n"
-                   "But once the full set is on, the Azure Dike trinkets in my trinket slots stop working: their power "
-                   "already lives in the armor.",
+                   "But once the full set is on, the trinkets I fused into it stop working in my trinket slots: their "
+                   "power already lives in the armor. The other Dike trinkets, like my nectar gloves, still add theirs.",
         "text_it": "Gli accessori Dike che ho fuso nell'armatura non sono spariti: indossando tutti e quattro i pezzi mi "
                    "avvolge un **Azure Dike** forte quanto tutti loro insieme, che si ricarica altrettanto in fretta.\\\n\\\n"
-                   "Però, con il set completo addosso, gli accessori Azure Dike negli slot degli accessori smettono di "
-                   "funzionare: il loro potere vive già nell'armatura.",
+                   "Però, con il set completo addosso, gli accessori che ci ho fuso smettono di funzionare negli slot "
+                   "degli accessori: il loro potere vive già nell'armatura. Gli altri accessori Dike, come i miei guanti "
+                   "di nettare, aggiungono ancora il loro.",
     },
     "t9": {
         "title_en": "The Full Set", "title_it": "Il set completo",
         "text_en": "Wearing all four pieces seems to keep the **Azure Dike** properties I used in the original creation.\\\n\\\n"
-                   "However, once the full set is on, the Dike trinkets seem to stop working.",
+                   "However, once the full set is on, the Dike trinkets I fused into it seem to stop working; the others "
+                   "still add their Dike.",
         "text_it": "Indossare tutti e quattro i pezzi sembra che continui a mantenere le proprietà dell'**Azure Dike** che ho "
                    "usato nella creazione iniziale.\\\n\\\n"
-                   "Tuttavia sembra che una volta indossati gli accessori di Dike non facciano più il loro effetto.",
+                   "Tuttavia sembra che una volta indossati gli accessori di Dike che ci ho fuso non facciano più il loro "
+                   "effetto; gli altri aggiungono ancora il loro Dike.",
     },
 }
 
@@ -1605,7 +1607,8 @@ def main():
             "silk_touch.tooltip_pauses_foundry": "Pauses Foundry until you switch back to Fortune or Resonance",
             "enable_insertion": "Enable Inventory Insertion",
             "disable_insertion": "Disable Inventory Insertion",
-            "insertion.tooltip": "Drops go straight into your inventory"}),
+            "insertion.tooltip": "Drops go straight into your inventory",
+            "back": "Back"}),
                        ("it_it", {
             "larger_area": "Area più grande",
             "larger_area.tooltip_7x7": "Area 7x7",
@@ -1623,7 +1626,8 @@ def main():
             "silk_touch.tooltip_pauses_foundry": "Mette in pausa Foundry finché non torni a Fortuna o Resonance",
             "enable_insertion": "Accendi Inventory Insertion",
             "disable_insertion": "Spegni Inventory Insertion",
-            "insertion.tooltip": "I drop finiscono dritti nell'inventario"})):
+            "insertion.tooltip": "I drop finiscono dritti nell'inventario",
+            "back": "Indietro"})):
         for key, value in text.items():
             lang[code][f"gui.{MOD}.workstaff_menu.{key}"] = value
     lang["en_us"][f"item.{MOD}.armor.tooltip.set_dike"] = "Full set: grants %s units of Azure Dike"
@@ -1634,9 +1638,9 @@ def main():
     for code in ("en_us", "it_it"):  # tooltip rimosso (protezione a Ink dell'armatura eliminata)
         lang[code].pop(f"item.{MOD}.armor.tooltip.ink_protection", None)
     lang["en_us"][f"item.{MOD}.armor.tooltip.trinkets_disabled"] = \
-        "While the full set is worn, Azure Dike trinkets in trinket slots are disabled"
+        "With the full set, trinkets fused into it stop working; other Dike trinkets still add"
     lang["it_it"][f"item.{MOD}.armor.tooltip.trinkets_disabled"] = \
-        "Con il set completo indossato, gli accessori Azure Dike negli slot degli accessori sono disattivati"
+        "Con il set completo, gli accessori fusi nell'armatura non funzionano; gli altri accessori Dike si sommano"
     # Bident (SABident): modalità nel tooltip e nel messaggio sopra la hotbar; "stored" = set dell'altra modalità,
     # "inactive" = incantesimi del set attivo che non si sono potuti applicare (BidentEnchantments). Le righe descrittive delle modalità
     # sono quelle dei bident glass crest di Spectrum (item.spectrum.*_glass_crest_bident.tooltip*).

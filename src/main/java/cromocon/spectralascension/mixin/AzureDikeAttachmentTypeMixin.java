@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * <p>
  * Un mixin "inietta" codice in una classe di un'altra mod mentre il gioco la carica. Qui aggiungiamo codice
  * all'INIZIO (HEAD) di {@code AzureDikeAttachmentType.recalculate}: se il set completo è indossato impostiamo il
- * Dike del set e annulliamo il resto del metodo, così gli accessori Curios non contano (sono "disattivati").
+ * Dike del set (più gli accessori Curios non fusi nell'armatura) e annulliamo il resto del metodo, così gli accessori
+ * fusi indossati anche in Curios non contano due volte.
  * {@code remap = false}: la classe è di Spectrum, non di Minecraft, quindi i nomi non vanno tradotti.
  */
 @Mixin(value = AzureDikeAttachmentType.class, remap = false)

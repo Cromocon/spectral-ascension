@@ -671,6 +671,53 @@ public final class SAGameTests {
     }
 
     /**
+     * Accessori Dike NON fusi nell'armatura (2026-11-27): col set Prismatic completo gli Aether-Graced Nectar Gloves
+     * in Curios si sommano prima del × 2 del Core: (20 + 10) × 2 = 60, con amuleto pieno (bonus 10) 80. Un Azure Dike
+     * Ring in più (fuso nel pettorale) non conta due volte; togliendo i guanti si torna a 40. Il ricalcolo passa da
+     * onEquip/onUnequip dei guanti, come fa Curios in gioco.
+     */
+    @GameTest(template = EMPTY)
+    public static void armor_set_dike_extra_trinkets(GameTestHelper helper) {
+        ServerPlayer player = mockPlayer(helper);
+        var curios = CuriosApi.getCuriosInventory(player);
+        if (curios.isEmpty() || !curios.get().getStacksHandler("hands").map(h -> h.getSlots() > 0).orElse(false)) {
+            helper.fail("slot Curios 'hands' assente sul giocatore finto");
+            return;
+        }
+        for (var holder : SAItems.armor(SATier.ALLOY)) {
+            equip(player, holder.get().getEquipmentSlot(), new ItemStack(holder.get()));
+        }
+        ItemStack gloves = new ItemStack(SpectrumItems.AETHER_GRACED_NECTAR_GLOVES.get());
+        var glovesItem = (top.theillusivec4.curios.api.type.capability.ICurioItem) gloves.getItem();
+        var handsSlot = new top.theillusivec4.curios.api.SlotContext("hands", player, 0, false, true);
+        curios.get().setEquippedCurio("hands", 0, gloves);
+        glovesItem.onEquip(handsSlot, ItemStack.EMPTY, gloves);
+        float max = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+        helper.assertTrue(max == 60, "set Prismatic + guanti: Dike " + max + " invece di 60");
+
+        ItemStack boots = new ItemStack(SAItems.PRISMATIC_BOOTS.get());
+        boots.set(SAComponents.DIKE_BONUS.get(), 10);
+        equip(player, EquipmentSlot.FEET, boots);
+        max = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+        helper.assertTrue(max == 80, "set Prismatic (bonus 10) + guanti: Dike " + max + " invece di 80");
+
+        if (curios.get().getStacksHandler("ring").map(h -> h.getSlots() > 0).orElse(false)) {
+            curios.get().setEquippedCurio("ring", 0, new ItemStack(SpectrumItems.AZURE_DIKE_RING.get()));
+            AzureDikeAttachmentType.recalculate(player);
+            max = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+            helper.assertTrue(max == 80, "set + guanti + Azure Dike Ring: Dike " + max + " invece di 80 (anello già fuso)");
+            curios.get().setEquippedCurio("ring", 0, ItemStack.EMPTY);
+        }
+
+        curios.get().setEquippedCurio("hands", 0, ItemStack.EMPTY);
+        glovesItem.onUnequip(handsSlot, ItemStack.EMPTY, gloves);
+        max = player.getData(AzureDikeAttachmentType.ATTACHMENT_TYPE).getMaxCharges();
+        helper.assertTrue(max == 60, "set Prismatic (bonus 10) senza guanti: Dike " + max + " invece di 60");
+        SpectralAscension.LOGGER.info("[GameTest] Dike del set con accessori non fusi: guanti 60, con bonus 10 80, anello fuso ignorato, senza guanti 60");
+        helper.succeed();
+    }
+
+    /**
      * Dike del set su un'entità senza inventario Curios (armor stand): AzureDikeAttachmentTypeMixin imposta il Dike del
      * set e lo toglie da solo, perché lì Spectrum non lo ricalcola. Set T6 completo → 40; senza stivali → 0.
      */

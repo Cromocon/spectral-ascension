@@ -47,7 +47,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:impaling": 10
+          "minecraft:impaling": 12
         }
       }
     }

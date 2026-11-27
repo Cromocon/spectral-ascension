@@ -1,0 +1,63 @@
+// "Indietro" al centro delle sotto-pagine del menu della workstaff T7+ (SAWorkstaffScreen), col mouse e coi tasti: torna
+// alla pagina precedente senza scegliere niente; nella principale il centro chiude. Voci sui vertici di un poligono
+// (WorkstaffMenuLayout), raggio scelto dalla schermata: a 1280×720 GUI 3 circa 60-80, caselle 38×38, quindi i clic
+// vanno a ±64 (4 voci: su [0, -64], destra [64, 0], giù [0, 64], sinistra [-64, 0]) e a ±72 (2 voci, in orizzontale).
+// Prismatic (Alloy): principale 4, Area 4, Area più grande 2, Incantesimi 4, Drop 2.
+{
+  "description": "Menu della workstaff: Indietro al centro (mouse, tasto destro e tasti Drop/Inventario) torna alla pagina precedente senza cambiare l'oggetto",
+  "stop_on_fail": true,
+  "steps": [
+    {"action": "command", "expect": "any", "commands": ["gamemode creative", "clear @s", "tp @s 0.5 -60 -6.5 180 0"]},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_workstaff[spectrum:aoe=1]"},
+    {"action": "sneak", "value": true},
+    {"action": "use_item"},
+    {"action": "assert_screen", "screen": "SAWorkstaffScreen"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_principale"},
+    // mouse: Area (rombo) → Area più grande (2 voci in orizzontale) → indietro → indietro
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, -64]},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0], "click": false},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_area"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 64]},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [72, 0], "click": false},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_area_grande"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0]},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_area_tornato"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0]},
+    // Incantesimi → Drop → indietro → indietro
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [-64, 0]},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_incantesimi"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 64]},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0], "click": false},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_drop"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0]},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [0, 0]},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_principale_tornato"},
+    // tasti: sinistra = Incantesimi, giù = Drop, Drop = indietro, Inventario = indietro; su = Area, tasto destro = indietro
+    {"action": "gui_key", "key": "left"},
+    {"action": "gui_key", "key": "down"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_tasti_drop"},
+    {"action": "gui_key", "key": "drop"},
+    {"action": "gui_key", "key": "inventory"},
+    {"action": "gui_key", "key": "up"},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_tasti_area"},
+    {"action": "gui_click", "screen": "SAWorkstaffScreen", "offset": [100, 100], "button": 1},
+    {"action": "wait", "ticks": 3},
+    {"action": "screenshot", "name": "indietro_tasti_principale"},
+    {"action": "assert_screen", "screen": "SAWorkstaffScreen"},
+    // nella principale il centro (Drop) chiude senza scegliere
+    {"action": "gui_key", "key": "drop"},
+    {"action": "assert_screen", "screen": "none"},
+    {"action": "sneak", "value": false},
+    {"action": "wait", "ticks": 5},
+    {"action": "assert_item", "slot": "mainhand", "predicate": "spectral_ascension:prismatic_workstaff[spectrum:aoe=1]"}
+  ]
+}

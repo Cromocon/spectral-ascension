@@ -114,6 +114,7 @@ public final class ScenarioActions {
                 return StepResult.ok("schermata chiusa");
             });
             case "gui_click" -> GuiClick.click(s);
+            case "gui_key" -> GuiClick.key(s);
             case "assert_screen" -> GuiClick.assertScreen(s);
             case "use_item" -> useItem(s, runner);
             case "use_on_block" -> useOnBlock(s);
@@ -190,6 +191,12 @@ public final class ScenarioActions {
             case "area_prediction" -> client(() -> {
                 cromocon.spectralascension.client.WorkstaffAreaPrediction.enabled = Scenario.bool(s, "value", true);
                 return StepResult.ok("previsione dell'area della workstaff sul client: " + (cromocon.spectralascension.client.WorkstaffAreaPrediction.enabled ? "on" : "off"));
+            });
+            case "particles" -> client(() -> {
+                // particelle vive sul client (ParticleEngine.countParticles, quello della schermata F3), con min/max
+                int n = Integer.parseInt(Minecraft.getInstance().particleEngine.countParticles());
+                int min = Scenario.integer(s, "min", Integer.MIN_VALUE), max = Scenario.integer(s, "max", Integer.MAX_VALUE);
+                return StepResult.of(n >= min && n <= max, "particelle: " + n);
             });
             default -> throw new IllegalArgumentException("azione sconosciuta: " + action);
         };

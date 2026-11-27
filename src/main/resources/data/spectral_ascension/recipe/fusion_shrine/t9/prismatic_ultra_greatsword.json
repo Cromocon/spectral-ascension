@@ -47,7 +47,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:sweeping_edge": 11
+          "minecraft:sweeping_edge": 10
         }
       }
     }

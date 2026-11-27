@@ -20,11 +20,11 @@ import net.neoforged.neoforge.event.GrindstoneEvent;
  *       Wind Burst entra nel libro solo se supera il livello intrinseco di almeno 2 ({@link #extractable}), altrimenti
  *       libri Wind Burst infiniti o la scalata di un livello alla volta.</li>
  * </ul>
- * Il tetto ATM10 (Wind Burst VIII) vale per i libri, come per tutti gli altri incantesimi; la mazza T9 resta a XI.
+ * Il tetto ATM10 (Wind Burst VIII) vale per i libri, come per tutti gli altri incantesimi; la mazza T9 resta a X.
  * <p>
  * L'Enchanter di Spectrum con un Gilded Book NON passa da {@link #extractable}, di proposito (decisione utente
  * 2026-11-27): i Gilded Book non si craftano, si trovano soltanto, e la copia è comunque tagliata al tetto ATM10
- * ({@code SpectrumEnchantmentHelperMixin}), quindi da una mazza T9 esce Wind Burst VIII, mai XI.
+ * ({@code SpectrumEnchantmentHelperMixin}), quindi da una mazza T9 esce Wind Burst VIII, mai X.
  */
 public final class MaceWindBurst {
     private MaceWindBurst() {
@@ -85,7 +85,7 @@ public final class MaceWindBurst {
     /**
      * Libro estratto da una nostra mazza: Wind Burst resta solo se il livello della mazza supera quello intrinseco + 1
      * (es. una mazza di bedrock, IV, portata a VI dà un libro VI; a V non dà Wind Burst, come una appena craftata).
-     * Con «supera l'intrinseco» bastava: mazza T6 (V) + libro V = VI, Extraction Tome → libro VI, e così via un livello
+     * Con «supera l'intrinseco» bastava: mazza T6 (VI) + libro VI = VII, Extraction Tome → libro VII, e così via un livello
      * alla volta.
      * Restituisce la stessa istanza se non c'è niente da togliere.
      */

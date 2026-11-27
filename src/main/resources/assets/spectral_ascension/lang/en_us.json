@@ -8,9 +8,9 @@
   "book.spectral_ascension.guidebook.t6_equipment.page0.text": "Bedrock was only the beginning. Deep in the ancient cities I found a golden metal, Allthemodium, and in a **Fusion Shrine** filled with **Dragonrot** it drank in the three pigments as if it had been waiting for them.\\\n\\\nI joined the **unbreakability of Bedrock** with the **magical properties of Allthemodium**: what was born of it knows no wear, and no enchantment needs to guard it any longer.\\\n\\\n*Three colors, one metal.*",
   "recipeGroup.spectrum.spectral_ascension_t6_armor": "Trichromatic Armor",
   "book.spectral_ascension.guidebook.t6_equipment.armor_set.title": "The Full Set",
-  "book.spectral_ascension.guidebook.t6_equipment.armor_set.text": "The Dike trinkets I fused into the armor did not vanish: wearing all four pieces surrounds me with an **Azure Dike** as strong as all of them together, and it recharges just as quickly.\\\n\\\nBut once the full set is on, the Azure Dike trinkets in my trinket slots stop working: their power already lives in the armor.",
+  "book.spectral_ascension.guidebook.t6_equipment.armor_set.text": "The Dike trinkets I fused into the armor did not vanish: wearing all four pieces surrounds me with an **Azure Dike** as strong as all of them together, and it recharges just as quickly.\\\n\\\nBut once the full set is on, the trinkets I fused into it stop working in my trinket slots: their power already lives in the armor. The other Dike trinkets, like my nectar gloves, still add theirs.",
   "item.spectral_ascension.armor.tooltip.set_dike": "Full set: grants %s units of Azure Dike",
-  "item.spectral_ascension.armor.tooltip.trinkets_disabled": "While the full set is worn, Azure Dike trinkets in trinket slots are disabled",
+  "item.spectral_ascension.armor.tooltip.trinkets_disabled": "With the full set, trinkets fused into it stop working; other Dike trinkets still add",
   "item.spectral_ascension.trichromatic_workstaff": "Trichromatic Workstaff",
   "book.spectral_ascension.guidebook.t6_equipment.trichromatic_workstaff.text": "My Glass Crest Workstaff went into the fusion and came out as the pickaxe of this metal, without losing anything I had given it. Every vein I open gives me more than before.",
   "item.spectral_ascension.trichromatic_axe": "Trichromatic Axe",
@@ -185,7 +185,7 @@
   "recipeGroup.spectrum.spectral_ascension_t9_tools": "Prismatic Tools",
   "recipeGroup.spectrum.spectral_ascension_t9_armor": "Prismatic Armor",
   "book.spectral_ascension.guidebook.t9_equipment.armor_set.title": "The Full Set",
-  "book.spectral_ascension.guidebook.t9_equipment.armor_set.text": "Wearing all four pieces seems to keep the **Azure Dike** properties I used in the original creation.\\\n\\\nHowever, once the full set is on, the Dike trinkets seem to stop working.",
+  "book.spectral_ascension.guidebook.t9_equipment.armor_set.text": "Wearing all four pieces seems to keep the **Azure Dike** properties I used in the original creation.\\\n\\\nHowever, once the full set is on, the Dike trinkets I fused into it seem to stop working; the others still add their Dike.",
   "item.spectral_ascension.workstaff.foundry_paused": "Foundry paused while Silk Touch is selected",
   "item.spectral_ascension.workstaff.foundry_off": "Foundry turned off (Sneak + Use to turn it on)",
   "item.spectral_ascension.workstaff.insertion_off": "Inventory Insertion turned off (Sneak + Use to turn it on)",
@@ -230,5 +230,6 @@
   "item.spectral_ascension.armor.tooltip.dike_bonus": "Infused Shieldgrasp Amulet: %s Azure Dike",
   "book.spectral_ascension.guidebook.spectral_ascension.more.title": "Descent",
   "book.spectral_ascension.guidebook.spectral_ascension.more.text": "Gold in the ancient cities, green in the Nether, violet in the End. I carried each one home and watched my Spectrum gear take them in as if it had been waiting all along.\\\n\\\nThe last one was different. It did not shine. It *listened*.\\\n\\\n*Some doors only open from the far side of the bedrock.*",
-  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Pro tip: the built-in resource pack \"Eternal Classics\" gives the equipment a different style. Switch it on in the resource packs menu.*"
+  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Pro tip: the built-in resource pack \"Eternal Classics\" gives the equipment a different style. Switch it on in the resource packs menu.*",
+  "gui.spectral_ascension.workstaff_menu.back": "Back"
 }

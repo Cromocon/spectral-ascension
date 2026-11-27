@@ -43,7 +43,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:sharpness": 12
+          "minecraft:sharpness": 11
         }
       }
     }

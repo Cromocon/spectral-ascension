@@ -177,7 +177,7 @@ public final class SAApothicTests {
 
     /**
      * Incudine vanilla con Apothic (tetto di AnvilMenu = EnchHooks.getMaxLevel, Sharpness IX). Per i NOSTRI oggetti
-     * AnvilMenuMixin non abbassa mai un livello: T9 Sharpness XII + libro V o XII resta XII; T6 VII + libro V resta VII;
+     * AnvilMenuMixin non abbassa mai un livello: T9 Sharpness XI + libro V o XI resta XI; T6 VII + libro V resta VII;
      * T6 VII + libro VII sale a VIII (regola normale); T8 IX + libro IX resta IX. Una spada di diamante (non nostra)
      * XII + libro V scende ancora a IX: per gli altri oggetti l'incudine resta quella di Apothic.
      */
@@ -188,7 +188,7 @@ public final class SAApothicTests {
         Holder<Enchantment> sharpness = ench(helper, Enchantments.SHARPNESS);
         record Case(SATier tier, int own, int book, int want) {
         }
-        for (Case c : List.of(new Case(SATier.ALLOY, 12, 5, 12), new Case(SATier.ALLOY, 12, 12, 12), new Case(SATier.T6, 7, 5, 7),
+        for (Case c : List.of(new Case(SATier.ALLOY, 11, 5, 11), new Case(SATier.ALLOY, 11, 11, 11), new Case(SATier.T6, 7, 5, 7),
                 new Case(SATier.T6, 7, 7, 8), new Case(SATier.T8, 9, 9, 9))) {
             ItemStack ours = enchanted(helper, SAFunctionTests.item(c.tier(), "sword"));
             int own = ours.getEnchantments().getLevel(sharpness);

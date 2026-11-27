@@ -1,5 +1,6 @@
 package cromocon.spectralascension.item;
 
+import cromocon.spectralascension.compat.SACurios;
 import cromocon.spectralascension.registry.SAComponents;
 import de.dafuqs.spectrum.api.item.AzureDikeItem;
 import de.dafuqs.spectrum.attachment_types.AzureDikeAttachmentType;
@@ -8,21 +9,25 @@ import de.dafuqs.spectrum.registries.SpectrumItems;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
  * Il bonus del set completo: con i 4 pezzi Spectral Ascension indossati il giocatore ha l'Azure Dike di tutti
- * gli accessori Dike di Spectrum, e gli accessori Dike negli slot Curios si disattivano. Lo Shieldgrasp Amulet conta al
+ * gli accessori Dike fusi nei pezzi, e quegli stessi accessori negli slot Curios si disattivano (niente doppio conteggio).
+ * Gli altri accessori Dike negli slot Curios (es. Aether-Graced Nectar Gloves, 10) restano attivi e si sommano al set
+ * prima del × 2 del Core (decisione 2026-11-27). Lo Shieldgrasp Amulet conta al
  * minimo (2) più il potenziamento a Ink che aveva quando è stato fuso negli stivali T6 (componente
  * spectral_ascension:dike_bonus, 2026-11-27): set da 40 a 60, letto dagli stivali indossati da ogni giocatore.
  * <p>
  * Spectrum calcola il Dike solo dagli slot Curios ({@link AzureDikeAttachmentType#recalculate}). Il nostro mixin
  * (mixin/AzureDikeAttachmentTypeMixin) intercetta quel calcolo: se il set è indossato usa {@link #applySetDike}
- * e salta i Curios. Il ricalcolo parte quando cambiano gli accessori (Spectrum) o l'armatura ({@link #onEquipmentChange}).
+ * con i soli accessori Curios non fusi. Il ricalcolo parte quando cambiano gli accessori (Spectrum) o l'armatura ({@link #onEquipmentChange}).
  */
 public final class SAArmorSet {
     private static final EquipmentSlot[] ARMOR_SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
@@ -42,7 +47,7 @@ public final class SAArmorSet {
      * del Core e ricarica. Sono costanti degli oggetti: il potenziamento a Ink, che cambia da giocatore a giocatore,
      * NON è qui ma sugli stivali indossati ({@link #dikeStats(LivingEntity)}).
      */
-    private record Base(int dikeSum, float multiplier, int ticksPerCharge, int rechargeDelayAfterDamage) {
+    private record Base(Set<Item> fused, int dikeSum, float multiplier, float rechargeSpeedModifier, float rechargeDelayAfterDamageModifier) {
     }
 
     private static volatile Base base;
@@ -81,6 +86,7 @@ public final class SAArmorSet {
         if (cached != null) {
             return cached;
         }
+        // Gli accessori fusi nell'armatura: col set completo, negli slot Curios non contano (sono già nel set).
         List<ItemStack> trinkets = List.of(
                 new ItemStack(SpectrumItems.PUFF_CIRCLET.get()),
                 new ItemStack(SpectrumItems.AZURE_DIKE_RING.get()),
@@ -99,9 +105,8 @@ public final class SAArmorSet {
             rechargeDelayAfterDamageModifier += item.rechargeDelayAfterDamageModifier(stack) - 1;
             maxAzureDikeMultiplier += item.maxAzureDikeMultiplier(stack) - 1;
         }
-        cached = new Base(maxAzureDike, maxAzureDikeMultiplier,
-                (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS / rechargeSpeedModifier),
-                (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS_AFTER_DAMAGE / rechargeDelayAfterDamageModifier));
+        cached = new Base(Set.copyOf(trinkets.stream().map(ItemStack::getItem).toList()),
+                maxAzureDike, maxAzureDikeMultiplier, rechargeSpeedModifier, rechargeDelayAfterDamageModifier);
         base = cached;
         return cached;
     }
@@ -116,13 +121,35 @@ public final class SAArmorSet {
      * (4 + 6 + 8 + 2 + bonus) × 2 del Core, quindi 40..60. Ricarica invariata.
      */
     public static DikeStats dikeStats(int bonus) {
-        Base b = base();
-        return new DikeStats(Math.round((b.dikeSum() + Math.max(0, bonus)) * b.multiplier()), b.ticksPerCharge(), b.rechargeDelayAfterDamage());
+        return dikeStats(bonus, List.of());
     }
 
-    /** Dike del set per chi lo indossa: il potenziamento si legge dagli stivali nello slot FEET (nessuna cache). */
+    /**
+     * Dike del set più gli accessori Dike indossati negli slot Curios che NON sono fusi nell'armatura (quelli fusi si
+     * saltano). Si combinano come in AzureDikeAttachmentType.recalculate: Dike sommati, moltiplicatori e ricarica
+     * sommati come (valore - 1). Es. guanti 10 + amuleto pieno: (4 + 6 + 8 + 2 + 10 + 10) × 2 = 80.
+     */
+    public static DikeStats dikeStats(int bonus, List<ItemStack> curios) {
+        Base b = base();
+        int dike = b.dikeSum() + Math.max(0, bonus);
+        float multiplier = b.multiplier();
+        float speed = b.rechargeSpeedModifier();
+        float delay = b.rechargeDelayAfterDamageModifier();
+        for (ItemStack stack : curios) {
+            if (b.fused().contains(stack.getItem()) || !(stack.getItem() instanceof AzureDikeItem item)) continue;
+            dike += item.maxAzureDike(stack);
+            multiplier += item.maxAzureDikeMultiplier(stack) - 1;
+            speed += item.azureDikeRechargeSpeedModifier(stack) - 1;
+            delay += item.rechargeDelayAfterDamageModifier(stack) - 1;
+        }
+        return new DikeStats(Math.round(dike * multiplier),
+                (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS / speed),
+                (int) Math.max(1, AzureDikeAttachmentType.BASE_RECHARGE_DELAY_TICKS_AFTER_DAMAGE / delay));
+    }
+
+    /** Dike del set per chi lo indossa: potenziamento dagli stivali nello slot FEET e accessori Curios non fusi (nessuna cache). */
     public static DikeStats dikeStats(LivingEntity entity) {
-        return dikeStats(wornBonus(entity));
+        return dikeStats(wornBonus(entity), SACurios.dikeItems(entity));
     }
 
     /** Potenziamento degli stivali indossati (0 se non sono nostri o non ne hanno). */
@@ -148,14 +175,15 @@ public final class SAArmorSet {
 
     /**
      * Dike del set da mostrare nel tooltip di un pezzo: per gli stivali il loro potenziamento; per gli altri pezzi quello
-     * degli stivali indossati da chi guarda (client), altrimenti la base.
+     * degli stivali indossati da chi guarda (client), altrimenti la base. Più gli accessori Curios non fusi di chi guarda.
      */
     public static int tooltipSetDike(ItemStack piece) {
-        if (piece.getItem() instanceof SAArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.FEET) {
-            return dikeStats(bonus(piece)).max();
-        }
         Player viewer = tooltipViewer.get();
-        return dikeStats(viewer == null ? 0 : wornBonus(viewer)).max();
+        List<ItemStack> curios = viewer == null ? List.of() : SACurios.dikeItems(viewer);
+        if (piece.getItem() instanceof SAArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.FEET) {
+            return dikeStats(bonus(piece), curios).max();
+        }
+        return dikeStats(viewer == null ? 0 : wornBonus(viewer), curios).max();
     }
 
     /** Dike in più che il potenziamento degli stivali dà al set (bonus × moltiplicatore del Core). */

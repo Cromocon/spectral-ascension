@@ -43,7 +43,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:efficiency": 5,
+          "minecraft:efficiency": 7,
           "minecraft:fortune": 6
         }
       }

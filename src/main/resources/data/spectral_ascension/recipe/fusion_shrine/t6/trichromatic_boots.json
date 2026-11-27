@@ -41,7 +41,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:fire_protection": 6
+          "minecraft:fire_protection": 7
         }
       }
     }

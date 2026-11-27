@@ -614,8 +614,8 @@ public final class SAEdgeCaseTests {
 
     /**
      * Tetto ATM10 alla copia: ogni nostro oggetto nelle bowl, con il suo Gilded Book al centro, dà un libro i cui livelli
-     * sono al massimo quelli di ATM10 (SAEnchantCap, tabella di ricerca/09). Un T9 con Sharpness XII dà Sharpness IX,
-     * mai XII; una mazza T9 con Wind Burst XI dà Wind Burst VIII; gli incantesimi sotto il tetto (T6-T8) passano
+     * sono al massimo quelli di ATM10 (SAEnchantCap, tabella di ricerca/09). Un T9 con Sharpness XI dà Sharpness IX,
+     * mai XI; una mazza T9 con Wind Burst X dà Wind Burst VIII; gli incantesimi sotto il tetto (T6-T8) passano
      * com'erano.
      */
     @GameTest(template = EMPTY, timeoutTicks = 200)
@@ -644,7 +644,7 @@ public final class SAEdgeCaseTests {
             if (!enchanter.getItem(0).is(Items.ENCHANTED_BOOK) && !enchanter.getItem(0).is(SpectrumItems.GILDED_BOOK.get()))
                 problems.add(id + ": il libro che esce è " + enchanter.getItem(0));
         }
-        // caso esplicito: T9 spada Sharpness XII → libro Sharpness IX; T8 spada resta com'è (IX)
+        // caso esplicito: T9 spada Sharpness XI → libro Sharpness IX; T8 spada resta com'è (IX)
         Holder<Enchantment> sharpness = registry.getOrThrow(Enchantments.SHARPNESS);
         for (SATier tier : List.of(SATier.T8, SATier.ALLOY)) {
             ItemStack sword = enchanted(helper, SAFunctionTests.item(tier, "sword"));
@@ -652,17 +652,17 @@ public final class SAEdgeCaseTests {
             int got = enchanterBook(enchanterSetup(helper, pos, new ItemStack(SpectrumItems.GILDED_BOOK.get()), sword)).getLevel(sharpness);
             report.add("spada " + tier + ": Sharpness " + own + " sull'oggetto → libro Sharpness " + got + " (tetto ATM10 " + SAEnchantCap.tableCap(sharpness).getAsInt() + ")");
             if (got != Math.min(own, 9)) problems.add("spada " + tier + ": libro Sharpness " + got + " invece di " + Math.min(own, 9));
-            if (tier == SATier.ALLOY && (own != 12 || got >= 12)) problems.add("spada Alloy: oggetto " + own + ", libro " + got + " (atteso 12 → 9)");
+            if (tier == SATier.ALLOY && (own != 11 || got >= 11)) problems.add("spada Alloy: oggetto " + own + ", libro " + got + " (atteso 11 → 9)");
         }
-        // mazza T9 (Wind Burst XI) → libro Wind Burst VIII: l'Enchanter non toglie l'intrinseco (voluto, vedi
+        // mazza T9 (Wind Burst X) → libro Wind Burst VIII: l'Enchanter non toglie l'intrinseco (voluto, vedi
         // SpectrumEnchantmentHelperMixin), il tetto ATM10 sì
         Holder<Enchantment> wind = registry.getOrThrow(Enchantments.WIND_BURST);
         ItemStack t9Mace = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "mace"));
         int maceOwn = t9Mace.getEnchantments().getLevel(wind);
         int maceBook = enchanterBook(enchanterSetup(helper, pos, new ItemStack(SpectrumItems.GILDED_BOOK.get()), t9Mace)).getLevel(wind);
         report.add("mazza T9: Wind Burst " + maceOwn + " sull'oggetto → libro Wind Burst " + maceBook);
-        if (maceOwn != 11 || maceBook != 8) problems.add("mazza T9: oggetto Wind Burst " + maceOwn + ", libro " + maceBook + " (atteso 11 → 8)");
-        // il costo in XP è quello del livello tagliato, non del XII
+        if (maceOwn != 10 || maceBook != 8) problems.add("mazza T9: oggetto Wind Burst " + maceOwn + ", libro " + maceBook + " (atteso 10 → 8)");
+        // il costo in XP è quello del livello tagliato, non del XI
         ItemStack t9 = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "sword"));
         ItemStack vanillaNine = new ItemStack(Items.DIAMOND_SWORD);
         vanillaNine.set(DataComponents.ENCHANTMENTS, new ItemEnchantments.Mutable(ItemEnchantments.EMPTY) {{ set(sharpness, 9); }}.toImmutable());
@@ -800,8 +800,8 @@ public final class SAEdgeCaseTests {
     }
 
     /**
-     * Bedrock Anvil, «mai più basso» (tutti gli oggetti): la spada T9 (Sharpness XII) con un libro Sharpness V resta XII
-     * (prima scendeva a V); con un libro XII non sale. Spada vanilla: V + V = V (tetto del JSON, come prima), IV + IV =
+     * Bedrock Anvil, «mai più basso» (tutti gli oggetti): la spada T9 (Sharpness XI) con un libro Sharpness V resta XI
+     * (prima scendeva a V); con un libro XI non sale. Spada vanilla: V + V = V (tetto del JSON, come prima), IV + IV =
      * V, III + V = V; una spada vanilla con Sharpness XII (comando) + V resta XII.
      */
     @GameTest(template = EMPTY)
@@ -812,10 +812,10 @@ public final class SAEdgeCaseTests {
         ServerPlayer player = mockPlayer(helper);
         ItemStack t9 = enchanted(helper, SAFunctionTests.item(SATier.ALLOY, "sword"));
         int own = t9.getEnchantments().getLevel(sharpness);
-        if (own != 12) problems.add("la spada T9 ha Sharpness " + own + " invece di 12");
+        if (own != 11) problems.add("la spada T9 ha Sharpness " + own + " invece di 11");
         record Case(String name, ItemStack left, int book, int want) {
         }
-        List<Case> cases = new ArrayList<>(List.of(new Case("T9 XII + libro V", t9, 5, 12), new Case("T9 XII + libro XII", t9, 12, 12)));
+        List<Case> cases = new ArrayList<>(List.of(new Case("T9 XI + libro V", t9, 5, 11), new Case("T9 XI + libro XI", t9, 11, 11)));
         for (int[] c : new int[][]{{5, 5, 5}, {4, 4, 5}, {3, 5, 5}, {12, 5, 12}}) {
             ItemStack diamond = new ItemStack(Items.DIAMOND_SWORD);
             diamond.set(DataComponents.ENCHANTMENTS, new ItemEnchantments.Mutable(ItemEnchantments.EMPTY) {{ set(sharpness, c[0]); }}.toImmutable());

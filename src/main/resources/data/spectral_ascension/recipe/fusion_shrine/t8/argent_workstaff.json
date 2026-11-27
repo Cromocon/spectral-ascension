@@ -32,7 +32,7 @@
       "minecraft:enchantments": {
         "levels": {
           "minecraft:fortune": 8,
-          "minecraft:efficiency": 8,
+          "minecraft:efficiency": 9,
           "spectrum:foundry": 1,
           "spectrum:inventory_insertion": 1
         }

@@ -1,0 +1,30 @@
+// Particelle dello scavo ad area 9x9 della Prismatic workstaff (Alloy, area gratis). Prima ogni blocco dell'area
+// mandava il suo evento 2001 al giocatore (AoEHelper.breakBlockWithDrops): 81 eventi × 64 particelle ≈ 5184 in un
+// frame. Ora (WorkstaffArea.sendBreakEffects) l'area ne manda al massimo 8 + il blocco mirato: 9 × 64 ≈ 576.
+// Parete 9x9 di pietra a nord (z=797, x 796..804, y -61..-53), blocco mirato (800,-60,797).
+{
+  "description": "Workstaff Prismatic 9x9: particelle sul client dopo un colpo ad area (al massimo 9 eventi di rottura invece di 81)",
+  "steps": [
+    {"action": "command", "expect": "any", "commands": [
+      "gamemode survival", "clear @s", "effect clear @s", "time set 6000", "weather clear", "kill @e[type=item]",
+      "effect give @s minecraft:saturation 600 10 true", "effect give @s minecraft:haste 600 1 true",
+      "fill 794 -61 794 806 -50 803 minecraft:air", "fill 794 -62 794 806 -62 803 minecraft:stone",
+      "tp @s 800.5 -61 800.5 180 0"
+    ]},
+    {"action": "hold", "slot": 0, "item": "spectral_ascension:prismatic_workstaff[spectrum:aoe=4,minecraft:enchantments={levels:{'minecraft:efficiency':8,'minecraft:fortune':8}}]"},
+    {"action": "command", "commands": ["fill 796 -61 797 804 -53 797 minecraft:stone"]},
+    {"action": "wait", "ticks": 40},
+    {"action": "count_blocks", "from": [796, -61, 797], "to": [804, -53, 797], "block": "minecraft:stone", "count": 81},
+    {"action": "particles", "max": 50},
+    {"action": "mine", "pos": [800, -60, 797], "face": "south", "from": [796, -61, 797], "to": [804, -53, 797], "count": 81},
+    // il blocco mirato fa le sue 64 particelle sul client subito; i 2001 dell'area arrivano dal server un paio di tick dopo
+    {"action": "wait", "ticks": 1},
+    {"action": "particles"},
+    {"action": "wait", "ticks": 2},
+    {"action": "particles", "min": 200, "max": 1200},
+    {"action": "screenshot", "name": "area_9x9_particelle", "frames": 1},
+    {"action": "wait", "ticks": 10},
+    {"action": "count_blocks", "side": "server", "from": [796, -61, 797], "to": [804, -53, 797], "count": 81},
+    {"action": "command", "expect": "any", "commands": ["kill @e[type=item]", "fill 794 -62 794 806 -62 803 minecraft:dirt", "fill 794 -61 794 806 -61 803 minecraft:grass_block", "effect clear @s"]}
+  ]
+}

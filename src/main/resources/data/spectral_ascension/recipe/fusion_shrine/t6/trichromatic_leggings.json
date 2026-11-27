@@ -44,7 +44,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:blast_protection": 6
+          "minecraft:blast_protection": 7
         }
       }
     }

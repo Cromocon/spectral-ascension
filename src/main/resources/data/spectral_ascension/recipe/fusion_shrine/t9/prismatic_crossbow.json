@@ -43,7 +43,7 @@
     "components": {
       "minecraft:enchantments": {
         "levels": {
-          "minecraft:piercing": 11,
+          "minecraft:piercing": 10,
           "minecraft:quick_charge": 4,
           "spectrum:sniping": 2
         }

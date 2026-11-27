@@ -8,9 +8,9 @@
   "book.spectral_ascension.guidebook.t6_equipment.page0.text": "La bedrock era solo l'inizio. Nelle profondità delle ancient city ho trovato un metallo dorato, l'allthemodium, e in una **Fusion Shrine** piena di **Dragonrot** ha assorbito i tre pigmenti come se li stesse aspettando.\\\n\\\nHo unito l'**indistruttibilità della bedrock** alle **proprietà magiche dell'allthemodium**: ciò che ne è nato non conosce usura, nessun incanto deve più proteggerlo.\\\n\\\n*Tre colori, un solo metallo.*",
   "recipeGroup.spectrum.spectral_ascension_t6_armor": "Armatura tricromatica",
   "book.spectral_ascension.guidebook.t6_equipment.armor_set.title": "Il set completo",
-  "book.spectral_ascension.guidebook.t6_equipment.armor_set.text": "Gli accessori Dike che ho fuso nell'armatura non sono spariti: indossando tutti e quattro i pezzi mi avvolge un **Azure Dike** forte quanto tutti loro insieme, che si ricarica altrettanto in fretta.\\\n\\\nPerò, con il set completo addosso, gli accessori Azure Dike negli slot degli accessori smettono di funzionare: il loro potere vive già nell'armatura.",
+  "book.spectral_ascension.guidebook.t6_equipment.armor_set.text": "Gli accessori Dike che ho fuso nell'armatura non sono spariti: indossando tutti e quattro i pezzi mi avvolge un **Azure Dike** forte quanto tutti loro insieme, che si ricarica altrettanto in fretta.\\\n\\\nPerò, con il set completo addosso, gli accessori che ci ho fuso smettono di funzionare negli slot degli accessori: il loro potere vive già nell'armatura. Gli altri accessori Dike, come i miei guanti di nettare, aggiungono ancora il loro.",
   "item.spectral_ascension.armor.tooltip.set_dike": "Set completo: dà %s unità di Azure Dike",
-  "item.spectral_ascension.armor.tooltip.trinkets_disabled": "Con il set completo indossato, gli accessori Azure Dike negli slot degli accessori sono disattivati",
+  "item.spectral_ascension.armor.tooltip.trinkets_disabled": "Con il set completo, gli accessori fusi nell'armatura non funzionano; gli altri accessori Dike si sommano",
   "item.spectral_ascension.trichromatic_workstaff": "Workstaff tricromatica",
   "book.spectral_ascension.guidebook.t6_equipment.trichromatic_workstaff.text": "La mia workstaff glass crest è entrata nella fusione ed è uscita come il piccone di questo metallo, senza perdere niente di quello che le avevo dato. Ogni vena che apro mi rende più di prima.",
   "item.spectral_ascension.trichromatic_axe": "Ascia tricromatica",
@@ -185,7 +185,7 @@
   "recipeGroup.spectrum.spectral_ascension_t9_tools": "Attrezzi prismatici",
   "recipeGroup.spectrum.spectral_ascension_t9_armor": "Armatura prismatica",
   "book.spectral_ascension.guidebook.t9_equipment.armor_set.title": "Il set completo",
-  "book.spectral_ascension.guidebook.t9_equipment.armor_set.text": "Indossare tutti e quattro i pezzi sembra che continui a mantenere le proprietà dell'**Azure Dike** che ho usato nella creazione iniziale.\\\n\\\nTuttavia sembra che una volta indossati gli accessori di Dike non facciano più il loro effetto.",
+  "book.spectral_ascension.guidebook.t9_equipment.armor_set.text": "Indossare tutti e quattro i pezzi sembra che continui a mantenere le proprietà dell'**Azure Dike** che ho usato nella creazione iniziale.\\\n\\\nTuttavia sembra che una volta indossati gli accessori di Dike che ci ho fuso non facciano più il loro effetto; gli altri aggiungono ancora il loro Dike.",
   "item.spectral_ascension.workstaff.foundry_paused": "Foundry in pausa finché è scelto Tocco di velluto",
   "item.spectral_ascension.workstaff.foundry_off": "Foundry spenta (Accovacciati + Usa per accenderla)",
   "item.spectral_ascension.workstaff.insertion_off": "Inventory Insertion spenta (Accovacciati + Usa per accenderla)",
@@ -230,5 +230,6 @@
   "item.spectral_ascension.armor.tooltip.dike_bonus": "Shieldgrasp Amulet infuso: %s Azure Dike",
   "book.spectral_ascension.guidebook.spectral_ascension.more.title": "Discesa",
   "book.spectral_ascension.guidebook.spectral_ascension.more.text": "Oro nelle ancient city, verde nel Nether, viola nell'End. Li ho portati a casa uno a uno e ho visto il mio equipaggiamento di Spectrum accoglierli come se non aspettasse altro.\\\n\\\nL'ultimo era diverso. Non brillava. *Ascoltava*.\\\n\\\n*Alcune porte si aprono solo dal lato più lontano del bedrock.*",
-  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Consiglio: il resource pack integrato «Eternal Classics» dà all'equipaggiamento un altro stile. Accendilo dal menu dei resource pack.*"
+  "book.spectral_ascension.guidebook.spectral_ascension.more.tip.text": "*Consiglio: il resource pack integrato «Eternal Classics» dà all'equipaggiamento un altro stile. Accendilo dal menu dei resource pack.*",
+  "gui.spectral_ascension.workstaff_menu.back": "Indietro"
 }

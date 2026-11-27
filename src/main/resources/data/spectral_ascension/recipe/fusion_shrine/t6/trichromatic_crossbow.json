@@ -44,7 +44,7 @@
       "minecraft:enchantments": {
         "levels": {
           "minecraft:quick_charge": 3,
-          "minecraft:piercing": 5
+          "minecraft:piercing": 6
         }
       }
     }

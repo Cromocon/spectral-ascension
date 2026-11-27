@@ -8,11 +8,13 @@ import de.dafuqs.spectrum.items.tools.WorkstaffItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.GameMasterBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -33,7 +35,8 @@ import java.util.function.Predicate;
  * previsione del client (mixin MultiPlayerGameModeMixin), così i due non possono divergere.
  *
  * <p><b>Copia di Spectrum 1.12.9</b> ({@code de.dafuqs.spectrum.helpers.AoEHelper.doAoEBlockBreaking} e
- * {@code breakBlockWithDrops}, {@code AoEBreakingTool.afterBreakingBlock}, {@code InkPowered.tryDrainEnergy}):
+ * {@code breakBlockWithDrops} (in {@link #breakBlockWithDrops}, senza l'evento 2001 per blocco),
+ * {@code AoEBreakingTool.afterBreakingBlock}, {@code InkPowered.tryDrainEnergy}):
  * a ogni aggiornamento di Spectrum va ricontrollata. La workstaff di Spectrum (WorkstaffItem) sul server passa
  * ancora da AoEHelper: per lei la previsione è una copia, non lo stesso codice.
  */
@@ -103,6 +106,46 @@ public final class WorkstaffArea {
             }
         }
         return out;
+    }
+
+    /**
+     * AoEHelper.breakBlockWithDrops di Spectrum senza il pacchetto 2001 (particelle + suono) per ogni blocco: con il
+     * 9×9 erano 80 eventi, ~5000 particelle in un frame. Restituisce lo stato rotto, o null se il blocco non è
+     * cambiato (non rompibile, BreakEvent annullato da una protezione): gli effetti li manda {@link #sendBreakEffects}.
+     */
+    @Nullable
+    public static BlockState breakBlockWithDrops(Player player, ItemStack stack, LevelAccessor level, BlockPos pos,
+                                                 Predicate<BlockState> filter) {
+        if (level.isClientSide() || !level.hasChunkAt(pos) || !(player instanceof ServerPlayer sp)) {
+            return null;
+        }
+        BlockState state = level.getBlockState(pos);
+        if (state.isAir() || state.getDestroyProgress(player, level, pos) <= 0.0F || !filter.test(state)) {
+            return null;
+        }
+        ItemStack save = player.getMainHandItem();
+        player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        sp.gameMode.destroyBlock(pos);
+        player.setItemInHand(InteractionHand.MAIN_HAND, save);
+        return level.getBlockState(pos) != state ? state : null;
+    }
+
+    /** Eventi 2001 passati da ServerLevel.levelEvent (contati da ServerLevelMixin), per i GameTest. */
+    public static int destroyEventsForTests;
+
+    /** Eventi 2001 al massimo per un colpo ad area (oltre al blocco mirato, che ha i suoi). */
+    public static final int MAX_BREAK_EFFECTS = 8;
+
+    /**
+     * Particelle e suono di rottura (evento 2001, a tutti entro 64 blocchi) per al più {@link #MAX_BREAK_EFFECTS} dei
+     * blocchi rotti, sparsi su tutta l'area: fino al 3×3 (8 blocchi) è come prima.
+     */
+    public static void sendBreakEffects(LevelAccessor level, List<BlockPos> positions, List<BlockState> states) {
+        int n = positions.size();
+        int stride = Math.max(1, n / MAX_BREAK_EFFECTS);
+        for (int i = 0, sent = 0; i < n && sent < MAX_BREAK_EFFECTS; i += stride, sent++) {
+            level.levelEvent(null, 2001, positions.get(i), Block.getId(states.get(i)));
+        }
     }
 
     /** Filtro dei blocchi di AoEHelper.doAoEBlockBreaking: attrezzo adatto (se serve) e velocità di scavo > 0. */

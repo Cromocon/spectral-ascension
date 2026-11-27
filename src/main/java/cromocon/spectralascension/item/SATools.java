@@ -3,7 +3,6 @@ package cromocon.spectralascension.item;
 import de.dafuqs.spectrum.api.ink.InkPowered;
 import de.dafuqs.spectrum.api.item.Preenchanted;
 import de.dafuqs.spectrum.api.ink.color.InkColor;
-import de.dafuqs.spectrum.helpers.AoEHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import java.util.function.Predicate;
@@ -45,6 +44,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -160,6 +160,8 @@ public final class SATools {
             if (breakingArea) {
                 return;
             }
+            List<BlockPos> broken = new ArrayList<>();
+            List<BlockState> brokenStates = new ArrayList<>();
             breakingArea = true;
             try {
                 // Come AoEBreakingTool.afterBreakingBlock + AoEHelper.doAoEBlockBreaking di Spectrum, ma con l'area di
@@ -170,12 +172,18 @@ public final class SATools {
                 if (side != null && canUseAoE(player, stack)) {
                     Predicate<BlockState> filter = WorkstaffArea.minableFilter(stack);
                     for (BlockPos p : WorkstaffArea.positions(pos, side, getAoERange(stack))) {
-                        AoEHelper.breakBlockWithDrops(player, stack, level, p, filter);
+                        BlockState state = WorkstaffArea.breakBlockWithDrops(player, stack, level, p, filter);
+                        if (state != null) {
+                            broken.add(p);
+                            brokenStates.add(state);
+                        }
                     }
                 }
             } finally {
                 breakingArea = false;
             }
+            // Dopo la guardia: questi 2001 non vanno annullati (ServerLevelMixin annulla quelli di playerWillDestroy).
+            WorkstaffArea.sendBreakEffects(level, broken, brokenStates);
         }
 
         /**
@@ -239,6 +247,11 @@ public final class SATools {
 
         /** Siamo dentro lo scavo ad area (solo thread del server: gli eventi di rottura arrivano tutti da lì). */
         private static boolean breakingArea;
+
+        /** Per ServerLevelMixin: dentro lo scavo ad area gli eventi 2001 dei singoli blocchi vanno annullati. */
+        public static boolean isBreakingArea() {
+            return breakingArea;
+        }
     }
 
     /**
@@ -364,7 +377,7 @@ public final class SATools {
             return enchantments;
         }
 
-        /** Il Wind Burst intrinseco della mazza: IV bedrock, V/VI/VII T6-T8, XI T9 (0 se non ne ha). */
+        /** Il Wind Burst intrinseco della mazza: IV bedrock, VI/VII/VIII T6-T8, X T9 (0 se non ne ha). */
         public int intrinsicWindBurst() {
             return enchantments.getOrDefault(Enchantments.WIND_BURST, 0);
         }

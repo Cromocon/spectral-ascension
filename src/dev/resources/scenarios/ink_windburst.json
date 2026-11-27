@@ -1,5 +1,6 @@
 // Prova in gioco 2026-11-27: Dike dell'armatura T6 (stivali con dike_bonus=10), tooltip mazze (Wind Burst IV e XI), pagine 2 e 3 della voce General.
 // Mazze: hotbar 0 (bedrock) e 1 (prismatic). Armatura T6 indossata, stivali potenziati.
+// Dal 2026-11-27 anche gli Aether-Graced Nectar Gloves in Curios (non fusi): Dike del set (30 + 10) × 2 = 80 nei tooltip.
 {
   "description": "Dike armatura T6 con stivali potenziati, tooltip mazze bedrock e prismatic, guidebook General pagine 2-3",
   "stop_on_fail": false,
@@ -12,7 +13,9 @@
       "item replace entity @s armor.legs with spectral_ascension:trichromatic_leggings",
       "item replace entity @s armor.feet with spectral_ascension:trichromatic_boots[spectral_ascension:dike_bonus=10]",
       "give @s spectral_ascension:bedrock_mace",
-      "give @s spectral_ascension:prismatic_mace"
+      "give @s spectral_ascension:prismatic_mace",
+      "curios replace hands 0 @s with spectrum:aether_graced_nectar_gloves",
+      "advancement grant @s everything"
     ]},
     {"action": "first_person"},
     {"action": "wait", "ticks": 60},
@@ -41,6 +44,11 @@
     {"action": "open_screen", "screen": "guidebook", "book": "spectrum:guidebook", "entry": "spectrum:general/spectral_ascension", "page": 2},
     {"action": "wait", "ticks": 20},
     {"action": "screenshot", "name": "07_guidebook_general_pagina3"},
+    {"action": "close_screen"},
+    {"action": "wait", "ticks": 5},
+    {"action": "open_screen", "screen": "guidebook", "book": "spectrum:guidebook", "entry": "spectrum:equipment/spectral_ascension_t6_equipment", "page": 17},
+    {"action": "wait", "ticks": 20},
+    {"action": "screenshot", "name": "08_guidebook_t6_set_completo"},
     {"action": "close_screen"}
   ]
 }
